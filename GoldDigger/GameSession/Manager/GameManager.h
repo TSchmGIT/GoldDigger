@@ -1,0 +1,31 @@
+#pragma once
+#include "..\..\hvsdk\SingletonBase.h"
+
+/////////////////////////////////////////////////////////////////////////////
+
+namespace hvgs
+{
+
+/////////////////////////////////////////////////////////////////////////////
+
+class CGameManager : public hvsdk::CSingletonBase<CGameManager>
+{
+
+public:
+	CGameManager();
+	virtual ~CGameManager();
+
+public:
+	void Init();
+	void Shutdown();
+
+public:
+	void Tick();
+
+protected:
+	sf::RenderWindow m_GameWindow;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+
+} // hvgs

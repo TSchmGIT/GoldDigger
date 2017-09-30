@@ -1,12 +1,14 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
 
+#pragma warning( push )
+#pragma warning( disable : 4100)
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
 					 )
 {
-	switch (ul_reason_for_call)
+	switch (ul_reason_for_call) 
 	{
 	case DLL_PROCESS_ATTACH:
 	case DLL_THREAD_ATTACH:
@@ -16,4 +18,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	}
 	return TRUE;
 }
+#pragma warning( pop )
+
 

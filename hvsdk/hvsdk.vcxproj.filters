@@ -27,6 +27,15 @@
     <ClInclude Include="hvsdk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Meta\Assert.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meta\DefinesSTL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meta\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

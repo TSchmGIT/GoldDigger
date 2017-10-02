@@ -1,0 +1,27 @@
+#pragma once
+#include "GameSession/Manager/SingletonBase.h"
+#include "GameSession/Fonts/EnumsFont.h"
+
+/////////////////////////////////////////////////////////////////////////////
+
+namespace hvgs
+{
+
+/////////////////////////////////////////////////////////////////////////////
+
+class CFontManager : public CSingletonBase<CFontManager>
+{
+
+public:
+	CFontManager();
+	virtual ~CFontManager();
+
+	void Init();
+
+protected:
+	Map <FontName, sf::Font> m_FontTable;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+
+} // hvgs

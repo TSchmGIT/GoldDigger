@@ -45,10 +45,22 @@
     <ClInclude Include="Manager\PerformanceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Meta\Defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\TimeManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Time\DefinesTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Meta\TrackTime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TimeTracking\TrackItem.h">
+    <ClInclude Include="Fonts\EnumsFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\FontManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,7 +83,10 @@
     <ClCompile Include="Manager\PerformanceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TimeTracking\TrackItem.cpp">
+    <ClCompile Include="Manager\TimeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\FontManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

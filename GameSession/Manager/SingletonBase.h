@@ -11,7 +11,6 @@ struct CSingletonBase
 {
 	CSingletonBase() = default;
 	virtual ~CSingletonBase() = default;
-	//CSingletonBase(const& CSingletonBase) = default;
 
 	static T& GetMutable() { return GetActual(); }
 	static const T& Get() { return GetActual(); }

@@ -16,7 +16,6 @@
 #include <vector>
 
 #include <chrono>
-
 #include <memory>
 #include <boost/unordered_map.hpp>
 

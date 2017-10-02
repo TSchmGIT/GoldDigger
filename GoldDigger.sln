@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hvsdk", "hvsdk\hvsdk.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameSession", "GameSession\GameSession.vcxproj", "{97ADC588-7525-44B7-A97C-9416C237F3D3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hvmath", "hvmath\hvmath.vcxproj", "{6D0693C0-D7DF-4371-8C51-483D774C0FCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{97ADC588-7525-44B7-A97C-9416C237F3D3}.Release|x64.Build.0 = Release|x64
 		{97ADC588-7525-44B7-A97C-9416C237F3D3}.Release|x86.ActiveCfg = Release|Win32
 		{97ADC588-7525-44B7-A97C-9416C237F3D3}.Release|x86.Build.0 = Release|Win32
+		{6D0693C0-D7DF-4371-8C51-483D774C0FCA}.Debug|x64.ActiveCfg = Debug|x64
+		{6D0693C0-D7DF-4371-8C51-483D774C0FCA}.Debug|x64.Build.0 = Debug|x64
+		{6D0693C0-D7DF-4371-8C51-483D774C0FCA}.Debug|x86.ActiveCfg = Debug|Win32
+		{6D0693C0-D7DF-4371-8C51-483D774C0FCA}.Debug|x86.Build.0 = Debug|Win32
+		{6D0693C0-D7DF-4371-8C51-483D774C0FCA}.Release|x64.ActiveCfg = Release|x64
+		{6D0693C0-D7DF-4371-8C51-483D774C0FCA}.Release|x64.Build.0 = Release|x64
+		{6D0693C0-D7DF-4371-8C51-483D774C0FCA}.Release|x86.ActiveCfg = Release|Win32
+		{6D0693C0-D7DF-4371-8C51-483D774C0FCA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

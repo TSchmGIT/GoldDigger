@@ -5,6 +5,7 @@
 
 #include "GameSession/Manager/InputManager.h"
 #include "GameSession/Manager/RenderManager.h"
+#include "GameSession/Manager/TimeManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -31,6 +32,8 @@ CGameManager::~CGameManager()
 
 void CGameManager::Init()
 {
+	CTimeManager::GetMutable().Init();
+
 	//////////////////////////////////////////////////////////////////////////
 	// Render
 	//////////////////////////////////////////////////////////////////////////
@@ -40,6 +43,7 @@ void CGameManager::Init()
 	// Input
 	//////////////////////////////////////////////////////////////////////////
 	CInputManager::GetMutable().Init();
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -59,34 +63,20 @@ void CGameManager::Run()
 
 		PollEvents();
 
-		if (CInputManager::Get().IsMouseButtonDown(MouseButton::Left))
-		{
-			LOG_INFO("LMB down");
-		}
-		if (CInputManager::Get().IsMouseButtonUp(MouseButton::Left))
-		{
-			LOG_INFO("LMB up");
-		}
-
-		if (CInputManager::Get().IsMouseButtonDown(MouseButton::Right))
-		{
-			LOG_INFO("RMB down");
-		}
-		if (CInputManager::Get().IsMouseButtonUp(MouseButton::Right))
-		{
-			LOG_INFO("RMB up");
-		}
+		LOG_INFO(CTimeManager::Get().GetFPS());
 
 		CRenderManager::GetMutable().GetWindow()->clear();
 		CRenderManager::GetMutable().GetWindow()->display();
 	}
+	std::cout << "Time passed upon end from game clock: " << CTimeManager::Get().GetAppTime() << " seconds";
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void CGameManager::PrepareTick()
 {
-	CInputManager::GetMutable().ResetIntermediateStatus();
+	CTimeManager::GetMutable().PrepareTick();
+	CInputManager::GetMutable().PrepareTick();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -98,6 +88,9 @@ void CGameManager::PollEvents()
 	{
 		switch (pollEvent.type)
 		{
+			//////////////////////////////////////////////////////////////////////////
+			// Input
+			//////////////////////////////////////////////////////////////////////////
 		case sf::Event::EventType::KeyPressed:
 			CInputManager::GetMutable().RegisterKeyPressed(KeyCode(pollEvent.key.code));
 			break;
@@ -110,12 +103,17 @@ void CGameManager::PollEvents()
 		case sf::Event::EventType::MouseButtonReleased:
 			CInputManager::GetMutable().RegisterMouseButtonReleased(MouseButton(pollEvent.mouseButton.button));
 			break;
+		case sf::Event::EventType::MouseMoved:
+			CInputManager::GetMutable().UpdateMouseCursorPosition(pollEvent.mouseMove.x, pollEvent.mouseMove.y);
+			break;
+		case sf::Event::EventType::MouseWheelScrolled:
+			CInputManager::GetMutable().UpdateMouseWheelDelta(pollEvent.mouseWheelScroll.delta);
+		case sf::Event::EventType::Closed:
+			CRenderManager::GetMutable().GetWindow()->close();
+			break;
 		default:
 			break;
 		}
-
-		if (pollEvent.type == sf::Event::Closed)
-			CRenderManager::GetMutable().GetWindow()->close();
 	}
 }
 

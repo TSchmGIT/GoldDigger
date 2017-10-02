@@ -79,6 +79,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)ProjectOutput\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)ProjectOutput\$(ProjectName)\$(Configuration)\Intermediate\</IntDir>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -96,15 +97,15 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>USE_ASSERTS;STATIC_SFML;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir);D:\Users\Thorsten\Documents\Programming\C++\Projects\GoldDigger\GameSession;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)GameSession;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvsdk\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\Debug;$(SolutionDir)\ProjectOutput\hvsdk\Debug;%(AdditionalLibraryDirectories);$(VcpkgRoot)debug\lib;$(VcpkgRoot)debug\lib\manual-link</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -113,8 +114,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>USE_ASSERTS;STATIC_SFML;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalOptions>/Yu"stdafx.h" /GS /W4 /Zc:wchar_t /I"D:\Users\Thorsten\Documents\Programming\C++\External\sfml\SFML-2.4.2-bin\include" /I"C:\Users\Thorsten\vcpkg\installed\x64-windows\include" /ZI /Gm /Od /Fd"x64\Debug\vc140.pdb" /Zc:inline /fp:precise /D "STATIC_SFML" /D "_DEBUG" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /errorReport:prompt /WX /Zc:forScope /RTC1 /Gd /MDd /Fa"x64\Debug\" /EHsc /nologo /Fo"x64\Debug\" /Fp"x64\Debug\GoldDigger.pch" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(SolutionDir);D:\Users\Thorsten\Documents\Programming\C++\Projects\GoldDigger\GameSession;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\thors\vcpkg\installed\x86-windows\include\boost;$(SolutionDir);($ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -167,31 +167,36 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Fonts\EnumsFont.h" />
     <ClInclude Include="Input\InputEnums.h" />
+    <ClInclude Include="Manager\FontManager.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\InputManager.h" />
     <ClInclude Include="Manager\PerformanceManager.h" />
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SingletonBase.h" />
+    <ClInclude Include="Manager\TimeManager.h" />
     <ClInclude Include="Meta\Assert.h" />
+    <ClInclude Include="Meta\Defines.h" />
     <ClInclude Include="Meta\TrackTime.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TimeTracking\TrackItem.h" />
+    <ClInclude Include="Time\DefinesTime.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Manager\FontManager.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\InputManager.cpp" />
     <ClCompile Include="Manager\PerformanceManager.cpp" />
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\TimeManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TimeTracking\TrackItem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

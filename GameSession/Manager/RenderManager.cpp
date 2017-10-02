@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "RenderManager.h"
 
+#include "GameSession/Manager/FontManager.h"
+
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
@@ -25,7 +27,10 @@ CRenderManager::~CRenderManager()
 
 void CRenderManager::Init()
 {
+	CFontManager::GetMutable().Init();
+
 	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(200, 200), "SFML works!");
+	//m_window->setVerticalSyncEnabled(true);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -40,6 +45,13 @@ const sf::RenderWindow* CRenderManager::GetWindow() const
 sf::RenderWindow* CRenderManager::GetWindow()
 {
 	return m_window.get();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawText(std::string text)
+{
+
 }
 
 //////////////////////////////////////////////////////////////////////////

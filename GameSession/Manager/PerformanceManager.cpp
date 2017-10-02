@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "PerformanceManager.h"
 
-#include "GameSession/TimeTracking/TrackItem.h"
-
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
@@ -50,31 +48,6 @@ void CPerformanceManager::StopTracking(String key)
 	LOG_INFO("PERF: Operation " << key << " took " << ss.str() << " ms");
 
 	m_TrackingMap.erase(key);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CPerformanceManager::StartTrackingNew(String key)
-{
-	if (!m_TrackItem)
-	{
-		m_TrackItem = std::make_unique<CTrackItem>(std::chrono::steady_clock::now());
-		return;
-	}
-
-	m_TrackItem = m_TrackItem->AddChild(key);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CPerformanceManager::StopTrackingNew()
-{
-	if (!m_TrackItem)
-	{
-		return;
-	}
-
-	if (m_TrackItem->)
 }
 
 //////////////////////////////////////////////////////////////////////////

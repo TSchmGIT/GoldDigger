@@ -23,4 +23,4 @@ using hvuint16 = uint16_t;
 using hvuint64 = uint64_t;
 
 using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
-using DurationMS = std::chrono::duration<double, std::milli>;
+using DurationMS = std::chrono::duration<float, std::milli>;

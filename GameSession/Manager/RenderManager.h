@@ -21,6 +21,9 @@ public:
 	const sf::RenderWindow* GetWindow() const;
 	sf::RenderWindow* GetWindow();
 
+public:
+	void DrawText(std::string text);
+
 protected:
 	UniquePtr<sf::RenderWindow> m_window;
 };

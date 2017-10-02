@@ -27,7 +27,7 @@ void CInputManager::Init()
 
 //////////////////////////////////////////////////////////////////////////
 
-void CInputManager::ResetIntermediateStatus()
+void CInputManager::PrepareTick()
 {
 	//TT_BEGIN("ResetInput");
 	for (int i = 0; i < int(KeyCode::Count); i++)
@@ -41,6 +41,8 @@ void CInputManager::ResetIntermediateStatus()
 		m_MouseButtonArrayDown[i] = false;
 		m_MouseButtonArrayUp[i] = false;
 	}
+
+	m_MouseWheelDelta = 0.0f;
 	//TT_END("ResetInput");
 }
 
@@ -101,6 +103,29 @@ void CInputManager::RegisterMouseButtonReleased(MouseButton button)
 
 //////////////////////////////////////////////////////////////////////////
 
+void CInputManager::UpdateMouseCursorPosition(int x, int y)
+{
+	// Set delta
+	m_MouseDelta.x = x - m_MousePos.x;
+	m_MouseDelta.y = y - m_MousePos.y;
+
+	// Set position
+	m_MousePos.x = x;
+	m_MousePos.y = y;
+
+	LOG_INFO("Mouse pos: x: " << m_MousePos.x << ", y: " << m_MousePos.y);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CInputManager::UpdateMouseWheelDelta(float delta)
+{
+	m_MouseWheelDelta = delta;
+	m_MouseWheelPos += delta;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 bool CInputManager::IsKeyPressed(KeyCode keycode) const
 {
 	ASSERT_OR_EXECUTE(keycode > KeyCode::Unknown && keycode < KeyCode::Count, return false);
@@ -145,6 +170,34 @@ bool CInputManager::IsMouseButtonDown(MouseButton button) const
 {
 	ASSERT_OR_EXECUTE(button >= MouseButton(0) && button < MouseButton::Count, return false);
 	return m_MouseButtonArrayDown[size_t(button)];
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+Vector2i CInputManager::GetMousePos() const
+{
+	return m_MousePos;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+Vector2i CInputManager::GetMouseDelta() const
+{
+	return m_MouseDelta;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+float CInputManager::GetMouseWheelDelta() const
+{
+	return m_MouseWheelDelta;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+float CInputManager::GetMouseWheelPos() const
+{
+	return m_MouseWheelPos;
 }
 
 //////////////////////////////////////////////////////////////////////////

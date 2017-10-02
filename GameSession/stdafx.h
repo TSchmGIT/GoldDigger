@@ -28,7 +28,12 @@
 #include <hvsdk/Meta/Log.h>
 #include <hvsdk/Meta/Assert.h>
 
+#include <hvmath/Vector2/Vector2.inl>
+
+#include "Meta/Defines.h"
 #include "Meta/TrackTime.h"
+
+#include "Time/DefinesTime.h"
 
 #include "GameSession/Manager/SingletonBase.h"
 #include "GameSession/Manager/PerformanceManager.h"

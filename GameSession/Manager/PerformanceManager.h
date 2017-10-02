@@ -21,12 +21,8 @@ public:
 	void StartTracking(String key);
 	void StopTracking(String key);
 
-	void StartTrackingNew(String key);
-	void StopTrackingNew();
-
 protected:
 	Map<String, TimePoint> m_TrackingMap;
-	UniquePtr<CTrackItem> m_TrackItem;
 };
 
 /////////////////////////////////////////////////////////////////////////////

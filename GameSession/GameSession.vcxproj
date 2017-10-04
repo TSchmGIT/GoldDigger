@@ -167,30 +167,41 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Fonts\EnumsFont.h" />
+    <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="GameObjects\IGameObject.h" />
     <ClInclude Include="Input\InputEnums.h" />
-    <ClInclude Include="Manager\FontManager.h" />
+    <ClInclude Include="Manager\GameObjectManager.h" />
+    <ClInclude Include="Manager\Rendering\FontManager.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\InputManager.h" />
     <ClInclude Include="Manager\PerformanceManager.h" />
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SingletonBase.h" />
+    <ClInclude Include="Manager\Rendering\TextureManager.h" />
     <ClInclude Include="Manager\TimeManager.h" />
     <ClInclude Include="Meta\Assert.h" />
     <ClInclude Include="Meta\Defines.h" />
     <ClInclude Include="Meta\TrackTime.h" />
+    <ClInclude Include="Rendering\Fonts\EnumsFont.h" />
+    <ClInclude Include="Rendering\IRenderElement.h" />
+    <ClInclude Include="Rendering\Textures\EnumsTexture.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Time\DefinesTime.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Manager\FontManager.cpp" />
+    <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="GameObjects\IGameObject.cpp" />
+    <ClCompile Include="Manager\GameObjectManager.cpp" />
+    <ClCompile Include="Manager\Rendering\FontManager.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\InputManager.cpp" />
     <ClCompile Include="Manager\PerformanceManager.cpp" />
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\Rendering\TextureManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
+    <ClCompile Include="Rendering\IRenderElement.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

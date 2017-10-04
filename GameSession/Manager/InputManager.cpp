@@ -29,7 +29,6 @@ void CInputManager::Init()
 
 void CInputManager::PrepareTick()
 {
-	//TT_BEGIN("ResetInput");
 	for (int i = 0; i < int(KeyCode::Count); i++)
 	{
 		m_KeyCodeArrayDown[i] = false;
@@ -43,7 +42,6 @@ void CInputManager::PrepareTick()
 	}
 
 	m_MouseWheelDelta = 0.0f;
-	//TT_END("ResetInput");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -112,8 +110,6 @@ void CInputManager::UpdateMouseCursorPosition(int x, int y)
 	// Set position
 	m_MousePos.x = x;
 	m_MousePos.y = y;
-
-	LOG_INFO("Mouse pos: x: " << m_MousePos.x << ", y: " << m_MousePos.y);
 }
 
 //////////////////////////////////////////////////////////////////////////

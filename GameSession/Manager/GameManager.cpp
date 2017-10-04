@@ -3,9 +3,11 @@
 
 #include <SFML/Window/Event.hpp>
 
+#include "GameSession/Manager/GameObjectManager.h"
 #include "GameSession/Manager/InputManager.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/Manager/TimeManager.h"
+#include "GameSession/Actor/Actor.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +45,6 @@ void CGameManager::Init()
 	// Input
 	//////////////////////////////////////////////////////////////////////////
 	CInputManager::GetMutable().Init();
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -63,10 +64,9 @@ void CGameManager::Run()
 
 		PollEvents();
 
-		LOG_INFO(CTimeManager::Get().GetFPS());
+		Tick();
 
-		CRenderManager::GetMutable().GetWindow()->clear();
-		CRenderManager::GetMutable().GetWindow()->display();
+		Render();
 	}
 	std::cout << "Time passed upon end from game clock: " << CTimeManager::Get().GetAppTime() << " seconds";
 }
@@ -75,6 +75,7 @@ void CGameManager::Run()
 
 void CGameManager::PrepareTick()
 {
+	CRenderManager::GetMutable().PrepareTick();
 	CTimeManager::GetMutable().PrepareTick();
 	CInputManager::GetMutable().PrepareTick();
 }
@@ -115,6 +116,20 @@ void CGameManager::PollEvents()
 			break;
 		}
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CGameManager::Tick()
+{
+	CGameObjectManager::GetMutable().Tick();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CGameManager::Render()
+{
+	CRenderManager::GetMutable().Render();
 }
 
 //////////////////////////////////////////////////////////////////////////

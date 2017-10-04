@@ -1,12 +1,20 @@
 #include "stdafx.h"
 #include "RenderManager.h"
 
-#include "GameSession/Manager/FontManager.h"
+#include <SFML/Graphics/Text.hpp>
+
+#include "GameSession/Manager/Rendering/FontManager.h"
+#include "GameSession/Manager/Rendering/TextureManager.h"
+#include "GameSession/Rendering/IRenderElement.h"
+
 
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
 {
+
+static const int	SCREEN_WIDTH = 1536;
+static const int	SCREEN_HEIGHT = 864;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -25,33 +33,95 @@ CRenderManager::~CRenderManager()
 
 //////////////////////////////////////////////////////////////////////////
 
+void CRenderManager::PrepareTick()
+{
+	m_Window->clear();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CRenderManager::Init()
 {
 	CFontManager::GetMutable().Init();
+	CTextureManager::GetMutable().Init();
 
-	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(200, 200), "SFML works!");
+	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Gold Digger");
 	//m_window->setVerticalSyncEnabled(true);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::Render()
+{
+	for (const IRenderElement* renderElement : m_RenderElementList)
+	{
+		renderElement->Draw();
+	}
+
+	m_Window->display();
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 const sf::RenderWindow* CRenderManager::GetWindow() const
 {
-	return m_window.get();
+	return m_Window.get();
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 sf::RenderWindow* CRenderManager::GetWindow()
 {
-	return m_window.get();
+	return m_Window.get();
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawText(std::string text)
+void CRenderManager::RegisterRenderElement(const IRenderElement* renderElement)
 {
+	ASSERT_OR_EXECUTE(renderElement, return);
+	m_RenderElementList.push_back(renderElement);
+}
 
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::UnregisterRenderElement(const IRenderElement* renderElement)
+{
+	ASSERT_OR_EXECUTE(renderElement, return);
+	auto it = std::find_if(m_RenderElementList.cbegin(), m_RenderElementList.cend(), [renderElement](const IRenderElement* element) { return renderElement == element; });
+	ASSERT_OR_EXECUTE(it != m_RenderElementList.cend(), return);
+	m_RenderElementList.erase(it);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawText(const Vector2& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/)
+{
+	sf::Text text = CFontManager::Get().CreateText(content, fontName, charSize, textColor);
+	text.setPosition(pos);
+
+	m_Window->draw(std::move(text));
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawSpriteWorld(const Vector2& pos, const TextureName& textureName)
+{
+	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
+	ASSERT_OR_EXECUTE(texture, return);
+
+	sf::Sprite sprite;
+	sprite.setTexture(*texture);
+	sprite.setPosition(WorldToRenderPos(pos));
+
+	m_Window->draw(std::move(sprite));
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+sf::Vector2f CRenderManager::WorldToRenderPos(Vector2 worldPos) const
+{
+	return sf::Vector2f(worldPos.x, worldPos.y);
 }
 
 //////////////////////////////////////////////////////////////////////////

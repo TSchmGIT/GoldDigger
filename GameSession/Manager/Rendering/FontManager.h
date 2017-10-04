@@ -1,6 +1,6 @@
 #pragma once
 #include "GameSession/Manager/SingletonBase.h"
-#include "GameSession/Fonts/EnumsFont.h"
+#include "GameSession/Rendering/Fonts/EnumsFont.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,8 +18,11 @@ public:
 
 	void Init();
 
+public:
+	sf::Text CreateText(String content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White) const;
+
 protected:
-	Map <FontName, sf::Font> m_FontTable;
+	Map<FontName, sf::Font> m_FontTable;
 };
 
 /////////////////////////////////////////////////////////////////////////////

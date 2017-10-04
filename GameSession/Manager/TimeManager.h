@@ -21,7 +21,9 @@ public:
 
 public:
 	GameTime GetGameTime() const;
+	GameTime GetGameDeltaTime() const;
 	AppTime GetAppTime() const;
+	AppTime GetAppDeltaTime() const;
 
 	int GetFrameCount() const;
 	float GetFPS() const;

@@ -8,24 +8,28 @@ namespace hvmath
 /////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-class CVector2
+class Vector2
 {
 
 public:
-	CVector2() : x(T()), y(T()) {};
-	CVector2(T x, T y) : x(x), y(y) {};
-	CVector2(const CVector2& vec) = default;
-	virtual ~CVector2() = default;
+	Vector2() : x(T()), y(T()) {};
+	Vector2(T x, T y) : x(x), y(y) {};
+	Vector2(const Vector2& vec) = default;
+	virtual ~Vector2() = default;
 
 	template<typename U>
-	CVector2<T> operator+(const CVector2<U>& vec);
+	Vector2<T> operator+(const Vector2<U>& vec);
 	template<typename U>
-	CVector2<T>& operator+=(const CVector2<U>& vec);
+	Vector2<T>& operator+=(const Vector2<U>& vec);
 
 	template<typename U>
-	CVector2<T> operator*(const U& factor);
+	Vector2<T> operator*(const U& factor);
 	template<typename U>
-	CVector2<T>& operator*=(const U& factor);
+	Vector2<T>& operator*=(const U& factor);
+
+	operator sf::Vector2f() const;
+	operator sf::Vector2i() const;
+	operator sf::Vector2u() const;
 
 public:
 	T x;
@@ -35,15 +39,39 @@ public:
 //////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-template<typename U>
-CVector2<T> CVector2<T>::operator+(const CVector2<U>& vec)
+Vector2<T>::operator sf::Vector2u() const
 {
-	return CVector2<T>(x + vec.x, y + vec.y);
+	return sf::Vector2u(x, y);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+Vector2<T>::operator sf::Vector2i() const
+{
+	return sf::Vector2i(x, y);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+Vector2<T>::operator sf::Vector2f() const
+{
+	return sf::Vector2f(x, y);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+template<typename U>
+Vector2<T> Vector2<T>::operator+(const Vector2<U>& vec)
+{
+	return Vector2<T>(x + vec.x, y + vec.y);
 }
 
 template<typename T>
 template<typename U>
-CVector2<T>& CVector2<T>::operator+=(const CVector2<U>& vec)
+Vector2<T>& Vector2<T>::operator+=(const Vector2<U>& vec)
 {
 	x += vec.x;
 	y += vec.y;
@@ -54,14 +82,14 @@ CVector2<T>& CVector2<T>::operator+=(const CVector2<U>& vec)
 
 template<typename T>
 template<typename U>
-CVector2<T> CVector2<T>::operator*(const U& factor)
+Vector2<T> Vector2<T>::operator*(const U& factor)
 {
-	return CVector2<T>(x * factor, y * factor);
+	return Vector2<T>(x * factor, y * factor);
 }
 
 template<typename T>
 template<typename U>
-CVector2<T>& CVector2<T>::operator*=(const U& factor)
+Vector2<T>& Vector2<T>::operator*=(const U& factor)
 {
 	x *= factor;
 	y *= factor;

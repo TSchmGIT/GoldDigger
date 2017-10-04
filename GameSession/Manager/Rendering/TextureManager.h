@@ -1,5 +1,6 @@
 #pragma once
 #include "GameSession/Manager/SingletonBase.h"
+#include "GameSession/Rendering/Textures/EnumsTexture.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -8,30 +9,20 @@ namespace hvgs
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CGameManager : public CSingletonBase<CGameManager>
+class CTextureManager : public CSingletonBase<CTextureManager>
 {
 
 public:
-	CGameManager();
-	virtual ~CGameManager();
+	CTextureManager();
+	virtual ~CTextureManager();
+
+	void Init();
 
 public:
-	void Init();
-	void Shutdown();
-
-	void Run();
+	const sf::Texture* GetTexture(TextureName textureName) const;
 
 protected:
-	void PrepareTick();
-
-	void PollEvents();
-
-	void Tick();
-
-	void Render();
-
-protected:
-	sf::RenderWindow m_GameWindow;
+	Map<TextureName, sf::Texture> m_TextureTable;
 };
 
 /////////////////////////////////////////////////////////////////////////////

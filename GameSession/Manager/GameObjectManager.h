@@ -5,33 +5,30 @@
 
 namespace hvgs
 {
+class IGameObject;
+}
+
+namespace hvgs
+{
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CGameManager : public CSingletonBase<CGameManager>
+class CGameObjectManager : public CSingletonBase<CGameObjectManager>
 {
 
 public:
-	CGameManager();
-	virtual ~CGameManager();
+	CGameObjectManager();
+	virtual ~CGameObjectManager();
 
 public:
-	void Init();
-	void Shutdown();
+	void RegisterGameObject(IGameObject* gameObject);
+	void UnregisterGameObject(IGameObject* gameObject);
 
-	void Run();
-
-protected:
-	void PrepareTick();
-
-	void PollEvents();
-
+public:
 	void Tick();
 
-	void Render();
-
 protected:
-	sf::RenderWindow m_GameWindow;
+	Vector<IGameObject*> m_GameObjectList;
 };
 
 /////////////////////////////////////////////////////////////////////////////

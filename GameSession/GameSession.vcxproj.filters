@@ -57,10 +57,28 @@
     <ClInclude Include="Meta\TrackTime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Fonts\EnumsFont.h">
+    <ClInclude Include="Manager\Rendering\FontManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Manager\FontManager.h">
+    <ClInclude Include="Manager\Rendering\TextureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Textures\EnumsTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Fonts\EnumsFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\IRenderElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\GameObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\IGameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,7 +104,22 @@
     <ClCompile Include="Manager\TimeManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\FontManager.cpp">
+    <ClCompile Include="Manager\Rendering\FontManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\Rendering\TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\IRenderElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Actor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\GameObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\IGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

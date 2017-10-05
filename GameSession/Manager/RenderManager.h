@@ -32,6 +32,9 @@ public:
 	const sf::RenderWindow* GetWindow() const;
 	sf::RenderWindow* GetWindow();
 
+	hvuint GetScreenWidth() const;
+	hvuint GetScreenHeight() const;
+
 public:
 	void RegisterRenderElement(const IRenderElement* renderElement);
 	void UnregisterRenderElement(const IRenderElement* renderElement);
@@ -39,6 +42,7 @@ public:
 public:
 	void DrawText(const Vector2& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White);
 
+	/// Draws a sprite on the screen with given world coordinates (position may be out of viewport)
 	void DrawSpriteWorld(const Vector2& pos, const TextureName& textureName);
 
 protected:

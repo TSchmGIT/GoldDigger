@@ -17,7 +17,7 @@ using hvint8 = int8_t;
 using hvint16 = int16_t;
 using hvint64 = int64_t;
 
-using hvuint = uint16_t;
+using hvuint = uint32_t;
 using hvuint8 = uint8_t;
 using hvuint16 = uint16_t;
 using hvuint64 = uint64_t;

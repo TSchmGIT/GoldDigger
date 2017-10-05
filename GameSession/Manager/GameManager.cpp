@@ -3,6 +3,7 @@
 
 #include <SFML/Window/Event.hpp>
 
+#include "GameSession/Manager/CameraManager.h"
 #include "GameSession/Manager/GameObjectManager.h"
 #include "GameSession/Manager/InputManager.h"
 #include "GameSession/Manager/RenderManager.h"
@@ -40,11 +41,13 @@ void CGameManager::Init()
 	// Render
 	//////////////////////////////////////////////////////////////////////////
 	CRenderManager::GetMutable().Init();
+	CCameraManager::GetMutable().Init();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Input
 	//////////////////////////////////////////////////////////////////////////
 	CInputManager::GetMutable().Init();
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -109,6 +112,7 @@ void CGameManager::PollEvents()
 			break;
 		case sf::Event::EventType::MouseWheelScrolled:
 			CInputManager::GetMutable().UpdateMouseWheelDelta(pollEvent.mouseWheelScroll.delta);
+			break;
 		case sf::Event::EventType::Closed:
 			CRenderManager::GetMutable().GetWindow()->close();
 			break;
@@ -122,6 +126,7 @@ void CGameManager::PollEvents()
 
 void CGameManager::Tick()
 {
+	CCameraManager::GetMutable().Tick();
 	CGameObjectManager::GetMutable().Tick();
 }
 

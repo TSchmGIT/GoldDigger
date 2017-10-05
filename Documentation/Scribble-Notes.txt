@@ -1,10 +1,15 @@
 GoldDigger Todo/Wishlist/Idealist:
 
+Tools:
+- GameObjectEditor	WPF App that let's you configure game objects and its properties (e.g. sprite)
+- TextureCodeGen	WPF App that allows texture configuration (e.g. creation of texture names, mapping from texturename->filename, etc.)
+
 Engine:
 [DONE] - INPUT:		Input Manager for Mouse Movement
 - DEBUG: 			Debugsystem
 - PROFILER: 		Performance profiler (github dll)
-- RENDERING: 		RenderManager with a lot of useful methods that provides good interface for creating visuals (textures, sprites, etc.)
+[DONE] - RENDERING: RenderManager with a lot of useful methods that provides good interface for creating visuals (textures, sprites, etc.)
+[DONE] - Camera		CameraManager that allows paning, zooming and WorldToScreenPoint calulations
 [DONE] - TIME:		TimeManager that knows time of game, delta times, frame counts, etc.	
 - MUTLITHREADING:	Make a basic, but solid compute-vs-render multthreading structure
 - XML-INTEGRATION:	Have a system where xml files can be read and data can be filled into it. Useful for serialization. Hot-reload required!
@@ -13,7 +18,7 @@ Engine:
 
 Gameplay:
 - WORLD:			Generate a world that holds ores and is configurable. Needs to have testable and visualized data
-- ACTOR:			Have an actor that moves through the environment. Collision detection required. Gravity required. Needs debug values and configurable values
+[WIP] - ACTOR		Have an actor that moves through the environment. Collision detection required. Gravity required. Needs debug values and configurable values
 - DIGGING:			World needs to be changeable at runtime. Actor needs to be able to dig stuff. Functionality needs to be debuggable with clicks on screen.
 - INVENTORY:		Actor has an inventory that stores things he collects through digging. Inventory must be viewable in data or on-screen. Need admin commands (clear, fill, etc.)
 - ACTOR UPGRADES:	Actor needs to be upgradeable to be faster and more efficient at things he can do. Elements should be easy to add and remove for debugging.

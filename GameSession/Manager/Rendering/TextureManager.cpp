@@ -37,6 +37,9 @@ void CTextureManager::Init()
 		case TextureName::Actor:
 			fileName += "Actor.png";
 			break;
+		case TextureName::Background:
+			fileName += "background.png";
+			break;
 		default:
 			break;
 		}

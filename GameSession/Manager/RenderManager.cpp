@@ -3,9 +3,11 @@
 
 #include <SFML/Graphics/Text.hpp>
 
+#include "GameSession/Manager/CameraManager.h"
 #include "GameSession/Manager/Rendering/FontManager.h"
 #include "GameSession/Manager/Rendering/TextureManager.h"
 #include "GameSession/Rendering/IRenderElement.h"
+#include "GameSession/Camera/Camera.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -53,6 +55,8 @@ void CRenderManager::Init()
 
 void CRenderManager::Render()
 {
+	DrawSpriteWorld(Vector2(), TextureName::Background);
+
 	for (const IRenderElement* renderElement : m_RenderElementList)
 	{
 		renderElement->Draw();
@@ -77,6 +81,22 @@ sf::RenderWindow* CRenderManager::GetWindow()
 
 //////////////////////////////////////////////////////////////////////////
 
+hvuint CRenderManager::GetScreenWidth() const
+{
+	ASSERT_OR_EXECUTE(m_Window, return 0);
+	return m_Window->getSize().x;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvuint CRenderManager::GetScreenHeight() const
+{
+	ASSERT_OR_EXECUTE(m_Window, return 0);
+	return m_Window->getSize().y;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CRenderManager::RegisterRenderElement(const IRenderElement* renderElement)
 {
 	ASSERT_OR_EXECUTE(renderElement, return);
@@ -88,8 +108,10 @@ void CRenderManager::RegisterRenderElement(const IRenderElement* renderElement)
 void CRenderManager::UnregisterRenderElement(const IRenderElement* renderElement)
 {
 	ASSERT_OR_EXECUTE(renderElement, return);
+
 	auto it = std::find_if(m_RenderElementList.cbegin(), m_RenderElementList.cend(), [renderElement](const IRenderElement* element) { return renderElement == element; });
-	ASSERT_OR_EXECUTE(it != m_RenderElementList.cend(), return);
+	ASSERT_OR_EXECUTE(it != m_RenderElementList.end(), return);
+
 	m_RenderElementList.erase(it);
 }
 
@@ -110,9 +132,26 @@ void CRenderManager::DrawSpriteWorld(const Vector2& pos, const TextureName& text
 	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
 	ASSERT_OR_EXECUTE(texture, return);
 
+	sf::Vector2u textureSize = texture->getSize();
+
+	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
+	sf::Vector2f screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
+
+	// Do not render objects outside the view
+	if (screenPos.x + textureSize.x < 0 || screenPos.x - textureSize.x > GetScreenWidth() ||
+		screenPos.y + textureSize.y < 0 || screenPos.y - textureSize.y > GetScreenHeight())
+	{
+		return;
+	}
+
 	sf::Sprite sprite;
 	sprite.setTexture(*texture);
-	sprite.setPosition(WorldToRenderPos(pos));
+
+	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
+	sprite.setPosition(CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos));
+
+	float zoomFactor = CCameraManager::GetMutable().GetActive()->GetZoomFactor();
+	sprite.setScale(zoomFactor, zoomFactor);
 
 	m_Window->draw(std::move(sprite));
 }

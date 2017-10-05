@@ -11,10 +11,17 @@
 
 using namespace hvgs;
 
+CActor GetRenderElement()
+{
+	return CActor();
+}
+
 int main()
 {
-	CActor actor;
 	CGameManager::GetMutable().Init();
+
+	CActor actor;
+	actor.SetPosition(Vector2(0.0f, 420.0f));
 
 	CGameManager::GetMutable().Run();
 

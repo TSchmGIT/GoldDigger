@@ -1,8 +1,5 @@
 #pragma once
 
-#include "GameSession/GameObjects/IGameObject.h"
-#include "GameSession/Rendering/IRenderElement.h"
-
 /////////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
@@ -10,24 +7,31 @@ namespace hvgs
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CActor : public IRenderElement, public IGameObject
+class CCamera
 {
 
 public:
-	CActor();
-	virtual ~CActor();
+	CCamera();
+	virtual ~CCamera();
 
-public: // IGameObject
-	virtual void Tick() override;
-
-public: // IRenderElement
-	virtual void Draw() const override;
+	void Tick();
 
 public:
-	Vector2 GetPosition() const;
+	Vector2 WorldToScreenPoint(const Vector2& worldPos) const;
+
+public:
+	const Vector2& GetPosition() const;
 	void SetPosition(const Vector2& position);
+	void SetPosition(Vector2&& position);
+
+	float GetZoomFactor() const;
+	void SetZoomFactor(float zoomFactor);
+protected:
+	void UpdateZoom();
+
 protected:
 	Vector2		m_Position;
+	float		m_ZoomFactor;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -168,8 +168,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="GameObjects\IGameObject.h" />
     <ClInclude Include="Input\InputEnums.h" />
+    <ClInclude Include="Manager\CameraManager.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Manager\Rendering\FontManager.h" />
     <ClInclude Include="Manager\GameManager.h" />
@@ -191,7 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GameObjects\IGameObject.cpp" />
+    <ClCompile Include="Manager\CameraManager.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
     <ClCompile Include="Manager\Rendering\FontManager.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />

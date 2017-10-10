@@ -113,6 +113,21 @@ void CGameManager::PollEvents()
 		case sf::Event::EventType::MouseWheelScrolled:
 			CInputManager::GetMutable().UpdateMouseWheelDelta(pollEvent.mouseWheelScroll.delta);
 			break;
+		case sf::Event::EventType::JoystickMoved:
+			CInputManager::GetMutable().UpdateJoystickAxisPosition(JoystickID(pollEvent.joystickMove.joystickId), JoystickAxis(pollEvent.joystickMove.axis), pollEvent.joystickMove.position);
+			break;
+		case sf::Event::EventType::JoystickButtonPressed:
+			CInputManager::GetMutable().RegisterJoystickButtonPressed(JoystickID(pollEvent.joystickButton.joystickId), JoystickButton(pollEvent.joystickButton.button));
+			break;
+		case sf::Event::EventType::JoystickButtonReleased:
+			CInputManager::GetMutable().RegisterJoystickButtonReleased(JoystickID(pollEvent.joystickButton.joystickId), JoystickButton(pollEvent.joystickButton.button));
+			break;
+		case sf::Event::EventType::JoystickConnected:
+			CInputManager::GetMutable().RegisterJoystickConnect(JoystickID(pollEvent.joystickConnect.joystickId));
+			break;
+		case sf::Event::EventType::JoystickDisconnected:
+			CInputManager::GetMutable().RegisterJoystickDisconnect(JoystickID(pollEvent.joystickConnect.joystickId));
+			break;
 		case sf::Event::EventType::Closed:
 			CRenderManager::GetMutable().GetWindow()->close();
 			break;

@@ -22,6 +22,46 @@ enum class MouseButton : hvuint8
 	Count ///< Keep last -- the total number of mouse buttons
 };
 
+enum class JoystickID : hvuint8
+{
+	Player1 = 0,
+	Player2,
+	Player3,
+	Player4,
+	Count
+};
+
+enum class JoystickAxis : hvint8
+{
+	Unknown = -1,
+	LeftX = 0,
+	LeftY,
+	Trigger,
+	RightY,
+	RightX,
+	V,    ///< The V axis
+	PadX,
+	PadY,
+	Count
+};
+
+enum class JoystickButton : hvint8
+{
+	Unknown = -1,
+	XBOX_A = 0,
+	XBOX_B,
+	XBOX_X,
+	XBOX_Y,
+	XBOX_LeftButton,
+	XBOX_RightButton,
+	XBOX_Back,
+	XBOX_Start,
+	XBOX_LeftAxisButton,
+	XBOX_RightAxisButton,
+
+	Count
+};
+
 enum class KeyCode : hvint8
 {
 	Unknown = -1, ///< Unhandled key

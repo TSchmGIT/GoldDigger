@@ -29,6 +29,7 @@
 #include <hvsdk/Meta/Assert.h>
 
 #include <hvmath/Vector2/Vector2.inl>
+#include <hvmath/Generic/Generic.inl>
 
 #include "Meta/Defines.h"
 #include "Meta/TrackTime.h"

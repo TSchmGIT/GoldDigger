@@ -19,34 +19,59 @@ public:
 
 public:
 	void PrepareTick();
+
+	//////////////////////////////////////////////////////////////////////////
+	// Keyboard
+	//////////////////////////////////////////////////////////////////////////
 	void RegisterKeyPressed(KeyCode keycode);
 	void RegisterKeyReleased(KeyCode keycode);
-
-	void RegisterMouseButtonPressed(MouseButton button);
-	void RegisterMouseButtonReleased(MouseButton button);
-
-public:
-	void UpdateMouseCursorPosition(int x, int y);
-	void UpdateMouseWheelDelta(float delta);
 
 public:
 	bool IsKeyPressed(KeyCode keyCode) const;
 	bool IsKeyDown(KeyCode keyCode) const;
 	bool IsKeyUp(KeyCode keyCode) const;
 
+
+	//////////////////////////////////////////////////////////////////////////
+	// Mouse
+	//////////////////////////////////////////////////////////////////////////
+	void RegisterMouseButtonPressed(MouseButton button);
+	void RegisterMouseButtonReleased(MouseButton button);
+
+	void UpdateMouseCursorPosition(int x, int y);
+	void UpdateMouseWheelDelta(float delta);
+
 public:
 	bool IsMouseButtonPressed(MouseButton button) const;
 	bool IsMouseButtonUp(MouseButton button) const;
 	bool IsMouseButtonDown(MouseButton button) const;
 
-public:
 	Vector2i	GetMousePos() const;
 	Vector2i	GetMouseDelta() const;
 
 	float		GetMouseWheelDelta() const;
 	float		GetMouseWheelPos() const;
+
+	//////////////////////////////////////////////////////////////////////////
+	/// Joystick
+	//////////////////////////////////////////////////////////////////////////
+	void RegisterJoystickConnect(JoystickID id);
+	void RegisterJoystickDisconnect(JoystickID id);
+
+	void UpdateJoystickAxisPosition(JoystickID id, JoystickAxis axis, float position);
+
+	void RegisterJoystickButtonPressed(JoystickID id, JoystickButton button);
+	void RegisterJoystickButtonReleased(JoystickID id, JoystickButton button);
+
 public:
-	float GetAxis(Axis axis) const;
+	bool IsJoystickButtonDown(JoystickButton button, JoystickID id = JoystickID::Player1) const;
+	bool IsJoystickButtonUp(JoystickButton button, JoystickID id = JoystickID::Player1) const;
+	bool IsJoystickButtonPressed(JoystickButton button, JoystickID id = JoystickID::Player1) const;
+
+	float GetJoystickAxis(JoystickAxis axis, JoystickID id = JoystickID::Player1) const;
+
+public:
+	float GetAxis(Axis axis, JoystickID id = JoystickID::Player1) const;
 
 protected:
 	bool m_KeyCodeArrayPressed[size_t(KeyCode::Count)];
@@ -56,6 +81,12 @@ protected:
 	bool m_MouseButtonArrayPressed[size_t(MouseButton::Count)];
 	bool m_MouseButtonArrayDown[size_t(MouseButton::Count)];
 	bool m_MouseButtonArrayUp[size_t(MouseButton::Count)];
+
+	Map<JoystickID, bool*> m_JoystickButtonMapPressed;
+	Map<JoystickID, bool*> m_JoystickButtonMapDown;
+	Map<JoystickID, bool*> m_JoystickButtonMapUp;
+
+	Map<JoystickID, Map<JoystickAxis, float>> m_JoystickAxis;
 
 	Vector2i	m_MousePos;
 	Vector2i	m_MouseDelta;

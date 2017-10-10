@@ -1,41 +1,11 @@
 #pragma once
 
-#include <math.h>
-
 /////////////////////////////////////////////////////////////////////////////
 
 namespace hvmath
 {
 
 /////////////////////////////////////////////////////////////////////////////
-
-template<typename T>
-T Mod(T a, T b)
-{
-	return a % b;
-}
-
-template<>
-inline float Mod<float>(float a, float b)
-{
-	return std::fmod(a, b);
-}
-
-template<typename T>
-T PingPong(T time, T length)
-{
-	T lengthDoubled = length * 2;
-	T modulo = Mod(time, lengthDoubled); // Clamp between 0 and lengthDoubled
-
-	if (modulo <= length)
-	{
-		return modulo;
-	}
-	else
-	{
-		return lengthDoubled - modulo;
-	}
-}
 
 template<typename T>
 class Vector2

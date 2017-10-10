@@ -31,8 +31,11 @@ CActor::~CActor()
 
 void CActor::Tick()
 {
+	// Get Input
 	float hor = CInputManager::Get().GetAxis(Axis::Horizontal);
+	//float ver = CInputManager::Get().GetAxis(Axis::Vertical);
 
+	// Calculate delta movement
 	Vector2 deltaMovement(hor * 500.0f * CTimeManager::Get().GetGameDeltaTime(), 0.0f);
 
 	m_Position += deltaMovement;

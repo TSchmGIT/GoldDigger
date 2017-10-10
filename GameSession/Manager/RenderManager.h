@@ -40,10 +40,11 @@ public:
 	void UnregisterRenderElement(const IRenderElement* renderElement);
 
 public:
-	void DrawText(const Vector2& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White);
+	void DrawText(const ScreenPos& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White);
 
+	void DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White);
 	/// Draws a sprite on the screen with given world coordinates (position may be out of viewport)
-	void DrawSpriteWorld(const Vector2& pos, const TextureName& textureName);
+	void DrawSpriteWorld(const WorldPos& pos, const TextureName& textureName);
 
 protected:
 	sf::Vector2f WorldToRenderPos(Vector2 worldPos) const;

@@ -27,6 +27,7 @@
 #include <hvsdk/Meta/DefinesSTL.h>
 #include <hvsdk/Meta/Log.h>
 #include <hvsdk/Meta/Assert.h>
+#include <hvsdk/Meta/ObjectPool.h>
 
 #include <hvmath/Vector2/Vector2.inl>
 #include <hvmath/Generic/Generic.inl>

@@ -2,6 +2,7 @@
 #include "Camera.h"
 
 #include "GameSession/Manager/InputManager.h"
+#include "GameSession/Manager/RenderManager.h"
 #include "GameSession/Manager/TimeManager.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -34,10 +35,12 @@ void CCamera::Tick()
 
 //////////////////////////////////////////////////////////////////////////
 
-Vector2 CCamera::WorldToScreenPoint(const Vector2& worldPos) const
+ScreenPos CCamera::WorldToScreenPoint(const WorldPos& worldPos) const
 {
 	Vector2 result = worldPos - m_Position;
 	result *= m_ZoomFactor;
+
+	result.y = CRenderManager::Get().GetScreenHeight() - result.y;
 	return result;
 }
 

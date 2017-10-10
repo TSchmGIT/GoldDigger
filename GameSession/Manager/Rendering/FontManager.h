@@ -19,10 +19,13 @@ public:
 	void Init();
 
 public:
-	sf::Text CreateText(String content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White) const;
+	sf::Text* PopText(String content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White);
+	void PushText(sf::Text* text);
 
 protected:
 	Map<FontName, sf::Font> m_FontTable;
+
+	hvsdk::ObjectPool<sf::Text> m_PoolText;
 };
 
 /////////////////////////////////////////////////////////////////////////////

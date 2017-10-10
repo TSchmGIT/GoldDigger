@@ -36,6 +36,12 @@
     <ClInclude Include="Meta\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Meta\StrictTypedef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meta\ObjectPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

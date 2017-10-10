@@ -117,17 +117,44 @@ void CRenderManager::UnregisterRenderElement(const IRenderElement* renderElement
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawText(const Vector2& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawText(const ScreenPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
-	sf::Text text = CFontManager::Get().CreateText(content, fontName, charSize, textColor);
-	text.setPosition(pos);
+	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, charSize, textColor);
+	text->setPosition(pos);
 
-	m_Window->draw(std::move(text));
+	auto globalBounds = text->getGlobalBounds();
+	if (globalBounds.left + globalBounds.width < 0.0f || globalBounds.left > GetScreenWidth() ||
+		globalBounds.top + globalBounds.height < 0.0f || globalBounds.top > GetScreenHeight())
+	{
+		CFontManager::GetMutable().PushText(text);
+		return;
+	}
+
+	m_Window->draw(*text);
+
+	CFontManager::GetMutable().PushText(text);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawSpriteWorld(const Vector2& pos, const TextureName& textureName)
+void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/)
+{
+	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
+	ScreenPos screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
+
+	//// Do not render objects outside the view
+	//if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
+	//	screenPos.y < 0 || screenPos.y > GetScreenHeight())
+	//{
+	//	return;
+	//}
+
+	DrawText(screenPos, content, fontName, charSize, textColor);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawSpriteWorld(const WorldPos& pos, const TextureName& textureName)
 {
 	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
 	ASSERT_OR_EXECUTE(texture, return);

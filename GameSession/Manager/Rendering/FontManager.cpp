@@ -13,6 +13,7 @@ static const String RESOURCES_PATH_FONTS("..\\Resources\\Fonts\\");
 //////////////////////////////////////////////////////////////////////////
 
 CFontManager::CFontManager()
+	: m_PoolText(32, 1000)
 {
 
 }
@@ -59,19 +60,27 @@ void CFontManager::Init()
 
 //////////////////////////////////////////////////////////////////////////
 
-sf::Text CFontManager::CreateText(String content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/) const
+sf::Text* CFontManager::PopText(String content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	auto itFont = m_FontTable.find(fontName);
-	ASSERT_OR_EXECUTE(itFont != m_FontTable.end(), return sf::Text());
+	ASSERT_OR_EXECUTE(itFont != m_FontTable.end(), return nullptr);
 
-	sf::Text text;
-	text.setFont(itFont->second);
-	text.setString(content);
-	text.setCharacterSize(charSize);
-	text.setFillColor(textColor);
-	text.setStyle(sf::Text::Style::Regular);
+	sf::Text* text = m_PoolText.New();
+	text->setFont(itFont->second);
+	text->setString(content);
+	text->setCharacterSize(charSize);
+	text->setFillColor(textColor);
+	text->setStyle(sf::Text::Style::Regular);
 
 	return text;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CFontManager::PushText(sf::Text* text)
+{
+	ASSERT_OR_EXECUTE(text, return);
+	m_PoolText.Delete(text);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -165,6 +165,8 @@
     <ClInclude Include="Meta\Assert.h" />
     <ClInclude Include="Meta\DefinesSTL.h" />
     <ClInclude Include="Meta\Log.h" />
+    <ClInclude Include="Meta\ObjectPool.h" />
+    <ClInclude Include="Meta\StrictTypedef.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

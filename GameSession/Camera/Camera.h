@@ -17,7 +17,7 @@ public:
 	void Tick();
 
 public:
-	Vector2 WorldToScreenPoint(const Vector2& worldPos) const;
+	ScreenPos WorldToScreenPoint(const WorldPos& worldPos) const;
 
 public:
 	const Vector2& GetPosition() const;

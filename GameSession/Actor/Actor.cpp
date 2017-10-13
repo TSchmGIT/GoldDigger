@@ -44,26 +44,26 @@ void CActor::Tick()
 	ASSERT_OR_EXECUTE(cam, return);
 	ScreenPos screenPos = cam->WorldToScreenPoint(m_Position);
 
-	//float deltaXMax = screenPos.x + 100.0f - CRenderManager::Get().GetScreenWidth();
-	//if (deltaXMax > 0)
-	//{
-	//	cam->SetPosition(cam->GetPosition() + ScreenPos(deltaXMax, 0.0f));
-	//}
-	//float deltaXMin = screenPos.x - 100.0f;
-	//if (deltaXMin < 0)
-	//{
-	//	cam->SetPosition(cam->GetPosition() + ScreenPos(deltaXMin, 0.0f));
-	//}
-	//float deltaYMax = screenPos.y - 100.0f;
-	//if (deltaYMax < 0)
-	//{
-	//	cam->SetPosition(cam->GetPosition() + ScreenPos(0.0f, -deltaYMax));
-	//}
-	//float deltaYMin = screenPos.y + 100.0f - CRenderManager::Get().GetScreenHeight();
-	//if (deltaYMin > 0)
-	//{
-	//	cam->SetPosition(cam->GetPosition() + ScreenPos(0.0f, -deltaYMin));
-	//}
+	float deltaXMax = screenPos.x + 100.0f - CRenderManager::Get().GetScreenWidth();
+	if (deltaXMax > 0)
+	{
+		cam->SetPosition(cam->GetPosition() + ScreenPos(deltaXMax, 0.0f));
+	}
+	float deltaXMin = screenPos.x - 100.0f;
+	if (deltaXMin < 0)
+	{
+		cam->SetPosition(cam->GetPosition() + ScreenPos(deltaXMin, 0.0f));
+	}
+	float deltaYMax = screenPos.y - 100.0f;
+	if (deltaYMax < 0)
+	{
+		cam->SetPosition(cam->GetPosition() + ScreenPos(0.0f, -deltaYMax));
+	}
+	float deltaYMin = screenPos.y + 100.0f - CRenderManager::Get().GetScreenHeight();
+	if (deltaYMin > 0)
+	{
+		cam->SetPosition(cam->GetPosition() + ScreenPos(0.0f, -deltaYMin));
+	}
 
 }
 

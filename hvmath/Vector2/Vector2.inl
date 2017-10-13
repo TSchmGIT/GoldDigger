@@ -51,7 +51,7 @@ public:
 template<typename T>
 Vector2<T>::operator sf::Vector2u() const
 {
-	return sf::Vector2u(x, y);
+	return sf::Vector2u(unsigned int(x), unsigned int(y));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ Vector2<T>::operator sf::Vector2u() const
 template<typename T>
 Vector2<T>::operator sf::Vector2i() const
 {
-	return sf::Vector2i(x, y);
+	return sf::Vector2i(int(x), int(y));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@ Vector2<T>::operator sf::Vector2i() const
 template<typename T>
 Vector2<T>::operator sf::Vector2f() const
 {
-	return sf::Vector2f(x, y);
+	return sf::Vector2f(float(x), float(y));
 }
 
 //////////////////////////////////////////////////////////////////////////

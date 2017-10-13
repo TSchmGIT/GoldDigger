@@ -40,6 +40,9 @@ void CTextureManager::Init()
 		case TextureName::Background:
 			fileName += "background.png";
 			break;
+		case TextureName::TileAtlas:
+			fileName += "TileAtlas/Final_Atlas.png";
+			break;
 		default:
 			break;
 		}

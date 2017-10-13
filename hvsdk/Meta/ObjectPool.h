@@ -26,7 +26,7 @@ public:
 };
 
 template<typename T, class TMemoryAllocator = DefaultMemoryAllocator>
-class ObjectPool
+class CObjectPool
 {
 private:
 	struct _Node
@@ -63,8 +63,8 @@ private:
 
 	static const size_t _itemSize;
 
-	ObjectPool(const ObjectPool<T, TMemoryAllocator> &source);
-	void operator = (const ObjectPool<T, TMemoryAllocator> &source);
+	CObjectPool(const CObjectPool<T, TMemoryAllocator> &source);
+	void operator = (const CObjectPool<T, TMemoryAllocator> &source);
 
 	void _AllocateNewNode()
 	{
@@ -91,7 +91,7 @@ private:
 	}
 
 public:
-	explicit ObjectPool(size_t initialCapacity = 32, size_t maxBlockLength = 1000000) :
+	explicit CObjectPool(size_t initialCapacity = 32, size_t maxBlockLength = 1000000) :
 		_firstDeleted(NULL),
 		_countInNode(0),
 		_nodeCapacity(initialCapacity),
@@ -104,7 +104,7 @@ public:
 		_nodeMemory = _firstNode._memory;
 		_lastNode = &_firstNode;
 	}
-	~ObjectPool()
+	~CObjectPool()
 	{
 		_Node *node = _firstNode._nextNode;
 		while (node)
@@ -170,5 +170,5 @@ public:
 };
 
 template<typename T, class TMemoryAllocator>
-const size_t ObjectPool<T, TMemoryAllocator>::_itemSize = ((sizeof(T) + sizeof(void *) - 1) / sizeof(void *)) * sizeof(void *);
+const size_t CObjectPool<T, TMemoryAllocator>::_itemSize = ((sizeof(T) + sizeof(void *) - 1) / sizeof(void *)) * sizeof(void *);
 }

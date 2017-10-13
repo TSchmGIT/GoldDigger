@@ -8,6 +8,8 @@ namespace hvgs
 {
 class IRenderElement;
 enum class TextureName : hvuint8;
+
+class CChunk;
 }
 
 namespace hvgs
@@ -46,12 +48,16 @@ public:
 	/// Draws a sprite on the screen with given world coordinates (position may be out of viewport)
 	void DrawSpriteWorld(const WorldPos& pos, const TextureName& textureName);
 
+	void DrawChunk(const CChunk& chunk);
+
 protected:
 	sf::Vector2f WorldToRenderPos(Vector2 worldPos) const;
 
 protected:
 	UniquePtr<sf::RenderWindow>		m_Window;
 	Vector<const IRenderElement*>	m_RenderElementList;
+
+	hvsdk::CObjectPool<sf::Sprite>	m_PoolSprites;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -14,6 +14,7 @@
 #include <tchar.h>
 #include <sstream>
 #include <iomanip>
+#include <stdlib.h>
 
 #include <chrono>
 
@@ -22,8 +23,15 @@
 
 //////////////////////////////////////////////////////////////////////////
 
+
+//////////////////////////////////////////////////////////////////////////
+// External libs
 #include <SFML/Graphics.hpp>
 
+#include <FastNoiseSIMD/FastNoiseSIMD.h>
+
+//////////////////////////////////////////////////////////////////////////
+// Haven libs
 #include <hvsdk/Meta/DefinesSTL.h>
 #include <hvsdk/Meta/Log.h>
 #include <hvsdk/Meta/Assert.h>
@@ -32,10 +40,12 @@
 #include <hvmath/Vector2/Vector2.inl>
 #include <hvmath/Generic/Generic.inl>
 
-#include "Meta/Defines.h"
-#include "Meta/TrackTime.h"
+//////////////////////////////////////////////////////////////////////////
+// Haven GameSession
+#include "GameSession/Meta/Defines.h"
+#include "GameSession/Meta/TrackTime.h"
 
-#include "Time/DefinesTime.h"
+#include "GameSession/Time/DefinesTime.h"
 
 #include "GameSession/Manager/SingletonBase.h"
 #include "GameSession/Manager/PerformanceManager.h"

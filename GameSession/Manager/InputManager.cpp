@@ -212,20 +212,6 @@ float CInputManager::GetMouseWheelPos() const
 
 //////////////////////////////////////////////////////////////////////////
 
-void CInputManager::RegisterJoystickConnect(JoystickID id)
-{
-	ASSERT_TEXT(false, "No implementation for method CInputManager::RegisterJoystickConnect(JoystickID id), paramenter: " << int(id));
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CInputManager::RegisterJoystickDisconnect(JoystickID id)
-{
-	ASSERT_TEXT(false, "No implementation for method CInputManager::RegisterJoystickDisconnect(JoystickID id), parameter: " << int(id));
-}
-
-//////////////////////////////////////////////////////////////////////////
-
 float CInputManager::GetAxis(Axis axis, JoystickID id /*= JoystickID::Player1*/) const
 {
 	KeyCode keyNeg = KeyCode::Unknown;

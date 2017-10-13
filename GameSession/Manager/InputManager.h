@@ -55,9 +55,6 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	/// Joystick
 	//////////////////////////////////////////////////////////////////////////
-	void RegisterJoystickConnect(JoystickID id);
-	void RegisterJoystickDisconnect(JoystickID id);
-
 	void UpdateJoystickAxisPosition(JoystickID id, JoystickAxis axis, float position);
 
 	void RegisterJoystickButtonPressed(JoystickID id, JoystickButton button);

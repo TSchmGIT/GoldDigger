@@ -3,12 +3,13 @@
 
 #include <SFML/Window/Event.hpp>
 
+#include "GameSession/Actor/Actor.h"
 #include "GameSession/Manager/CameraManager.h"
 #include "GameSession/Manager/GameObjectManager.h"
 #include "GameSession/Manager/InputManager.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/Manager/TimeManager.h"
-#include "GameSession/Actor/Actor.h"
+#include "GameSession/Rendering/Textures/EnumsTexture.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -122,12 +123,6 @@ void CGameManager::PollEvents()
 		case sf::Event::EventType::JoystickButtonReleased:
 			CInputManager::GetMutable().RegisterJoystickButtonReleased(JoystickID(pollEvent.joystickButton.joystickId), JoystickButton(pollEvent.joystickButton.button));
 			break;
-		case sf::Event::EventType::JoystickConnected:
-			CInputManager::GetMutable().RegisterJoystickConnect(JoystickID(pollEvent.joystickConnect.joystickId));
-			break;
-		case sf::Event::EventType::JoystickDisconnected:
-			CInputManager::GetMutable().RegisterJoystickDisconnect(JoystickID(pollEvent.joystickConnect.joystickId));
-			break;
 		case sf::Event::EventType::Closed:
 			CRenderManager::GetMutable().GetWindow()->close();
 			break;
@@ -143,6 +138,19 @@ void CGameManager::Tick()
 {
 	CCameraManager::GetMutable().Tick();
 	CGameObjectManager::GetMutable().Tick();
+
+	static float timestamp = 0.0f;
+	static float lastFPS = 0.0f;
+
+	if (timestamp + 0.25f < CTimeManager::Get().GetAppTime())
+	{
+		lastFPS = CTimeManager::Get().GetFPS();
+		timestamp = CTimeManager::Get().GetAppTime();
+	}
+
+	std::ostringstream ss;
+	ss << "FPS: " << lastFPS;
+	CRenderManager::GetMutable().DrawText(ScreenPos(0.0f, 0.0f), ss.str(), FontName::Courier_New);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -7,6 +7,7 @@ enum class TextureName : hvuint8
 {
 	Actor = 0,
 	Background,
+	TileAtlas,
 
 	Count
 };

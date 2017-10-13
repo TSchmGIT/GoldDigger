@@ -8,6 +8,7 @@
 #include "GameSession/Actor/Actor.h"
 #include "GameSession/Manager/GameManager.h"
 #include "GameSession/Manager/RenderManager.h"
+#include "GameSession/World/World.h"
 
 using namespace hvgs;
 
@@ -18,10 +19,13 @@ CActor GetRenderElement()
 
 int main()
 {
+	std::srand(unsigned int(std::time(nullptr)));
+
 	CGameManager::GetMutable().Init();
 
 	CActor actor;
-	actor.SetPosition(Vector2(0.0f, 420.0f));
+	actor.SetPosition({ 0, 0 });
+	CWorld world;
 
 	CGameManager::GetMutable().Run();
 

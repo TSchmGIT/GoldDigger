@@ -25,7 +25,7 @@ public:
 protected:
 	Map<FontName, sf::Font> m_FontTable;
 
-	hvsdk::ObjectPool<sf::Text> m_PoolText;
+	hvsdk::CObjectPool<sf::Text> m_PoolText;
 };
 
 /////////////////////////////////////////////////////////////////////////////

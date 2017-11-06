@@ -1,0 +1,77 @@
+#include "stdafx.h"
+#include "CollisionObject.h"
+
+#include "GameSession/Manager/PhysicsManager.h"
+
+//////////////////////////////////////////////////////////////////////////
+
+namespace hvgs
+{
+
+//////////////////////////////////////////////////////////////////////////
+
+ICollisionObject::ICollisionObject()
+{
+	CPhysicsManager::GetMutable().RegisterCollisionObject(this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+ICollisionObject::ICollisionObject(const ICollisionObject& other)
+{
+	m_AABB = other.m_AABB;
+
+	CPhysicsManager::GetMutable().RegisterCollisionObject(this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+ICollisionObject::ICollisionObject(ICollisionObject&& other)
+{
+	m_AABB = std::move(other.m_AABB);
+
+	CPhysicsManager::GetMutable().RegisterCollisionObject(this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+ICollisionObject& ICollisionObject::operator=(const ICollisionObject& other)
+{
+	m_AABB = other.m_AABB;
+
+	return *this;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+ICollisionObject& ICollisionObject::operator=(ICollisionObject&& other)
+{
+	m_AABB = std::move(other.m_AABB);
+
+	return *this;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+ICollisionObject::~ICollisionObject()
+{
+	CPhysicsManager::GetMutable().UnregisterCollisionObject(this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+inline bool ICollisionObject::IsEnabled() const
+{
+	return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+const hvmath::AABB& ICollisionObject::GetAABB() const
+{
+	return m_AABB;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+} // hvgs

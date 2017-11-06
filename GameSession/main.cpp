@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include <hvmath/Vector2/Vector2.inl>
+#include <hvmath/Physics/AABB.h>
 
 #include "GameSession/Actor/Actor.h"
 #include "GameSession/Manager/GameManager.h"
@@ -23,9 +23,22 @@ int main()
 
 	CGameManager::GetMutable().Init();
 
+	// Create world
+	CWorld world;
+
+	// Create actor
 	CActor actor;
 	actor.SetPosition({ 0, 0 });
-	CWorld world;
+
+	/*hvmath::AABB aabb1{ { 0.0f, 0.0f }, { 0.5f, 0.5f } };
+	hvmath::AABB aabb2{ { 1.5f, 0.0f }, { 0.5f, 0.5f } };
+
+	hvmath::Sweep sweep;
+	hvmath::AABB collider;
+
+	bool collideAABB1 = aabb1.SweepInto({ aabb2 }, Vector2(-2.0f, 0.0f), sweep, collider);
+	bool collideAABB2 = aabb2.SweepInto({ aabb1 }, Vector2(-2.0f, 0.0f), sweep, collider);
+	collideAABB1 = collideAABB2;*/
 
 	CGameManager::GetMutable().Run();
 

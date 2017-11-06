@@ -1,5 +1,6 @@
 #pragma once
 #include "GameSession/World/WorldEnums.h"
+#include "GameSession/World/Tile.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -21,9 +22,10 @@ public:
 	virtual ~CChunkSlice();
 
 public:
-	TileType GetTileAt(hvuint8 x, hvuint8 y) const;
+	const CTile& GetTileAt(hvuint8 x, hvuint8 y) const;
+	void SetTileAt(hvuint8 x, hvuint8 y, TileType tileType);
 
-	Vector2i GetWorldPos() const;
+	WorldPos GetWorldPos() const;
 
 public:
 	void CalculateTiles();
@@ -31,7 +33,7 @@ public:
 protected:
 	inline size_t GetIndex(hvuint8 x, hvuint8 y) const;
 
-	TileType m_Tiles[CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y];
+	CTile m_Tiles[CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y];
 
 	const CChunk*	m_Parent;
 	int				m_YLevel;

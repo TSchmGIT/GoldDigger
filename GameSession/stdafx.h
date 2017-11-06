@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <boost/unordered_map.hpp>
+#include <boost/pointer_cast.hpp>
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -37,8 +38,8 @@
 #include <hvsdk/Meta/Assert.h>
 #include <hvsdk/Meta/ObjectPool.h>
 
-#include <hvmath/Vector2/Vector2.inl>
 #include <hvmath/Generic/Generic.inl>
+#include <hvmath/Vector2/Vector2.h>
 
 //////////////////////////////////////////////////////////////////////////
 // Haven GameSession
@@ -46,6 +47,7 @@
 #include "GameSession/Meta/TrackTime.h"
 
 #include "GameSession/Time/DefinesTime.h"
+#include "GameSession/Rendering/RenderEnums.h"
 
 #include "GameSession/Manager/SingletonBase.h"
 #include "GameSession/Manager/PerformanceManager.h"

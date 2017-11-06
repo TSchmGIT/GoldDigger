@@ -7,10 +7,11 @@
 
 #include "targetver.h"
 
+#ifdef WIN32
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#else
+#define WIN64_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#endif
 // Windows Header Files:
 #include <windows.h>
-
-
-
-// TODO: reference additional headers your program requires here
+#include <vector>

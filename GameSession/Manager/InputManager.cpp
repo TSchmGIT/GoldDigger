@@ -184,14 +184,14 @@ bool CInputManager::IsMouseButtonDown(MouseButton button) const
 
 //////////////////////////////////////////////////////////////////////////
 
-Vector2i CInputManager::GetMousePos() const
+const Vector2i& CInputManager::GetMousePos() const
 {
 	return m_MousePos;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-Vector2i CInputManager::GetMouseDelta() const
+const Vector2i& CInputManager::GetMouseDelta() const
 {
 	return m_MouseDelta;
 }
@@ -258,6 +258,11 @@ float CInputManager::GetAxis(Axis axis, JoystickID id /*= JoystickID::Player1*/)
 
 void CInputManager::UpdateJoystickAxisPosition(JoystickID id, JoystickAxis axis, float position)
 {
+	if (axis == JoystickAxis::LeftY)
+	{
+		position = -position;
+	}
+
 	auto itID = m_JoystickAxis.find(id);
 	ASSERT_OR_EXECUTE(itID != m_JoystickAxis.end(), return);
 	auto itAxis = itID->second.find(axis);

@@ -17,7 +17,15 @@ public:
 	void Tick();
 
 public:
+	void DrawDebug();
+
+public:
 	ScreenPos WorldToScreenPoint(const WorldPos& worldPos) const;
+	ScreenPos WorldToScreenDirection(const WorldPos& worldDir) const;
+
+	WorldPos ScreenToWorldPoint(const ScreenPos& screenPos) const;
+
+	bool IsInView(const sf::FloatRect& worldRect) const;
 
 public:
 	const Vector2& GetPosition() const;
@@ -26,6 +34,7 @@ public:
 
 	float GetZoomFactor() const;
 	void SetZoomFactor(float zoomFactor);
+
 protected:
 	void UpdateZoom();
 

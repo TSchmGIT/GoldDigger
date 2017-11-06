@@ -11,6 +11,7 @@
 #include "GameSession/World/Chunk.h"
 #include "GameSession/World/ChunkSlice.h"
 #include "GameSession/World/World.h"
+#include "Rendering/DebugRender.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -18,8 +19,8 @@
 namespace hvgs
 {
 
-static const int	SCREEN_WIDTH = 1536;
-static const int	SCREEN_HEIGHT = 864;
+static const int	SCREEN_WIDTH = 3584;
+static const int	SCREEN_HEIGHT = 2016;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +53,9 @@ void CRenderManager::Init()
 	CTextureManager::GetMutable().Init();
 
 	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Gold Digger");
-	//m_window->setVerticalSyncEnabled(true);
+	m_Window->setJoystickThreshold(0.25f);
+	m_Window->setKeyRepeatEnabled(false);
+	m_Window->setVerticalSyncEnabled(true);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -65,13 +68,18 @@ void CRenderManager::Render()
 		DrawChunk(*kvPair.second);
 	}
 
-	//DrawSpriteWorld(Vector2(), TextureName::Background);
-
 	for (const IRenderElement* renderElement : m_RenderElementList)
 	{
 		renderElement->Draw();
 	}
 
+	DrawRenderManager();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::Display()
+{
 	m_Window->display();
 }
 
@@ -127,7 +135,7 @@ void CRenderManager::UnregisterRenderElement(const IRenderElement* renderElement
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawText(const ScreenPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawText(const ScreenPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, charSize, textColor);
 	text->setPosition(pos);
@@ -147,27 +155,20 @@ void CRenderManager::DrawText(const ScreenPos& pos, const String& content, const
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
 	ScreenPos screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
-
-	//// Do not render objects outside the view
-	//if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
-	//	screenPos.y < 0 || screenPos.y > GetScreenHeight())
-	//{
-	//	return;
-	//}
 
 	DrawText(screenPos, content, fontName, charSize, textColor);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawSpriteWorld(const WorldPos& pos, const TextureName& textureName)
+void CRenderManager::DrawSpriteWorld(const WorldPos& pos, const TextureName& textureName, Alignment alignment /*= Alignment::Center*/)
 {
 	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
-	sf::Vector2f screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
+	Vector2 screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
 
 	// Do not render objects outside the view
 	if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
@@ -180,6 +181,7 @@ void CRenderManager::DrawSpriteWorld(const WorldPos& pos, const TextureName& tex
 	ASSERT_OR_EXECUTE(texture, return);
 
 	sf::Vector2u textureSize = texture->getSize();
+
 	// Do not render objects outside the view
 	if (screenPos.x + textureSize.x < 0 || screenPos.x - textureSize.x > GetScreenWidth() ||
 		screenPos.y + textureSize.y < 0 || screenPos.y - textureSize.y > GetScreenHeight())
@@ -191,10 +193,12 @@ void CRenderManager::DrawSpriteWorld(const WorldPos& pos, const TextureName& tex
 	sprite->setTexture(*texture);
 
 	ASSERT_OR_EXECUTE(CCameraManager::Get().GetActive(), return);
-	sprite->setPosition(CCameraManager::Get().GetActive()->WorldToScreenPoint(pos));
+	float scaleFactor = BASE_TILE_SIZE_PX / texture->getSize().x * CCameraManager::Get().GetActive()->GetZoomFactor();
+	sprite->setScale(scaleFactor, scaleFactor);
 
-	float zoomFactor = CCameraManager::Get().GetActive()->GetZoomFactor();
-	sprite->setScale(zoomFactor, zoomFactor);
+	AdjustSpritePivot(screenPos, Vector2(textureSize) * scaleFactor, alignment);
+
+	sprite->setPosition(screenPos.x, screenPos.y);
 
 	m_Window->draw(*sprite);
 
@@ -207,67 +211,97 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 {
 	const auto& chunkSliceMap = chunk.GetChunkSlices();
 
-	sf::VertexArray va(sf::Quads, 4 * CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y * chunkSliceMap.size());
 
-	int chunkSliceIndex = 0;
 	for (const auto& kvPair : chunkSliceMap)
 	{
 		const auto& chunkSlice = kvPair.second;
+
+		Vector2i csWorldPos = chunkSlice.GetWorldPos();
+		sf::FloatRect chunkSliceRect(float(csWorldPos.x), float(csWorldPos.y), CHUNKSLICE_SIZE_X, CHUNKSLICE_SIZE_Y);
+
+		if (!CCameraManager::Get().GetActive()->IsInView(chunkSliceRect))
+		{
+			continue;
+		}
+
+
+		sf::VertexArray va(sf::Quads, 4 * CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y);
+
 
 		for (hvuint8 x = 0; x < CHUNKSLICE_SIZE_X; x++)
 		{
 			for (hvuint8 y = 0; y < CHUNKSLICE_SIZE_Y; y++)
 			{
-				//TileType tileType = chunkSlice.GetTileAt(x, y);
+				const CTile& tile = chunkSlice.GetTileAt(x, y);
 
-				Vector2i pos = Vector2i(x, y) + chunkSlice.GetWorldPos();
-				WorldPos worldPos(pos.x * TILE_SPRITE_SIZE, pos.y * TILE_SPRITE_SIZE);
+				TileType tileType = tile.GetTileType();
+				if (tileType == TileType::Air)
+				{
+					continue;
+				}
 
-				int index = 4 * (y + x * CHUNKSLICE_SIZE_Y) + chunkSliceIndex * CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y;
+				WorldPos worldPos = Vector2(float(x), float(y)) + chunkSlice.GetWorldPos();
 
-				va[index].position = CCameraManager::Get().GetActive()->WorldToScreenPoint({ worldPos.x												, worldPos.y });
-				va[index + 2].position = CCameraManager::Get().GetActive()->WorldToScreenPoint({ worldPos.x + CHUNKSLICE_SIZE_X	* TILE_SPRITE_SIZE	, worldPos.y + CHUNKSLICE_SIZE_Y * TILE_SPRITE_SIZE });
-				va[index + 1].position = CCameraManager::Get().GetActive()->WorldToScreenPoint({ worldPos.x											, worldPos.y + CHUNKSLICE_SIZE_Y * TILE_SPRITE_SIZE });
-				va[index + 3].position = CCameraManager::Get().GetActive()->WorldToScreenPoint({ worldPos.x + CHUNKSLICE_SIZE_X	* TILE_SPRITE_SIZE	, worldPos.y });
+				int index = 4 * (y + x * CHUNKSLICE_SIZE_Y);
 
+				va[index].position = CCameraManager::Get().GetActive()->WorldToScreenPoint({ worldPos.x							, worldPos.y });
+				va[index + 1].position = CCameraManager::Get().GetActive()->WorldToScreenPoint({ worldPos.x						, worldPos.y + 1 });
+				va[index + 2].position = CCameraManager::Get().GetActive()->WorldToScreenPoint({ worldPos.x + 1					, worldPos.y + 1 });
+				va[index + 3].position = CCameraManager::Get().GetActive()->WorldToScreenPoint({ worldPos.x + 1					, worldPos.y });
 
-				sf::Color color(std::rand() % 255, std::rand() % 255, std::rand() % 255);
-				va[index].color = color;
-				va[index + 1].color = color;
-				va[index + 2].color = color;
-				va[index + 3].color = color;
-
-				/*switch (tileType)
+				switch (tileType)
 				{
 				case hvgs::TileType::Dirt:
-					va[index].texCoords = sf::Vector2f(64, 16);
-					va[index + 1].texCoords = sf::Vector2f(64, 0);
-					va[index + 2].texCoords = sf::Vector2f(76, 0);
-					va[index + 3].texCoords = sf::Vector2f(76, 0);
+					va[index].texCoords = { 64, 32 };
+					va[index + 1].texCoords = { 64, 0 };
+					va[index + 2].texCoords = { 96, 0 };
+					va[index + 3].texCoords = { 96, 32 };
 					break;
 				case hvgs::TileType::Stone:
-					va[index].texCoords = sf::Vector2f(76, 16);
-					va[index + 1].texCoords = sf::Vector2f(76, 0);
-					va[index + 2].texCoords = sf::Vector2f(92, 0);
-					va[index + 3].texCoords = sf::Vector2f(92, 0);
+					va[index].texCoords = { 96, 32 };
+					va[index + 1].texCoords = { 96, 0 };
+					va[index + 2].texCoords = { 128, 0 };
+					va[index + 3].texCoords = { 128, 32 };
+					break;
+				case TileType::IronOre:
+					va[index].texCoords = { 160, 32 };
+					va[index + 1].texCoords = { 160, 0 };
+					va[index + 2].texCoords = { 192, 0 };
+					va[index + 3].texCoords = { 192, 32 };
 					break;
 				default:
+					va[index].texCoords = { 480, 512 };
+					va[index + 1].texCoords = { 480, 480 };
+					va[index + 2].texCoords = { 512, 480 };
+					va[index + 3].texCoords = { 512, 512 };
 					break;
-				}*/
+				}
 			}
 		}
 
-		chunkSliceIndex++;
+		m_Window->draw(va, CTextureManager::Get().GetTexture(TextureName::TileAtlas));
 	}
-
-	m_Window->draw(va, CTextureManager::Get().GetTexture(TextureName::TileAtlas));
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-sf::Vector2f CRenderManager::WorldToRenderPos(Vector2 worldPos) const
+void CRenderManager::AdjustSpritePivot(ScreenPos& original, const Vector2& renderSize, Alignment alignment /*= Alignment::Center*/)
 {
-	return sf::Vector2f(worldPos.x, worldPos.y);
+	switch (alignment)
+	{
+	case hvgs::Alignment::Center:
+		original += ScreenPos{ renderSize.x * -0.5f, renderSize.y * -0.5f };
+		break;
+	case Alignment::CenterBottom:
+		original += ScreenPos{ renderSize.x * -0.5f, renderSize.y * -1.0f };
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawRenderManager()
+{
+	CCameraManager::GetMutable().GetActive()->DrawDebug();
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -24,9 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="hvsdk.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Meta\Assert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -36,21 +33,12 @@
     <ClInclude Include="Meta\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Meta\StrictTypedef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Meta\ObjectPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hvsdk.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

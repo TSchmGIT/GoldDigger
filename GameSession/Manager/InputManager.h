@@ -46,8 +46,8 @@ public:
 	bool IsMouseButtonUp(MouseButton button) const;
 	bool IsMouseButtonDown(MouseButton button) const;
 
-	Vector2i	GetMousePos() const;
-	Vector2i	GetMouseDelta() const;
+	const Vector2i& GetMousePos() const;
+	const Vector2i& GetMouseDelta() const;
 
 	float		GetMouseWheelDelta() const;
 	float		GetMouseWheelPos() const;

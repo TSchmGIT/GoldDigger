@@ -17,25 +17,29 @@ class CChunk
 {
 
 public:
-	CChunk(int positionX);
+	CChunk(ChunkInterval positionX);
 	virtual ~CChunk();
 
 public:
 	void UpdateSlicesAt(int yLevel, int yRange);
 
 public:
-	const Map<int, CChunkSlice>& GetChunkSlices() const;
+	const Map<ChunkSliceInterval, CChunkSlice>& GetChunkSlices() const;
+	const CChunkSlice* GetChunkSliceAt(int yLevel) const;
 
 public:
 	int GetPosX() const;
 
+public:
+	const CTile* GetTileAt(int yLevel, const ChunkSlicePos& chunkPos) const;
+	void SetTileAt(int yLevel, const ChunkSlicePos& chunkPos, TileType tileType, bool allowCreation = false);
+
 protected:
+	inline ChunkSliceInterval FindNextChunkSlicePos(int yLevel) const; ///< Returns the next valid chunk slice y-pos to the given input
 
-	inline int GetSliceYLevel(int yLevel) const;
+	Map<ChunkSliceInterval, CChunkSlice> m_ChunkSliceList;
 
-	Map<int, CChunkSlice> m_ChunkSliceList;
-
-	int m_PositionX;
+	ChunkInterval m_PositionX;
 };
 
 /////////////////////////////////////////////////////////////////////////////

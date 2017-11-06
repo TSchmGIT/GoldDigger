@@ -138,7 +138,23 @@ void CGameManager::Tick()
 {
 	CCameraManager::GetMutable().Tick();
 	CGameObjectManager::GetMutable().Tick();
+}
 
+//////////////////////////////////////////////////////////////////////////
+
+void CGameManager::Render()
+{
+	CRenderManager::GetMutable().Render();
+
+	Draw();
+
+	CRenderManager::GetMutable().Display();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CGameManager::Draw() const
+{
 	static float timestamp = 0.0f;
 	static float lastFPS = 0.0f;
 
@@ -147,17 +163,9 @@ void CGameManager::Tick()
 		lastFPS = CTimeManager::Get().GetFPS();
 		timestamp = CTimeManager::Get().GetAppTime();
 	}
-
 	std::ostringstream ss;
 	ss << "FPS: " << lastFPS;
 	CRenderManager::GetMutable().DrawText(ScreenPos(0.0f, 0.0f), ss.str(), FontName::Courier_New);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CGameManager::Render()
-{
-	CRenderManager::GetMutable().Render();
 }
 
 //////////////////////////////////////////////////////////////////////////

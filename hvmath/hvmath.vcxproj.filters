@@ -24,10 +24,13 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="hvmath.h">
+    <ClInclude Include="Vector2\Vector2.inl">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2\Vector2.inl">
+    <ClInclude Include="Vector2\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,10 +38,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hvmath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="Physics\AABB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

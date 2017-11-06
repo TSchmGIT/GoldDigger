@@ -173,6 +173,8 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="GameObjects\IGameObject.h" />
     <ClInclude Include="Input\InputEnums.h" />
+    <ClInclude Include="Items\Inventory.h" />
+    <ClInclude Include="Items\ItemBase.h" />
     <ClInclude Include="Manager\CameraManager.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Manager\Rendering\FontManager.h" />
@@ -186,14 +188,21 @@
     <ClInclude Include="Meta\Assert.h" />
     <ClInclude Include="Meta\Defines.h" />
     <ClInclude Include="Meta\TrackTime.h" />
+    <ClInclude Include="Physics\CollisionObject.h" />
+    <ClInclude Include="Manager\PhysicsManager.h" />
+    <ClInclude Include="Physics\PhysicsEnums.h" />
+    <ClInclude Include="Rendering\DebugRender.h" />
     <ClInclude Include="Rendering\Fonts\EnumsFont.h" />
     <ClInclude Include="Rendering\IRenderElement.h" />
+    <ClInclude Include="Rendering\RenderEnums.h" />
     <ClInclude Include="Rendering\Textures\EnumsTexture.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Time\DefinesTime.h" />
     <ClInclude Include="World\Chunk.h" />
     <ClInclude Include="World\ChunkSlice.h" />
+    <ClInclude Include="Items\ItemBlock.h" />
+    <ClInclude Include="World\Tile.h" />
     <ClInclude Include="World\World.h" />
     <ClInclude Include="World\WorldEnums.h" />
   </ItemGroup>
@@ -201,6 +210,9 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GameObjects\IGameObject.cpp" />
+    <ClCompile Include="Items\Inventory.cpp" />
+    <ClCompile Include="Items\ItemBase.cpp" />
+    <ClCompile Include="Items\ItemBlock.cpp" />
     <ClCompile Include="Manager\CameraManager.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
     <ClCompile Include="Manager\Rendering\FontManager.cpp" />
@@ -211,6 +223,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\Rendering\TextureManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
+    <ClCompile Include="Physics\CollisionObject.cpp" />
+    <ClCompile Include="Manager\PhysicsManager.cpp" />
+    <ClCompile Include="Rendering\DebugRender.cpp" />
     <ClCompile Include="Rendering\IRenderElement.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -220,6 +235,7 @@
     </ClCompile>
     <ClCompile Include="World\Chunk.cpp" />
     <ClCompile Include="World\ChunkSlice.cpp" />
+    <ClCompile Include="World\Tile.cpp" />
     <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

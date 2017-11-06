@@ -30,6 +30,8 @@ public:
 
 	void Render();
 
+	void Display();
+
 public:
 	const sf::RenderWindow* GetWindow() const;
 	sf::RenderWindow* GetWindow();
@@ -42,16 +44,21 @@ public:
 	void UnregisterRenderElement(const IRenderElement* renderElement);
 
 public:
-	void DrawText(const ScreenPos& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White);
+	void DrawText(const ScreenPos& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 60, const sf::Color& textColor = sf::Color::White);
 
-	void DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White);
+	void DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 60, const sf::Color& textColor = sf::Color::White);
 	/// Draws a sprite on the screen with given world coordinates (position may be out of viewport)
-	void DrawSpriteWorld(const WorldPos& pos, const TextureName& textureName);
+	void DrawSpriteWorld(const WorldPos& pos, const TextureName& textureName, Alignment alignment = Alignment::Center);
 
 	void DrawChunk(const CChunk& chunk);
 
 protected:
-	sf::Vector2f WorldToRenderPos(Vector2 worldPos) const;
+	static void AdjustSpritePivot(ScreenPos& original, const Vector2& renderSize, Alignment alignment = Alignment::Center);
+
+	//////////////////////////////////////////////////////////////////////////
+	// Debug
+protected:
+	void DrawRenderManager();
 
 protected:
 	UniquePtr<sf::RenderWindow>		m_Window;

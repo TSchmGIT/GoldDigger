@@ -1,11 +1,15 @@
 #pragma once
-
-#include "hvsdk\Meta\StrictTypedef.h"
-#include <boost/serialization/strong_typedef.hpp>
-
+namespace hvgs
+{
 
 using Vector2 = hvmath::Vector2<float>;
 using Vector2i = hvmath::Vector2<int>;
+using Vector2u = hvmath::Vector2<hvuint>;
 
-using ScreenPos = Vector2;
-using WorldPos = Vector2;
+using ScreenPos = hvgs::Vector2;
+
+using ChunkInterval = int; ///< x-position in world space where a chunk begins
+using ChunkSliceInterval = int; ///< y-position in world space where a chunk slice begins
+using WorldPos = hvgs::Vector2;
+using ChunkSlicePos = hvmath::Vector2<hvuint8>; ///< Chunk coords range from x = [0, CHUNK_SIZE_X], y = [0, CHUNK_SIZE_Y]
+}

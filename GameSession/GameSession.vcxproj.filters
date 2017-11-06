@@ -99,6 +99,33 @@
     <ClInclude Include="World\WorldEnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Rendering\RenderEnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\Inventory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\ItemBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World\Tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Items\ItemBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CollisionObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\PhysicsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\DebugRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicsEnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +180,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="World\ChunkSlice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\Inventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\ItemBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World\Tile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Items\ItemBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\CollisionObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\PhysicsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\DebugRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

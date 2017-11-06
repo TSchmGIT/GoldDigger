@@ -31,6 +31,8 @@ protected:
 	void Render();
 
 protected:
+	void Draw() const;
+
 	sf::RenderWindow m_GameWindow;
 };
 

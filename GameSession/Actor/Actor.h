@@ -1,14 +1,16 @@
 #pragma once
 
+#include "GameSession/Actor/Motor/MotorDefault.h"
 #include "GameSession/GameObjects/IGameObject.h"
-#include "GameSession/Rendering/IRenderElement.h"
 #include "GameSession/Physics/CollisionObject.h"
+#include "GameSession/Rendering/IRenderElement.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
 {
 class CInventory;
+
 enum class Layer : int;
 }
 
@@ -21,14 +23,16 @@ namespace hvgs
 class CActor
 	: public IRenderElement
 	, public IGameObject
-	, protected ICollisionObject
+	, public ICollisionObject
 {
 public:
 	CActor();
 	CActor(const CActor& other);
+	CActor(CActor&& other);
 	virtual ~CActor();
 
 public: // IGameObject
+	virtual void PrepareTick() override;
 	virtual void Tick() override;
 
 public: // IRenderElement
@@ -37,25 +41,27 @@ public: // IRenderElement
 protected: // ICollisionObject 
 	virtual WorldPos GetAABBOrigin() const override;
 	virtual WorldPos GetAABBHalfs() const override;
-	WorldPos GetAABBOriginOffset() const;
 	virtual Layer GetLayer() const override;
 
 public:
 	WorldPos GetPosition() const;
 	void SetPosition(const WorldPos& position);
 
+	WorldPos GetAABBOriginOffset() const;
+
 	const CInventory* GetInventory() const;
 
 protected:
-	void ProcessMovement(Vector2& deltaMovement);
 	void UpdateCamera(const Vector2& deltaMovement) const;
 
 	bool PerformSingleSweep(const Vector2& pos, const Vector2& halfs, const Vector2& delta, Vector2& newPos, Vector2& newDelta) const;
 
 protected:
-	WorldPos	m_Position;
+	WorldPos	m_Position = Vector2(0.0f, 0.0f);
 
 	UniquePtr<CInventory> m_Inventory = std::make_unique<CInventory>();
+	UniquePtr<CMotorBase> m_Motor = std::make_unique<CMotorDefault>(this);
+
 };
 
 /////////////////////////////////////////////////////////////////////////////

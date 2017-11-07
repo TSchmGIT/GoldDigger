@@ -82,6 +82,7 @@ void CGameManager::PrepareTick()
 	CRenderManager::GetMutable().PrepareTick();
 	CTimeManager::GetMutable().PrepareTick();
 	CInputManager::GetMutable().PrepareTick();
+	CGameObjectManager::GetMutable().PrepareTick();
 }
 
 //////////////////////////////////////////////////////////////////////////

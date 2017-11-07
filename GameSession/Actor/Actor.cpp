@@ -3,6 +3,7 @@
 
 #include <hvmath/Physics/AABB.h>
 
+#include "GameSession/Actor/Motor/MotorDefault.h"
 #include "GameSession/Camera/Camera.h"
 #include "GameSession/Items/Inventory.h"
 #include "GameSession/Items/ItemBlock.h"
@@ -21,12 +22,10 @@
 namespace hvgs
 {
 
-const float MOVEMENT_SPEED = 5.0f;
 
 ////////////////////////////////////////////////////////////////////////////
 
 CActor::CActor()
-	: m_Position()
 {
 }
 
@@ -42,6 +41,16 @@ CActor::CActor(const CActor& other)
 
 //////////////////////////////////////////////////////////////////////////
 
+CActor::CActor(CActor&& other)
+	: m_Position(other.m_Position)
+	, m_Inventory(std::move(other.m_Inventory))
+	, m_Motor(std::move(other.m_Motor))
+{
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 CActor::~CActor()
 {
 
@@ -49,10 +58,29 @@ CActor::~CActor()
 
 //////////////////////////////////////////////////////////////////////////
 
+void CActor::PrepareTick()
+{
+	m_AABB.pos = GetAABBOrigin();
+	m_AABB.half = GetAABBHalfs();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CActor::Tick()
 {
-	Vector2 deltaMovement;
-	ProcessMovement(deltaMovement);
+	{
+		if (std::abs(m_Position.x) > 200.0f || m_Position.y > 20.0f || m_Position.y <= -100.0f)
+		{
+			UpdateCamera(-m_Position);
+			m_Position = Vector2(0.0f, 0.0f);
+			m_Motor->SetVelocity({ 0.0f, 0.0f });
+		}
+	}
+
+	Vector2 oldPos = m_Position;
+
+	// Update motor
+	m_Motor->Tick();
 
 	// Collect tiles
 	if (CInputManager::Get().IsMouseButtonDown(MouseButton::Left))
@@ -86,7 +114,8 @@ void CActor::Tick()
 		}
 	}
 
-	UpdateCamera(deltaMovement);
+	// Make camera focus the player
+	UpdateCamera(m_Position - oldPos);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -97,7 +126,8 @@ void CActor::Draw() const
 
 	// Debug
 	std::ostringstream ss;
-	ss << "(" << m_Position.x << ", " << m_Position.y << ")";
+	ss << "(" << m_Position.x << ", " << m_Position.y << ")\n" <<
+		m_Motor->GetVelocity().x << ", " << m_Motor->GetVelocity().y << ")";
 	CRenderManager::GetMutable().DrawTextWorld(m_Position, ss.str(), FontName::Courier_New, 30);
 
 	DebugRender::DrawRect(CRenderManager::GetMutable().GetWindow(), { GetAABBOrigin(), GetAABBHalfs() });
@@ -127,56 +157,6 @@ void CActor::SetPosition(const WorldPos& position)
 const hvgs::CInventory* CActor::GetInventory() const
 {
 	return m_Inventory.get();
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CActor::ProcessMovement(Vector2& deltaMovement)
-{
-	// Update AABB
-	m_AABB.pos = GetAABBOrigin();
-	m_AABB.half = GetAABBHalfs();
-
-	// Get Input
-	float hor = CInputManager::Get().GetAxis(Axis::Horizontal);
-	float ver = CInputManager::Get().GetAxis(Axis::Vertical);
-
-	// Calculate delta movement
-	deltaMovement = Vector2(hor, ver).Normalize() * MOVEMENT_SPEED * CTimeManager::Get().GetGameDeltaTime();
-
-	// Return if there is no movement to be calculated
-	if (deltaMovement.x == 0.0f && deltaMovement.y == 0.0f)
-	{
-		return;
-	}
-
-	Vector2 oldAABBPos = GetAABBOrigin();
-	Vector2 oldDelta = deltaMovement;
-	Vector2 newAABBPos;
-	Vector2 newDelta;
-
-	int iteration = 0;
-	while (iteration < 100)
-	{
-		bool collisionSweep = PerformSingleSweep(oldAABBPos, GetAABBHalfs(), oldDelta, newAABBPos, newDelta);
-
-		oldAABBPos = newAABBPos;
-		oldDelta = newDelta;
-
-		// Break if no collision occurred
-		// Or if the resulting delta vector is zero (no further movement possible)
-		if (!collisionSweep || (oldDelta.x == 0.0f && oldDelta.y == 0.0f))
-		{
-			break;
-		}
-
-		iteration++;
-	}
-
-	Vector2 newPos = newAABBPos - GetAABBOriginOffset();
-	deltaMovement = newPos - m_Position;
-	m_Position = newPos;
-
 }
 
 //////////////////////////////////////////////////////////////////////////

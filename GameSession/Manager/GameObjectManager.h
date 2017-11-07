@@ -25,6 +25,7 @@ public:
 	void UnregisterGameObject(IGameObject* gameObject);
 
 public:
+	void PrepareTick();
 	void Tick();
 
 protected:

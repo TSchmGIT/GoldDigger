@@ -106,6 +106,14 @@ inline Vector2<T>& Vector2<T>::operator=(const Vector2<U>& other)
 
 //////////////////////////////////////////////////////////////////////////
 
+template<typename T>
+inline Vector2<T> operator-(const Vector2<T>& vec)
+{
+	return Vector2<T>(-vec.x, -vec.y);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 template<typename T, typename U>
 inline bool operator==(const Vector2<T>& vec1, std::initializer_list<U> initList)
 {

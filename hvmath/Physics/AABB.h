@@ -11,17 +11,17 @@ namespace hvmath
 
 struct Hit
 {
-	hvmath::Vector2<float> pos;
-	hvmath::Vector2<float> delta;
-	hvmath::Vector2<float> normal;
-	float time;
+	hvmath::Vector2<float> pos = { 0.0f, 0.0f };
+	hvmath::Vector2<float> delta = { 0.0f, 0.0f };
+	hvmath::Vector2<float> normal = { 0.0f, 0.0f };
+	float time = 1.0f;
 };
 
 struct Sweep
 {
 	Hit hit;
-	hvmath::Vector2<float> pos;
-	float time;
+	hvmath::Vector2<float> pos = { 0.0f, 0.0f };
+	float time = 1.0f;
 };
 
 class AABB

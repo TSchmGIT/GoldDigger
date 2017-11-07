@@ -170,6 +170,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="Actor\Motor\MotorBase.h" />
+    <ClInclude Include="Actor\Motor\MotorDefault.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="GameObjects\IGameObject.h" />
     <ClInclude Include="Input\InputEnums.h" />
@@ -208,6 +210,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="Actor\Motor\MotorBase.cpp" />
+    <ClCompile Include="Actor\Motor\MotorDefault.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GameObjects\IGameObject.cpp" />
     <ClCompile Include="Items\Inventory.cpp" />

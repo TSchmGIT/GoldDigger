@@ -11,6 +11,15 @@ enum class Layer : int
 	Environment = 1 << 1
 };
 
+enum class CollisionFlags : hvuint8
+{
+	None = 0U,
+	Bottom = 1U,
+	Right = 2U,
+	Top = 4U,
+	Left = 8U
+};
+
 //////////////////////////////////////////////////////////////////////////
 
 } // hvgs

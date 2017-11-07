@@ -55,7 +55,7 @@ void CRenderManager::Init()
 	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Gold Digger");
 	m_Window->setJoystickThreshold(0.25f);
 	m_Window->setKeyRepeatEnabled(false);
-	m_Window->setVerticalSyncEnabled(true);
+	m_Window->setVerticalSyncEnabled(false);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -224,9 +224,7 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 			continue;
 		}
 
-
 		sf::VertexArray va(sf::Quads, 4 * CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y);
-
 
 		for (hvuint8 x = 0; x < CHUNKSLICE_SIZE_X; x++)
 		{

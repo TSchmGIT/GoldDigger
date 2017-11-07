@@ -75,7 +75,7 @@ void CPhysicsManager::UnregisterCollisionObject(const ICollisionObject* collisio
 
 const hvgs::Vector2& CPhysicsManager::GetGravity() const
 {
-	static Vector2 gravity(-9.81f, 0.0f);
+	static const Vector2 gravity(0.0f, -9.81f * 0.75f);
 	return gravity;
 }
 

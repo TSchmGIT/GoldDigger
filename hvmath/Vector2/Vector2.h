@@ -46,6 +46,8 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
+template<typename T> Vector2<T> operator-(const Vector2<T>& vec);
+
 template<typename T, typename U> bool operator==(const Vector2<T>& vec1, std::initializer_list<U> initList);
 template<typename T, typename U> bool operator==(const Vector2<T>& vec1, const Vector2<U>& vec2);
 template<typename T, typename U> bool operator!=(const Vector2<T>& vec1, const Vector2<U>& vec2);

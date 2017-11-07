@@ -19,7 +19,8 @@ public:
 	IGameObject& operator=(IGameObject&& other);
 	virtual ~IGameObject();
 
-	virtual void Tick() = 0;
+	virtual void PrepareTick() {};
+	virtual void Tick() {};
 };
 
 /////////////////////////////////////////////////////////////////////////////

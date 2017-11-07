@@ -48,6 +48,16 @@ void CGameObjectManager::UnregisterGameObject(IGameObject* gameObject)
 
 //////////////////////////////////////////////////////////////////////////
 
+void CGameObjectManager::PrepareTick()
+{
+	for (IGameObject* gameObject : m_GameObjectList)
+	{
+		gameObject->PrepareTick();
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CGameObjectManager::Tick()
 {
 	for (IGameObject* gameObject : m_GameObjectList)

@@ -66,13 +66,13 @@ void CChunkSlice::CalculateTiles()
 			{
 				tileType = TileType::IronOre;
 			}
-			else if (noiseValue >= 0.4f)
+			else if (noiseValue >= 0.3f)
 			{
 				tileType = TileType::Stone;
 			}
 			else
 			{
-				tileType = TileType::Dirt;
+				tileType = TileType::Air;
 			}
 
 			m_Tiles[index] = CTile(GetWorldPos() + WorldPos(float(x), float(y)), tileType);

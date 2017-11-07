@@ -3,6 +3,11 @@
 namespace hvgs
 {
 
+enum class Button : hvuint8
+{
+	Jump
+};
+
 enum class Axis : hvuint8
 {
 	Horizontal = 0,

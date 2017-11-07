@@ -69,6 +69,7 @@ public:
 
 public:
 	float GetAxis(Axis axis, JoystickID id = JoystickID::Player1) const;
+	bool GetButton(Button button, JoystickID id = JoystickID::Player1) const;
 
 protected:
 	bool m_KeyCodeArrayPressed[size_t(KeyCode::Count)];

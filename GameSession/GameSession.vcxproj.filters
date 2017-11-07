@@ -126,6 +126,12 @@
     <ClInclude Include="Physics\PhysicsEnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Actor\Motor\MotorBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Motor\MotorDefault.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -201,6 +207,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Rendering\DebugRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Motor\MotorBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Motor\MotorDefault.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

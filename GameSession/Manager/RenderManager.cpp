@@ -68,7 +68,7 @@ void CRenderManager::Render()
 		DrawChunk(*kvPair.second);
 	}
 
-	for (const IRenderElement* renderElement : m_RenderElementList)
+	for (const IRenderElement* renderElement : m_RenderElementSet)
 	{
 		renderElement->Draw();
 	}
@@ -118,7 +118,7 @@ hvuint CRenderManager::GetScreenHeight() const
 void CRenderManager::RegisterRenderElement(const IRenderElement* renderElement)
 {
 	ASSERT_OR_EXECUTE(renderElement, return);
-	m_RenderElementList.push_back(renderElement);
+	m_RenderElementSet.emplace(renderElement);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -127,10 +127,10 @@ void CRenderManager::UnregisterRenderElement(const IRenderElement* renderElement
 {
 	ASSERT_OR_EXECUTE(renderElement, return);
 
-	auto it = std::find_if(m_RenderElementList.cbegin(), m_RenderElementList.cend(), [renderElement](const IRenderElement* element) { return renderElement == element; });
-	ASSERT_OR_EXECUTE(it != m_RenderElementList.end(), return);
+	auto it = m_RenderElementSet.find(renderElement);
+	ASSERT_OR_EXECUTE(it != m_RenderElementSet.end(), return);
 
-	m_RenderElementList.erase(it);
+	m_RenderElementSet.erase(it);
 }
 
 //////////////////////////////////////////////////////////////////////////

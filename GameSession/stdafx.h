@@ -19,6 +19,11 @@
 #include <chrono>
 
 #include <memory>
+
+#include <vector>
+#include <queue>
+#include <set>
+
 #include <boost/unordered_map.hpp>
 #include <boost/pointer_cast.hpp>
 

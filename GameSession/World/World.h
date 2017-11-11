@@ -33,9 +33,6 @@ public:
 	const CTile* GetTileAt(const WorldPos& worldPos) const;
 	void SetTileAt(const WorldPos& worldPos, TileType tileType, bool allowCreation = false);
 
-private:
-	void WorkerThread();
-
 protected:
 	CChunk* CreateChunk(ChunkInterval worldX);
 
@@ -43,7 +40,6 @@ protected:
 
 protected:
 	Map<ChunkInterval, UniquePtr<CChunk>> m_ChunkMap;
-	Map<ChunkInterval, UniquePtr<CChunk>> m_ChunkMapBack;
 
 	hvsdk::CObjectPool<CChunk>	m_ChunkPool;
 

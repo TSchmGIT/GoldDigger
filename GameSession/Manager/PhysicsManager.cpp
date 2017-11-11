@@ -30,7 +30,11 @@ Vector<const ICollisionObject*> CPhysicsManager::GetCollisionObjectsInRange(cons
 {
 	Vector<const ICollisionObject*> result;
 
-	hvmath::AABB testBox(worldPos, range);
+	Vector2 adjustedRange = hvmath::Abs(range);
+	adjustedRange.x = hvmath::Max({ adjustedRange.x, 1.0f });
+	adjustedRange.y = hvmath::Max({ adjustedRange.y, 1.0f });
+
+	hvmath::AABB testBox(worldPos - adjustedRange * 0.5f, adjustedRange);
 	hvmath::Hit dummy;
 
 	for (auto&& collisionObject : m_ColliderList)
@@ -53,8 +57,10 @@ void CPhysicsManager::RegisterCollisionObject(const ICollisionObject* collisionO
 {
 	ASSERT_OR_EXECUTE(collisionObject, return);
 
-	auto it = std::find_if(m_ColliderList.begin(), m_ColliderList.end(), [collisionObject](const ICollisionObject* element) { return collisionObject == element; });
+#if _DEBUG
+	auto it = std::find_if(m_ColliderList.begin(), m_ColliderList.end(), [collisionObject](const ICollisionObject* element) { return element == collisionObject; });
 	ASSERT_OR_EXECUTE(it == m_ColliderList.end(), return);
+#endif
 
 	m_ColliderList.push_back(collisionObject);
 }
@@ -65,7 +71,7 @@ void CPhysicsManager::UnregisterCollisionObject(const ICollisionObject* collisio
 {
 	ASSERT_OR_EXECUTE(collisionObject, return);
 
-	auto it = std::find_if(m_ColliderList.begin(), m_ColliderList.end(), [collisionObject](const ICollisionObject* element) { return collisionObject == element; });
+	auto it = std::find_if(m_ColliderList.begin(), m_ColliderList.end(), [collisionObject](const ICollisionObject* element) { return element == collisionObject; });
 	ASSERT_OR_EXECUTE(it != m_ColliderList.end(), return);
 
 	m_ColliderList.erase(it);
@@ -86,7 +92,7 @@ bool CPhysicsManager::SweepTest(const hvmath::AABB& object, const Vector2& delta
 	Vector<hvmath::AABB> AABBList;
 	AABBList.reserve(m_ColliderList.size() - 1);
 
-	for (const ICollisionObject* collisionObject : m_ColliderList)
+	for (auto&& collisionObject : GetCollisionObjectsInRange(object.pos, delta))
 	{
 		if (!collisionObject->IsEnabled())
 		{

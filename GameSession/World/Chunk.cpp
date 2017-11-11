@@ -24,16 +24,16 @@ CChunk::~CChunk()
 
 const Map<ChunkSliceInterval, hvgs::CChunkSlice>& CChunk::GetChunkSlices() const
 {
-	return m_ChunkSliceList;
+	return m_ChunkSliceMap;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 const hvgs::CChunkSlice* CChunk::GetChunkSliceAt(int yLevel) const
 {
-	auto it = m_ChunkSliceList.find(FindNextChunkSlicePos(yLevel));
+	auto it = m_ChunkSliceMap.find(FindNextChunkSlicePos(yLevel));
 
-	if (it == m_ChunkSliceList.end())
+	if (it == m_ChunkSliceMap.end())
 	{
 		return nullptr;
 	}
@@ -56,8 +56,8 @@ const hvgs::CTile* CChunk::GetTileAt(int yLevel, const ChunkSlicePos& chunkPos) 
 {
 	ChunkSliceInterval yChunkInterval = FindNextChunkSlicePos(yLevel);
 
-	auto it = m_ChunkSliceList.find(yChunkInterval);
-	if (it == m_ChunkSliceList.end())
+	auto it = m_ChunkSliceMap.find(yChunkInterval);
+	if (it == m_ChunkSliceMap.end())
 	{
 		return nullptr;
 	}
@@ -71,8 +71,8 @@ void CChunk::SetTileAt(int yLevel, const ChunkSlicePos& chunkPos, TileType tileT
 {
 	ChunkSliceInterval yChunkInterval = FindNextChunkSlicePos(yLevel);
 
-	auto it = m_ChunkSliceList.find(yChunkInterval);
-	if (it == m_ChunkSliceList.end())
+	auto it = m_ChunkSliceMap.find(yChunkInterval);
+	if (it == m_ChunkSliceMap.end())
 	{
 		if (!allowCreation)
 		{
@@ -95,12 +95,15 @@ void CChunk::UpdateSlicesAt(int yLevel, int yRange)
 	ChunkSliceInterval sliceLevelMax = FindNextChunkSlicePos(yLevel + yRange);
 	ChunkSliceInterval sliceLevelMin = FindNextChunkSlicePos(yLevel - yRange);
 
+	std::ostringstream ss;
+	ss << "Chunk Update " << m_PositionX;
+	TT_BEGIN(ss.str());
 	for (ChunkSliceInterval i = sliceLevelMin; i < sliceLevelMax; i += CHUNKSLICE_SIZE_Y)
 	{
 		int height = i;
 
-		auto it = m_ChunkSliceList.find(height);
-		if (it != m_ChunkSliceList.end())
+		auto it = m_ChunkSliceMap.find(height);
+		if (it != m_ChunkSliceMap.end())
 		{
 			continue;
 		}
@@ -108,21 +111,22 @@ void CChunk::UpdateSlicesAt(int yLevel, int yRange)
 		CChunkSlice slice(this, height);
 		slice.CalculateTiles();
 
-		m_ChunkSliceList.emplace(height, std::move(slice));
+		m_ChunkSliceMap.emplace(height, std::move(slice));
 	}
+	TT_END(ss.str());
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 inline ChunkSliceInterval CChunk::FindNextChunkSlicePos(int yLevel) const
 {
-	if (yLevel > 0)
+	if (yLevel >= 0)
 	{
 		return (yLevel / CHUNKSLICE_SIZE_Y) * CHUNKSLICE_SIZE_Y;
 	}
 	else
 	{
-		return ((yLevel - CHUNKSLICE_SIZE_Y) / CHUNKSLICE_SIZE_Y) * CHUNKSLICE_SIZE_Y;
+		return ((yLevel + 1 - CHUNKSLICE_SIZE_Y) / CHUNKSLICE_SIZE_Y) * CHUNKSLICE_SIZE_Y;
 	}
 }
 

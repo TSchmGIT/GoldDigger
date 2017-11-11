@@ -16,19 +16,25 @@ CWorld* CWorld::s_instance = nullptr;
 
 CWorld::CWorld()
 	: m_ChunkPool(32, 100)
+	//, m_WorkerThread(&CWorld::WorkerThread, this)
 {
 	s_instance = this;
 
-	TT_BEGIN("Chunk creation");
+	m_ChunkMap.reserve(64);
+
+
+	//TT_BEGIN("Chunk Calculation");
 	for (int i = -2; i < 2; i++)
 	{
 		ChunkInterval posX = i * CHUNKSLICE_SIZE_X;
-		auto chunk = std::make_unique<CChunk>(posX);
+
+		UniquePtr<CChunk> chunk = std::make_unique<CChunk>(posX);
 		chunk->UpdateSlicesAt(int(-CHUNKSLICE_SIZE_Y * 0.5f), CHUNKSLICE_SIZE_Y * 1);
 
 		m_ChunkMap.emplace(posX, std::move(chunk));
 	}
-	TT_END("Chunk creation");
+	//TT_END("Chunk Calculation");
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -93,7 +99,7 @@ const hvgs::CTile* CWorld::GetTileAt(const WorldPos& worldPos) const
 	}
 
 	// Find Tile
-	return it->second->GetTileAt(int(worldPos.y), chunkPos);
+	return it->second->GetTileAt(hvmath::Floor<float, int>(worldPos.y), chunkPos);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -123,17 +129,7 @@ void CWorld::SetTileAt(const WorldPos& worldPos, TileType tileType, bool allowCr
 		chunk = it->second.get();
 	}
 
-	chunk->SetTileAt(int(worldPos.y), chunkPos, tileType, allowCreation);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CWorld::WorkerThread()
-{
-	while (true)
-	{
-
-	}
+	chunk->SetTileAt(hvmath::Floor<float, int>(worldPos.y), chunkPos, tileType, allowCreation);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -157,7 +153,7 @@ inline ChunkInterval CWorld::FindNextChunkPos(int x) const
 	}
 	else
 	{
-		return ((x - CHUNKSLICE_SIZE_X) / CHUNKSLICE_SIZE_X) * CHUNKSLICE_SIZE_X;
+		return ((x + 1 - CHUNKSLICE_SIZE_X) / CHUNKSLICE_SIZE_X) * CHUNKSLICE_SIZE_X;
 	}
 }
 

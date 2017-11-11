@@ -15,7 +15,6 @@ namespace hvgs
 
 class CChunk
 {
-
 public:
 	CChunk(ChunkInterval positionX);
 	virtual ~CChunk();
@@ -37,7 +36,8 @@ public:
 protected:
 	inline ChunkSliceInterval FindNextChunkSlicePos(int yLevel) const; ///< Returns the next valid chunk slice y-pos to the given input
 
-	Map<ChunkSliceInterval, CChunkSlice> m_ChunkSliceList;
+private:
+	Map<ChunkSliceInterval, CChunkSlice> m_ChunkSliceMap;
 
 	ChunkInterval m_PositionX;
 };

@@ -167,7 +167,7 @@ bool AABB::SweepInto(const std::vector<AABB>& staticColliderList, const hvmath::
 
 		if (_tmpSweep.time < sweep.time)
 		{
-			sweep.hit = _tmpSweep.hit;
+ 			sweep.hit = _tmpSweep.hit;
 			sweep.pos = _tmpSweep.pos;
 			sweep.time = _tmpSweep.time;
 			collider = aabb;

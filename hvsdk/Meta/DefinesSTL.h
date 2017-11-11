@@ -1,5 +1,9 @@
 #pragma once
 
+#include <vector>
+#include <queue>
+#include <set>
+
 template<typename T>
 using UniquePtr = std::unique_ptr<T>;
 template<typename T>
@@ -12,6 +16,10 @@ using Map = boost::unordered_map<Key, Value>;
 
 template<typename Key>
 using Vector = std::vector<Key>;
+template<typename Key>
+using Queue = std::queue<Key>;
+template<typename Key>
+using Set = std::set<Key>;
 
 using String = std::string;
 

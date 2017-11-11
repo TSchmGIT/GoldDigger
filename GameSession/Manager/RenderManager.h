@@ -62,7 +62,7 @@ protected:
 
 protected:
 	UniquePtr<sf::RenderWindow>		m_Window;
-	Vector<const IRenderElement*>	m_RenderElementList;
+	Set<const IRenderElement*>		m_RenderElementSet;
 
 	hvsdk::CObjectPool<sf::Sprite>	m_PoolSprites;
 };

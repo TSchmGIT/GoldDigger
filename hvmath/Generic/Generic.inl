@@ -13,6 +13,8 @@
 #include <initializer_list>
 #include <algorithm>
 
+#include "hvmath/Vector2/Vector2.h"
+
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvmath
@@ -85,9 +87,15 @@ inline T Clamp(const T& value, const T& lowerLimit, const T& upperLimit)
 }
 
 template<typename T>
-inline T Abs(std::initializer_list<T> iList)
+inline T Abs(const T& value)
 {
-	return std::abs(iList);
+	return std::abs(value);
+}
+
+template<>
+inline hvmath::Vector2<float> Abs<hvmath::Vector2<float>>(const hvmath::Vector2<float>& value)
+{
+	return hvmath::Vector2<float>(std::abs(value.x), std::abs(value.y));
 }
 
 template<typename T>

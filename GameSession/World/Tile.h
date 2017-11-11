@@ -24,6 +24,8 @@ public:
 	CTile(const WorldPos& position, TileType tileType);
 	virtual ~CTile();
 
+	void Init(const WorldPos& position, TileType tileType);
+
 public:
 	TileType GetTileType() const;
 

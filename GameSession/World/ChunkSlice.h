@@ -18,7 +18,9 @@ class CChunkSlice
 {
 
 public:
-	CChunkSlice(const CChunk* parent, int height);
+	//CChunkSlice(const CChunkSlice& other);
+	//CChunkSlice(CChunkSlice&& other);
+	CChunkSlice(const CChunk* parent, ChunkInterval height);
 	virtual ~CChunkSlice();
 
 public:
@@ -33,10 +35,10 @@ public:
 protected:
 	inline size_t GetIndex(hvuint8 x, hvuint8 y) const;
 
-	CTile m_Tiles[CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y];
-
-	const CChunk*	m_Parent;
-	int				m_YLevel;
+protected:
+	CTile			m_Tiles[CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y];
+	const CChunk*	m_Parent = nullptr;
+	ChunkInterval	m_YLevel = 0;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -34,6 +34,17 @@ CTile::~CTile()
 
 //////////////////////////////////////////////////////////////////////////
 
+void CTile::Init(const WorldPos& position, TileType tileType)
+{
+	m_Position = position;
+	m_TileType = tileType;
+
+	m_AABB.pos = GetAABBOrigin();
+	m_AABB.half = GetAABBHalfs();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 hvgs::TileType CTile::GetTileType() const
 {
 	return m_TileType;

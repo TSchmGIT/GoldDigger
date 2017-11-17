@@ -41,7 +41,7 @@ protected:
 	Vector<const ICollisionObject*> GetCollisionObjectsInRange(const WorldPos& worldPos, const Vector2& range) const;
 
 protected:
-	Vector<const ICollisionObject*> m_ColliderList;
+	Set<const ICollisionObject*> m_ColliderSet;
 };
 
 /////////////////////////////////////////////////////////////////////////////

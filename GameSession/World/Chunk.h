@@ -1,11 +1,13 @@
 #pragma once
-#include "GameSession/World/ChunkSlice.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
 {
 class CChunkSlice;
+class CTile;
+
+enum class TileType : hvuint8;
 }
 
 namespace hvgs
@@ -23,7 +25,7 @@ public:
 	void UpdateSlicesAt(int yLevel, int yRange);
 
 public:
-	const Map<ChunkSliceInterval, CChunkSlice>& GetChunkSlices() const;
+	const Map<ChunkSliceInterval, UniquePtr<CChunkSlice>>& GetChunkSlices() const;
 	const CChunkSlice* GetChunkSliceAt(int yLevel) const;
 
 public:
@@ -37,7 +39,7 @@ protected:
 	inline ChunkSliceInterval FindNextChunkSlicePos(int yLevel) const; ///< Returns the next valid chunk slice y-pos to the given input
 
 private:
-	Map<ChunkSliceInterval, CChunkSlice> m_ChunkSliceMap;
+	Map<ChunkSliceInterval, UniquePtr<CChunkSlice>> m_ChunkSliceMap;
 
 	ChunkInterval m_PositionX;
 };

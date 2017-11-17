@@ -33,7 +33,7 @@ void CInputManager::Init()
 		for (hvint8 j = 0; j < hvint8(JoystickButton::Count); j++)
 		{
 			itPairUp.first->second[j] = false;
-			itPairDown.first->second[j]= false;
+			itPairDown.first->second[j] = false;
 			itPairPressed.first->second[j] = false;
 		}
 
@@ -266,21 +266,52 @@ float CInputManager::GetAxis(Axis axis, JoystickID id /*= JoystickID::Player1*/)
 
 bool CInputManager::GetButton(Button button, JoystickID id /*= JoystickID::Player1*/) const
 {
-	KeyCode keyButton = KeyCode::Unknown;
-	JoystickButton joystickButton = JoystickButton::Unknown;
+	KeyCode keyButton;;
+	JoystickButton joystickButton;
 
+	std::tie(keyButton, joystickButton) = GetDataForButton(button);
+
+	return IsKeyPressed(keyButton) || IsJoystickButtonPressed(joystickButton, id);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CInputManager::GetButtonDown(Button button, JoystickID id /*= JoystickID::Player1*/) const
+{
+	KeyCode keyButton;;
+	JoystickButton joystickButton;
+
+	std::tie(keyButton, joystickButton) = GetDataForButton(button);
+
+	return IsKeyDown(keyButton) || IsJoystickButtonDown(joystickButton, id);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CInputManager::GetButtonUp(Button button, JoystickID id /*= JoystickID::Player1*/) const
+{
+	KeyCode keyButton;;
+	JoystickButton joystickButton;
+
+	std::tie(keyButton, joystickButton) = GetDataForButton(button);
+
+	return IsKeyPressed(keyButton) || IsJoystickButtonPressed(joystickButton, id);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+std::tuple<hvgs::KeyCode, hvgs::JoystickButton> CInputManager::GetDataForButton(Button button) const
+{
 	switch (button)
 	{
 	case hvgs::Button::Jump:
-		keyButton = KeyCode::Space;
-		joystickButton = JoystickButton::XBOX_A;
-		break;
+		return{ KeyCode::Space, JoystickButton::XBOX_A };
+	case hvgs::Button::Dig:
+		return{ KeyCode::LShift, JoystickButton::XBOX_B };
 	default:
-		ASSERT_TEXT(false, "Button is not configured");
-		break;
+		return{ KeyCode::Unknown, JoystickButton::Unknown };
 	}
 
-	return IsKeyPressed(keyButton) || IsJoystickButtonPressed(joystickButton, id);
 }
 
 //////////////////////////////////////////////////////////////////////////

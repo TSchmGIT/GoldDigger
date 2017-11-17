@@ -70,8 +70,12 @@ public:
 public:
 	float GetAxis(Axis axis, JoystickID id = JoystickID::Player1) const;
 	bool GetButton(Button button, JoystickID id = JoystickID::Player1) const;
+	bool GetButtonDown(Button button, JoystickID id = JoystickID::Player1) const;
+	bool GetButtonUp(Button button, JoystickID id = JoystickID::Player1) const;
 
 protected:
+	std::tuple<KeyCode, JoystickButton> GetDataForButton(Button button) const;
+
 	bool m_KeyCodeArrayPressed[size_t(KeyCode::Count)];
 	bool m_KeyCodeArrayDown[size_t(KeyCode::Count)];
 	bool m_KeyCodeArrayUp[size_t(KeyCode::Count)];

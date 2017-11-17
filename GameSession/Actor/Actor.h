@@ -9,6 +9,7 @@
 
 namespace hvgs
 {
+class CTile;
 class CInventory;
 
 enum class Layer : int;
@@ -44,12 +45,17 @@ protected: // ICollisionObject
 	virtual Layer GetLayer() const override;
 
 public:
+	WorldPos GetAABBOriginOffset() const;
+
 	WorldPos GetPosition() const;
 	void SetPosition(const WorldPos& position);
 
-	WorldPos GetAABBOriginOffset() const;
-
 	const CInventory* GetInventory() const;
+	CInventory* GetInventory();
+
+
+	void StartDigging(const CTile& tile);
+	void StopDigging();
 
 protected:
 	void UpdateCamera(const Vector2& deltaMovement) const;

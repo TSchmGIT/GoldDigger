@@ -62,10 +62,24 @@ inline Vector2<T> Vector2<T>::Normalize(const Vector2<T>& a)
 {
 	if (a.x == T(0) && a.y == T(0))
 	{
-		return Vector2<T>();
+		return Vector2<T>(0.0f, 0.0f);
 	}
 
 	return a / Magnitude(a);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+inline Vector2<T> Vector2<T>::MoveTowards(const Vector2<T>& current, const Vector2<T> target, float maxDelta)
+{
+	Vector2<T> delta = target - current;
+	if (Vector2<T>::SqrMagnitude(target - current) <= maxDelta * maxDelta)
+	{
+		return target;
+	}
+
+	return current + delta.Normalize() * maxDelta;
 }
 
 //////////////////////////////////////////////////////////////////////////

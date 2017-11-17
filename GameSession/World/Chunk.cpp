@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Chunk.h"
 
+#include "GameSession/World/ChunkSlice.h"
+#include "GameSession/World/Tile.h"
+#include "GameSession/World/WorldEnums.h"
+
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
@@ -22,7 +26,7 @@ CChunk::~CChunk()
 
 //////////////////////////////////////////////////////////////////////////
 
-const Map<ChunkSliceInterval, hvgs::CChunkSlice>& CChunk::GetChunkSlices() const
+const Map<hvgs::ChunkSliceInterval, UniquePtr<hvgs::CChunkSlice>>& CChunk::GetChunkSlices() const
 {
 	return m_ChunkSliceMap;
 }
@@ -39,7 +43,7 @@ const hvgs::CChunkSlice* CChunk::GetChunkSliceAt(int yLevel) const
 	}
 	else
 	{
-		return &it->second;
+		return it->second.get();
 	}
 }
 
@@ -62,7 +66,7 @@ const hvgs::CTile* CChunk::GetTileAt(int yLevel, const ChunkSlicePos& chunkPos) 
 		return nullptr;
 	}
 
-	return &it->second.GetTileAt(chunkPos.x, chunkPos.y);
+	return &it->second->GetTileAt(chunkPos.x, chunkPos.y);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -85,7 +89,7 @@ void CChunk::SetTileAt(int yLevel, const ChunkSlicePos& chunkPos, TileType tileT
 		}
 	}
 
-	it->second.SetTileAt(chunkPos.x, chunkPos.y, tileType);
+	it->second->SetTileAt(chunkPos.x, chunkPos.y, tileType);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -95,9 +99,9 @@ void CChunk::UpdateSlicesAt(int yLevel, int yRange)
 	ChunkSliceInterval sliceLevelMax = FindNextChunkSlicePos(yLevel + yRange);
 	ChunkSliceInterval sliceLevelMin = FindNextChunkSlicePos(yLevel - yRange);
 
-	std::ostringstream ss;
-	ss << "Chunk Update " << m_PositionX;
-	TT_BEGIN(ss.str());
+	//std::ostringstream ss;
+	//ss << "Chunk Update " << m_PositionX;
+	//TT_BEGIN(ss.str());
 	for (ChunkSliceInterval i = sliceLevelMin; i < sliceLevelMax; i += CHUNKSLICE_SIZE_Y)
 	{
 		int height = i;
@@ -108,12 +112,12 @@ void CChunk::UpdateSlicesAt(int yLevel, int yRange)
 			continue;
 		}
 
-		CChunkSlice slice(this, height);
-		slice.CalculateTiles();
+		UniquePtr<CChunkSlice> slice = std::make_unique<CChunkSlice>(this, height);
+		slice->CalculateTiles();
 
 		m_ChunkSliceMap.emplace(height, std::move(slice));
 	}
-	TT_END(ss.str());
+	//TT_END(ss.str());
 }
 
 //////////////////////////////////////////////////////////////////////////

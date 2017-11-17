@@ -4,6 +4,7 @@
 #include <hvmath/Physics/AABB.h>
 
 #include "GameSession/Actor/Motor/MotorDefault.h"
+#include "GameSession/Actor/Motor/MotorDigging.h"
 #include "GameSession/Camera/Camera.h"
 #include "GameSession/Items/Inventory.h"
 #include "GameSession/Items/ItemBlock.h"
@@ -15,6 +16,7 @@
 #include "GameSession/Physics/PhysicsEnums.h"
 #include "GameSession/Rendering/DebugRender.h"
 #include "GameSession/Rendering/Textures/EnumsTexture.h"
+#include "GameSession/World/Tile.h"
 #include "GameSession/World/World.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -68,13 +70,11 @@ void CActor::PrepareTick()
 
 void CActor::Tick()
 {
+	if (CInputManager::Get().IsMouseButtonDown(MouseButton::Middle) || std::abs(m_Position.x) > 200.0f || m_Position.y > 20.0f || m_Position.y <= -100.0f)
 	{
-		if (std::abs(m_Position.x) > 200.0f || m_Position.y > 20.0f || m_Position.y <= -100.0f)
-		{
-			UpdateCamera(-m_Position);
-			m_Position = Vector2(0.0f, 0.0f);
-			m_Motor->SetVelocity({ 0.0f, 0.0f });
-		}
+		UpdateCamera(-m_Position);
+		SetPosition(Vector2(0.0f, 0.0f));
+		m_Motor->SetVelocity({ 0.0f, 0.0f });
 	}
 
 	Vector2 oldPos = m_Position;
@@ -88,13 +88,13 @@ void CActor::Tick()
 		CCamera* cam = CCameraManager::GetMutable().GetActive();
 		ASSERT_OR_EXECUTE(cam, return);
 
-		auto&& tile = CWorld::GetWorld()->GetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()));
+		auto&& tile = CWorld::GetWorldMutable()->GetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()));
 
 		if (tile && tile->GetTileType() != TileType::Air)
 		{
 			m_Inventory->AddItem(std::make_unique<CItemBlock>(tile->GetTileType()));
 
-			CWorld::GetWorld()->SetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()), TileType::Air, false);
+			CWorld::GetWorldMutable()->SetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()), TileType::Air, false);
 		}
 	}
 
@@ -108,7 +108,7 @@ void CActor::Tick()
 		auto&& itemBlock = dynamic_cast<const CItemBlock*>(item);
 		if (itemBlock)
 		{
-			CWorld::GetWorld()->SetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()), itemBlock->GetTileType(), false);
+			CWorld::GetWorldMutable()->SetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()), itemBlock->GetTileType(), false);
 
 			m_Inventory->RemoveItemAt(0);
 		}
@@ -129,8 +129,6 @@ void CActor::Draw() const
 	ss << "(" << m_Position.x << ", " << m_Position.y << ")\n" <<
 		m_Motor->GetVelocity().x << ", " << m_Motor->GetVelocity().y << ")";
 	CRenderManager::GetMutable().DrawTextWorld(m_Position, ss.str(), FontName::Courier_New, 30);
-
-	DebugRender::DrawRect(CRenderManager::GetMutable().GetWindow(), { GetAABBOrigin(), GetAABBHalfs() });
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -157,6 +155,30 @@ void CActor::SetPosition(const WorldPos& position)
 const hvgs::CInventory* CActor::GetInventory() const
 {
 	return m_Inventory.get();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::CInventory* CActor::GetInventory()
+{
+	return m_Inventory.get();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CActor::StartDigging(const CTile& tile)
+{
+	m_Motor = std::make_unique<CMotorDigging>(*m_Motor);
+	CMotorDigging* motorDigging = boost::dynamic_pointer_cast<CMotorDigging>(m_Motor.get());
+	motorDigging->SetTargetPosition(tile.GetCenter());
+	motorDigging->SetDiggingPower(0.33f);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CActor::StopDigging()
+{
+	m_Motor = std::make_unique<CMotorDefault>(*m_Motor);
 }
 
 //////////////////////////////////////////////////////////////////////////

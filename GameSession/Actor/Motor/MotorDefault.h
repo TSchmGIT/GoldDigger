@@ -25,6 +25,8 @@ class CMotorDefault : public CMotorBase
 
 public:
 	CMotorDefault() = default;
+	CMotorDefault(const CMotorBase& other);
+	CMotorDefault(const CMotorDefault& other);
 	CMotorDefault(CActor* actor);
 	virtual ~CMotorDefault();
 
@@ -34,6 +36,7 @@ protected:
 	SweepResult PerformSingleSweep(const Vector2& pos, const Vector2& halfs, const Vector2& delta) const;
 
 	void UpdateGravityVelocity();
+	void CheckDigging();
 
 protected:
 	Vector2		m_GravityVelocity;

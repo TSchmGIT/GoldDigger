@@ -7,6 +7,7 @@ namespace hvgs
 {
 class CTile;
 class CChunk;
+class CActor;
 }
 
 namespace hvgs
@@ -21,13 +22,18 @@ public:
 	CWorld();
 	virtual ~CWorld();
 
-	static CWorld* GetWorld();
+	static CWorld* GetWorldMutable();
+	static const CWorld* GetWorld();
 
 public:
 	const Map<int, UniquePtr<CChunk>>& GetChunks() const;
+	const CActor& GetActor() const;
+	CActor& GetActor();
 
 public:
 	void WorldToChunkPos(const WorldPos& worldPos, ChunkInterval& outWorldX, ChunkSlicePos& outChunkPos) const;
+
+	WorldPos GetTilePos(const WorldPos& worldPos) const;
 
 public:
 	const CTile* GetTileAt(const WorldPos& worldPos) const;
@@ -45,6 +51,8 @@ protected:
 
 private:
 	static CWorld* s_instance;
+
+	UniquePtr<CActor> m_Actor = std::make_unique<CActor>();
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "World.h"
 
-#include "GameSession/World/Tile.h"
+#include "GameSession/Actor/Actor.h"
+#include "GameSession/World/Chunk.h"
 #include "GameSession/World/ChunkSlice.h"
-#include "Chunk.h"
+#include "GameSession/World/Tile.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -16,24 +17,24 @@ CWorld* CWorld::s_instance = nullptr;
 
 CWorld::CWorld()
 	: m_ChunkPool(32, 100)
-	//, m_WorkerThread(&CWorld::WorkerThread, this)
 {
+	m_Actor->SetPosition({ 0.0f, 0.0f });
+
 	s_instance = this;
 
 	m_ChunkMap.reserve(64);
 
-
-	//TT_BEGIN("Chunk Calculation");
-	for (int i = -2; i < 2; i++)
+	TT_BEGIN("Chunk Calculation");
+	for (int i = -4; i < 4; i++)
 	{
 		ChunkInterval posX = i * CHUNKSLICE_SIZE_X;
 
 		UniquePtr<CChunk> chunk = std::make_unique<CChunk>(posX);
-		chunk->UpdateSlicesAt(int(-CHUNKSLICE_SIZE_Y * 0.5f), CHUNKSLICE_SIZE_Y * 1);
+		chunk->UpdateSlicesAt(-32, 40);
 
 		m_ChunkMap.emplace(posX, std::move(chunk));
 	}
-	//TT_END("Chunk Calculation");
+	TT_END("Chunk Calculation");
 
 }
 
@@ -46,7 +47,14 @@ CWorld::~CWorld()
 
 //////////////////////////////////////////////////////////////////////////
 
-CWorld* CWorld::GetWorld()
+CWorld* CWorld::GetWorldMutable()
+{
+	return s_instance;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+const CWorld* CWorld::GetWorld()
 {
 	return s_instance;
 }
@@ -56,6 +64,20 @@ CWorld* CWorld::GetWorld()
 const Map<int, UniquePtr<CChunk>>& CWorld::GetChunks() const
 {
 	return m_ChunkMap;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+const hvgs::CActor& CWorld::GetActor() const
+{
+	return *m_Actor;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::CActor& CWorld::GetActor()
+{
+	return *m_Actor;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -81,6 +103,13 @@ void CWorld::WorldToChunkPos(const WorldPos& worldPos, ChunkInterval& outWorldX,
 	{
 		outChunkPos.y = hvuint8(float(CHUNKSLICE_SIZE_Y) + hvmath::Mod(worldPos.y, float(CHUNKSLICE_SIZE_Y)));
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::WorldPos CWorld::GetTilePos(const WorldPos& worldPos) const
+{
+	return WorldPos(hvmath::Floor<float, float>(worldPos.x), hvmath::Floor<float, float>(worldPos.y));
 }
 
 //////////////////////////////////////////////////////////////////////////

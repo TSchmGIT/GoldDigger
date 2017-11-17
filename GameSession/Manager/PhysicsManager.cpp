@@ -37,7 +37,7 @@ Vector<const ICollisionObject*> CPhysicsManager::GetCollisionObjectsInRange(cons
 	hvmath::AABB testBox(worldPos - adjustedRange * 0.5f, adjustedRange);
 	hvmath::Hit dummy;
 
-	for (auto&& collisionObject : m_ColliderList)
+	for (auto&& collisionObject : m_ColliderSet)
 	{
 		// The aabb is not inside the range
 		if (!testBox.IntersectAABB(collisionObject->GetAABB(), dummy))
@@ -58,11 +58,12 @@ void CPhysicsManager::RegisterCollisionObject(const ICollisionObject* collisionO
 	ASSERT_OR_EXECUTE(collisionObject, return);
 
 #if _DEBUG
-	auto it = std::find_if(m_ColliderList.begin(), m_ColliderList.end(), [collisionObject](const ICollisionObject* element) { return element == collisionObject; });
-	ASSERT_OR_EXECUTE(it == m_ColliderList.end(), return);
+	//auto it = std::find_if(m_ColliderSet.begin(), m_ColliderSet.end(), [collisionObject](const ICollisionObject* element) { return element == collisionObject; });
+	auto it = m_ColliderSet.find(collisionObject);
+	ASSERT_OR_EXECUTE(it == m_ColliderSet.end(), return);
 #endif
 
-	m_ColliderList.push_back(collisionObject);
+	m_ColliderSet.emplace(collisionObject);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -71,10 +72,11 @@ void CPhysicsManager::UnregisterCollisionObject(const ICollisionObject* collisio
 {
 	ASSERT_OR_EXECUTE(collisionObject, return);
 
-	auto it = std::find_if(m_ColliderList.begin(), m_ColliderList.end(), [collisionObject](const ICollisionObject* element) { return element == collisionObject; });
-	ASSERT_OR_EXECUTE(it != m_ColliderList.end(), return);
+	//auto it = std::find_if(m_ColliderSet.begin(), m_ColliderSet.end(), [collisionObject](const ICollisionObject* element) { return element == collisionObject; });
+	auto it = m_ColliderSet.find(collisionObject);
+	ASSERT_OR_EXECUTE(it != m_ColliderSet.end(), return);
 
-	m_ColliderList.erase(it);
+	m_ColliderSet.erase(it);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -90,7 +92,7 @@ const hvgs::Vector2& CPhysicsManager::GetGravity() const
 bool CPhysicsManager::SweepTest(const hvmath::AABB& object, const Vector2& delta, const Layer& layerMask, hvmath::Sweep& sweepResult, hvmath::AABB& collider) const
 {
 	Vector<hvmath::AABB> AABBList;
-	AABBList.reserve(m_ColliderList.size() - 1);
+	AABBList.reserve(m_ColliderSet.size() - 1);
 
 	for (auto&& collisionObject : GetCollisionObjectsInRange(object.pos, delta))
 	{
@@ -98,7 +100,7 @@ bool CPhysicsManager::SweepTest(const hvmath::AABB& object, const Vector2& delta
 		{
 			continue;
 		}
-
+		
 		if ((int(collisionObject->GetLayer()) & int(layerMask)) == 0)
 		{
 			continue;

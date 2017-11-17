@@ -62,7 +62,7 @@ void CRenderManager::Init()
 
 void CRenderManager::Render()
 {
-	CWorld* world = CWorld::GetWorld();
+	CWorld* world = CWorld::GetWorldMutable();
 	for (const auto& kvPair : world->GetChunks())
 	{
 		DrawChunk(*kvPair.second);
@@ -209,14 +209,14 @@ void CRenderManager::DrawSpriteWorld(const WorldPos& pos, const TextureName& tex
 
 void CRenderManager::DrawChunk(const CChunk& chunk)
 {
-	const auto& chunkSliceMap = chunk.GetChunkSlices();
+	auto&& chunkSliceMap = chunk.GetChunkSlices();
 
 
-	for (const auto& kvPair : chunkSliceMap)
+	for (auto&& kvPair : chunkSliceMap)
 	{
-		const auto& chunkSlice = kvPair.second;
+		auto&& chunkSlice = kvPair.second;
 
-		Vector2i csWorldPos = chunkSlice.GetWorldPos();
+		Vector2i csWorldPos = chunkSlice->GetWorldPos();
 		sf::FloatRect chunkSliceRect(float(csWorldPos.x), float(csWorldPos.y), CHUNKSLICE_SIZE_X, CHUNKSLICE_SIZE_Y);
 
 		if (!CCameraManager::Get().GetActive()->IsInView(chunkSliceRect))
@@ -230,7 +230,7 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 		{
 			for (hvuint8 y = 0; y < CHUNKSLICE_SIZE_Y; y++)
 			{
-				const CTile& tile = chunkSlice.GetTileAt(x, y);
+				const CTile& tile = chunkSlice->GetTileAt(x, y);
 
 				TileType tileType = tile.GetTileType();
 				if (tileType == TileType::Air)
@@ -238,7 +238,7 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 					continue;
 				}
 
-				WorldPos worldPos = Vector2(float(x), float(y)) + chunkSlice.GetWorldPos();
+				WorldPos worldPos = Vector2(float(x), float(y)) + chunkSlice->GetWorldPos();
 
 				int index = 4 * (y + x * CHUNKSLICE_SIZE_Y);
 

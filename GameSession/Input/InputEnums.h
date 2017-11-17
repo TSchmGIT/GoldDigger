@@ -5,7 +5,8 @@ namespace hvgs
 
 enum class Button : hvuint8
 {
-	Jump
+	Jump,
+	Dig
 };
 
 enum class Axis : hvuint8

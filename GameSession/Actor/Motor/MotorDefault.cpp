@@ -8,6 +8,8 @@
 #include "GameSession/Manager/PhysicsManager.h"
 #include "GameSession/Manager/TimeManager.h"
 #include "GameSession/Physics/PhysicsEnums.h"
+#include "GameSession/World/Tile.h"
+#include "GameSession/World/World.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -21,6 +23,24 @@ const float ACCELERATION_FORCE = 20.0f;
 
 CMotorDefault::CMotorDefault(CActor* actor)
 	: CMotorBase(actor)
+{
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+CMotorDefault::CMotorDefault(const CMotorDefault& other)
+	: CMotorBase::CMotorBase(other)
+	, m_GravityVelocity(other.m_GravityVelocity)
+	, m_IsGrounded(other.m_IsGrounded)
+{
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+CMotorDefault::CMotorDefault(const CMotorBase& other)
+	: CMotorBase(other)
 {
 
 }
@@ -78,6 +98,7 @@ void CMotorDefault::Tick()
 
 	// At max resolve 10 collisions in a single tick
 	int iteration = 0;
+	m_IsGrounded = false;
 	while (iteration < 10 && (oldDelta.x != 0 || oldDelta.y != 0))
 	{
 		sweepResult = PerformSingleSweep(oldAABBPos, aabb.half, oldDelta);
@@ -88,12 +109,11 @@ void CMotorDefault::Tick()
 		// No collision
 		if (sweepResult.flags == CollisionFlags::None)
 		{
-			m_IsGrounded = false;
 			break;
 		}
 
 		// Collision occured
-		m_IsGrounded = sweepResult.flags == CollisionFlags::Bottom;
+		m_IsGrounded |= sweepResult.flags == CollisionFlags::Bottom;
 		m_Velocity = m_Velocity - sweepResult.sweep.hit.normal * Vector2::Dot(sweepResult.sweep.hit.normal, m_Velocity);
 
 		if (sweepResult.flags == CollisionFlags::Bottom)
@@ -108,6 +128,10 @@ void CMotorDefault::Tick()
 	Vector2 newPos = sweepResult.newPos - m_Actor->GetAABBOriginOffset();
 	deltaMovement = newPos - m_Actor->GetPosition();
 	m_Actor->SetPosition(newPos);
+
+	//////////////////////////////////////////////////////////////////////////
+
+	CheckDigging();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -171,6 +195,34 @@ hvgs::SweepResult CMotorDefault::PerformSingleSweep(const Vector2& pos, const Ve
 void CMotorDefault::UpdateGravityVelocity()
 {
 	m_GravityVelocity += CPhysicsManager::Get().GetGravity() * CTimeManager::Get().GetGameDeltaTime();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CMotorDefault::CheckDigging()
+{
+	if (!m_IsGrounded)
+	{
+		return;
+	}
+
+	if (Vector2::SqrMagnitude(m_Velocity) > 0.5f * 0.5f)
+	{
+		return;
+	}
+
+	if (!CInputManager::Get().GetButtonDown(Button::Dig))
+	{
+		return;
+	}
+
+	const auto& tile = CWorld::GetWorld()->GetTileAt(m_Actor->GetPosition() + Vector2(0.0f, -1.0f));
+	if (!tile || tile->GetTileType() == TileType::Air)
+	{
+		return;
+	}
+
+	m_Actor->StartDigging(*tile);
 }
 
 //////////////////////////////////////////////////////////////////////////

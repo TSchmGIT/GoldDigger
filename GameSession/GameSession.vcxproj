@@ -104,8 +104,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\$(Configuration);$(SolutionDir)\ProjectOutput\FastNoiseSIMD\$(Configuration);$(SolutionDir)\ProjectOutput\hvsdk\$(Configuration);%(AdditionalLibraryDirectories);$(VcpkgRoot)debug\lib;$(VcpkgRoot)debug\lib\manual-link</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\$(Configuration);$(SolutionDir)\ProjectOutput\FastNoiseSIMD\$(Configuration);$(SolutionDir)\ProjectOutput\Octree\$(Configuration);$(SolutionDir)\ProjectOutput\hvsdk\$(Configuration);%(AdditionalLibraryDirectories);$(VcpkgRoot)debug\lib;$(VcpkgRoot)debug\lib\manual-link</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Octree.lib;FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,8 +120,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\$(Configuration);$(SolutionDir)\ProjectOutput\FastNoiseSIMD\$(Configuration);$(SolutionDir)\ProjectOutput\hvsdk\$(Configuration);%(AdditionalLibraryDirectories);$(VcpkgRoot)debug\lib;$(VcpkgRoot)debug\lib\manual-link</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\$(Configuration);$(SolutionDir)\ProjectOutput\FastNoiseSIMD\$(Configuration);$(SolutionDir)\ProjectOutput\Octree\$(Configuration);$(SolutionDir)\ProjectOutput\hvsdk\$(Configuration);%(AdditionalLibraryDirectories);$(VcpkgRoot)debug\lib;$(VcpkgRoot)debug\lib\manual-link</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Octree.lib;FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,8 +141,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\$(Configuration);$(SolutionDir)\ProjectOutput\FastNoiseSIMD\$(Configuration);$(SolutionDir)\ProjectOutput\hvsdk\$(Configuration);%(AdditionalLibraryDirectories);$(VcpkgRoot)release\lib;$(VcpkgRoot)release\lib\manual-link</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\$(Configuration);$(SolutionDir)\ProjectOutput\FastNoiseSIMD\$(Configuration);$(SolutionDir)\ProjectOutput\Octree\$(Configuration);$(SolutionDir)\ProjectOutput\hvsdk\$(Configuration);%(AdditionalLibraryDirectories);$(VcpkgRoot)release\lib;$(VcpkgRoot)release\lib\manual-link</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Octree.lib;FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,8 +161,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\$(Configuration);$(SolutionDir)\ProjectOutput\FastNoiseSIMD\$(Configuration);$(SolutionDir)\ProjectOutput\hvsdk\$(Configuration);%(AdditionalLibraryDirectories);$(VcpkgRoot)release\lib;$(VcpkgRoot)release\lib\manual-link</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ProjectOutput\hvmath\$(Configuration);$(SolutionDir)\ProjectOutput\FastNoiseSIMD\$(Configuration);$(SolutionDir)\ProjectOutput\Octree\$(Configuration);$(SolutionDir)\ProjectOutput\hvsdk\$(Configuration);%(AdditionalLibraryDirectories);$(VcpkgRoot)release\lib;$(VcpkgRoot)release\lib\manual-link</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Octree.lib;FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -172,6 +172,7 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Motor\MotorBase.h" />
     <ClInclude Include="Actor\Motor\MotorDefault.h" />
+    <ClInclude Include="Actor\Motor\MotorDigging.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="GameObjects\IGameObject.h" />
     <ClInclude Include="Input\InputEnums.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Motor\MotorBase.cpp" />
     <ClCompile Include="Actor\Motor\MotorDefault.cpp" />
+    <ClCompile Include="Actor\Motor\MotorDigging.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GameObjects\IGameObject.cpp" />
     <ClCompile Include="Items\Inventory.cpp" />

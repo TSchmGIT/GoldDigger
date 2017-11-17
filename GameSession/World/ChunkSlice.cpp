@@ -16,30 +16,6 @@ CChunkSlice::CChunkSlice(const CChunk* parent, ChunkInterval height)
 {
 
 }
-//
-////////////////////////////////////////////////////////////////////////////
-//
-//CChunkSlice::CChunkSlice(const CChunkSlice& other)
-//{
-//	m_Parent = other.m_Parent;
-//	m_YLevel = other.m_YLevel;
-//
-//	for (size_t i = 0; i < CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y; i++)
-//	{
-//		m_Tiles[i] = other.m_Tiles[i];
-//	}
-//}
-//
-////////////////////////////////////////////////////////////////////////////
-//
-//CChunkSlice::CChunkSlice(CChunkSlice&& other)
-//	: m_Parent(std::move(other.m_Parent))
-//	, m_YLevel(other.m_YLevel)
-//{
-//	std::move(m_Tiles, m_Tiles + CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y, std::back_inserter(other.m_YLevel));
-//}
-//
-////////////////////////////////////////////////////////////////////////////
 
 CChunkSlice::~CChunkSlice()
 {

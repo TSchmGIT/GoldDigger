@@ -59,6 +59,14 @@ const hvgs::WorldPos& CTile::GetPosition() const
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::WorldPos CTile::GetCenter() const
+{
+	static const Vector2 offset(0.5f, 0.5f);
+	return m_Position + offset;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 bool CTile::IsEnabled() const
 {
 	return m_TileType != TileType::Air;

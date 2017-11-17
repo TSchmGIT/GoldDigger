@@ -30,6 +30,7 @@ public:
 	TileType GetTileType() const;
 
 	const WorldPos& GetPosition() const;
+	WorldPos GetCenter() const;
 
 public:
 	virtual bool IsEnabled() const override;

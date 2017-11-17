@@ -35,6 +35,7 @@ public:
 	static float Magnitude(const Vector2<T>& a);
 	static float SqrMagnitude(const Vector2<T>& a);
 	static Vector2<T> Normalize(const Vector2<T>& a);
+	static Vector2<T> MoveTowards(const Vector2<T>& current, const Vector2<T> target, float maxDelta);
 
 	Vector2<T>& Normalize();
 

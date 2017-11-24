@@ -161,7 +161,7 @@ void CGameManager::Draw() const
 
 	if (timestamp + 0.25f < CTimeManager::Get().GetAppTime())
 	{
-		lastFPS = CTimeManager::Get().GetFPS();
+		lastFPS = CTimeManager::Get().GetFPSAverage();
 		timestamp = CTimeManager::Get().GetAppTime();
 	}
 	std::ostringstream ss;

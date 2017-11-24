@@ -20,6 +20,8 @@ public:
 
 	TileType GetTileType() const;
 
+	virtual String GetDisplayName() const override;
+
 protected:
 	TileType m_TileType = TileType::Air;
 };

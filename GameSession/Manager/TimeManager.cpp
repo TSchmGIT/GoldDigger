@@ -57,6 +57,14 @@ void CTimeManager::PrepareTick()
 
 	// Increase frame count
 	m_FrameCount++;
+
+	m_AverageFpsList.push_back(GetFPS());
+	if (m_AverageFpsTimestamp + 0.5f < m_AppTime)
+	{
+		m_AverageFps = std::accumulate(m_AverageFpsList.cbegin(), m_AverageFpsList.cend(), 0.0f) / m_AverageFpsList.size();
+		m_AverageFpsTimestamp = m_AppTime;
+		m_AverageFpsList.clear();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -99,6 +107,13 @@ int CTimeManager::GetFrameCount() const
 float CTimeManager::GetFPS() const
 {
 	return 1.0f / m_AppTimeDelta;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+float CTimeManager::GetFPSAverage() const
+{
+	return m_AverageFps;
 }
 
 //////////////////////////////////////////////////////////////////////////

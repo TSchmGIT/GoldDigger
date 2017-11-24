@@ -124,6 +124,9 @@ void CActor::Draw() const
 {
 	CRenderManager::GetMutable().DrawSpriteWorld(m_Position, TextureName::Actor, Alignment::CenterBottom);
 
+	// Money
+	CRenderManager::GetMutable().DrawText(ScreenPos(CRenderManager::Get().GetScreenWidth() - 400.0f, 0.0f), "Money: " + std::to_string(m_Money));
+
 	// Debug
 	std::ostringstream ss;
 	ss << "(" << m_Position.x << ", " << m_Position.y << ")\n" <<
@@ -170,7 +173,7 @@ void CActor::StartDigging(const CTile& tile)
 {
 	m_Motor = std::make_unique<CMotorDigging>(*m_Motor);
 	CMotorDigging* motorDigging = boost::dynamic_pointer_cast<CMotorDigging>(m_Motor.get());
-	motorDigging->SetTargetPosition(tile.GetCenter());
+	motorDigging->SetTargetPosition(tile.GetCenter() - GetAABBOriginOffset());
 	motorDigging->SetDiggingPower(0.33f);
 }
 

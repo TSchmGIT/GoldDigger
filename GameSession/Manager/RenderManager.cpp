@@ -13,14 +13,13 @@
 #include "GameSession/World/World.h"
 #include "Rendering/DebugRender.h"
 
-
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
 {
 
-static const int	SCREEN_WIDTH = 3584;
-static const int	SCREEN_HEIGHT = 2016;
+static const int	SCREEN_WIDTH = 1920;
+static const int	SCREEN_HEIGHT = 1080;
 
 //////////////////////////////////////////////////////////////////////////
 

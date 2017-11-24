@@ -14,6 +14,8 @@ public:
 	CItemBase();
 	virtual ~CItemBase();
 
+public:
+	virtual String GetDisplayName() const;
 };
 
 /////////////////////////////////////////////////////////////////////////////

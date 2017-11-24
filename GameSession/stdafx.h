@@ -17,6 +17,7 @@
 #include <stdlib.h>
 
 #include <chrono>
+#include <numeric>
 
 #include <memory>
 

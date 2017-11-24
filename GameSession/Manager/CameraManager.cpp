@@ -27,8 +27,7 @@ CCameraManager::~CCameraManager()
 
 void CCameraManager::Init()
 {
-	m_CameraList.emplace_back();
-	m_ActiveCamera = &m_CameraList.back();
+	m_ActiveCamera = &m_CameraList.emplace_back();
 }
 
 //////////////////////////////////////////////////////////////////////////

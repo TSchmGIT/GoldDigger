@@ -27,17 +27,23 @@ public:
 
 	int GetFrameCount() const;
 	float GetFPS() const;
+	float GetFPSAverage() const;
 
 protected:
-	int			m_FrameCount;
+	int			m_FrameCount = 0;
 
 	TimePoint	m_LastTickTimestamp;
 
-	GameTime	m_GameTime;
-	AppTime		m_AppTime;
-	
-	GameTime	m_GameTimeDelta;
-	AppTime		m_AppTimeDelta;
+	GameTime	m_GameTime = 0;
+	AppTime		m_AppTime = 0;
+
+	GameTime	m_GameTimeDelta = 0;
+	AppTime		m_AppTimeDelta = 0;
+
+protected:
+	float			m_AverageFps = 0.0f;
+	Vector<float>	m_AverageFpsList;
+	float			m_AverageFpsTimestamp = 0.0f;
 };
 
 /////////////////////////////////////////////////////////////////////////////

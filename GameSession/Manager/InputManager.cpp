@@ -266,10 +266,7 @@ float CInputManager::GetAxis(Axis axis, JoystickID id /*= JoystickID::Player1*/)
 
 bool CInputManager::GetButton(Button button, JoystickID id /*= JoystickID::Player1*/) const
 {
-	KeyCode keyButton;;
-	JoystickButton joystickButton;
-
-	std::tie(keyButton, joystickButton) = GetDataForButton(button);
+	auto[keyButton, joystickButton] = GetDataForButton(button);
 
 	return IsKeyPressed(keyButton) || IsJoystickButtonPressed(joystickButton, id);
 }
@@ -278,10 +275,7 @@ bool CInputManager::GetButton(Button button, JoystickID id /*= JoystickID::Playe
 
 bool CInputManager::GetButtonDown(Button button, JoystickID id /*= JoystickID::Player1*/) const
 {
-	KeyCode keyButton;;
-	JoystickButton joystickButton;
-
-	std::tie(keyButton, joystickButton) = GetDataForButton(button);
+	auto[keyButton, joystickButton] = GetDataForButton(button);
 
 	return IsKeyDown(keyButton) || IsJoystickButtonDown(joystickButton, id);
 }
@@ -290,10 +284,7 @@ bool CInputManager::GetButtonDown(Button button, JoystickID id /*= JoystickID::P
 
 bool CInputManager::GetButtonUp(Button button, JoystickID id /*= JoystickID::Player1*/) const
 {
-	KeyCode keyButton;;
-	JoystickButton joystickButton;
-
-	std::tie(keyButton, joystickButton) = GetDataForButton(button);
+	auto[keyButton, joystickButton] = GetDataForButton(button);
 
 	return IsKeyPressed(keyButton) || IsJoystickButtonPressed(joystickButton, id);
 }
@@ -349,7 +340,7 @@ void CInputManager::RegisterJoystickButtonPressed(JoystickID id, JoystickButton 
 	// When the button was released it cannot be pressed down
 	upArray[size_t(button)] = false;
 
-	downArray[size_t(button)] = pressedArray[size_t(button)];
+	downArray[size_t(button)] = !pressedArray[size_t(button)];
 
 	// Update pressed Array
 	pressedArray[size_t(button)] = true;

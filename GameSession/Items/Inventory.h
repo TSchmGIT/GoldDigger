@@ -1,4 +1,5 @@
 #pragma once
+#include "GameSession/Rendering/IRenderElement.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,12 +14,16 @@ namespace hvgs
 /////////////////////////////////////////////////////////////////////////////
 
 class CInventory
+	: public IRenderElement
 {
 
 public:
 	CInventory();
 	CInventory(const CInventory& other);
 	virtual ~CInventory();
+
+public:
+	virtual void Draw() const override; // Render element
 
 public:
 	bool HasItems() const;

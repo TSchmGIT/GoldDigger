@@ -63,10 +63,11 @@ protected:
 	bool PerformSingleSweep(const Vector2& pos, const Vector2& halfs, const Vector2& delta, Vector2& newPos, Vector2& newDelta) const;
 
 protected:
-	WorldPos	m_Position = Vector2(0.0f, 0.0f);
+	WorldPos				m_Position = Vector2(0.0f, 0.0f);
 
-	UniquePtr<CInventory> m_Inventory = std::make_unique<CInventory>();
-	UniquePtr<CMotorBase> m_Motor = std::make_unique<CMotorDefault>(this);
+	hvuint64				m_Money = 0;
+	UniquePtr<CInventory>	m_Inventory = std::make_unique<CInventory>();
+	UniquePtr<CMotorBase>	m_Motor = std::make_unique<CMotorDefault>(this);
 
 };
 

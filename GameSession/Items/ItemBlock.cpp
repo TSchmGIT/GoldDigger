@@ -39,4 +39,27 @@ hvgs::TileType CItemBlock::GetTileType() const
 
 //////////////////////////////////////////////////////////////////////////
 
+String CItemBlock::GetDisplayName() const
+{
+	switch (m_TileType)
+	{
+	case hvgs::TileType::Grass:
+		return "Grass";
+	case hvgs::TileType::Air:
+		return "Air";
+	case hvgs::TileType::Dirt:
+		return "Dirt";
+	case hvgs::TileType::Stone:
+		return "Stone";
+	case hvgs::TileType::IronOre:
+		return "Iron Ore";
+	case hvgs::TileType::GoldOre:
+		return "Gold Ore";
+	default:
+		return "Block invalid";
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 } // hvgs

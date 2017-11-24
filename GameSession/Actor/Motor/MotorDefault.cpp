@@ -206,17 +206,31 @@ void CMotorDefault::CheckDigging()
 		return;
 	}
 
-	if (Vector2::SqrMagnitude(m_Velocity) > 0.5f * 0.5f)
-	{
-		return;
-	}
-
 	if (!CInputManager::Get().GetButtonDown(Button::Dig))
 	{
 		return;
 	}
 
-	const auto& tile = CWorld::GetWorld()->GetTileAt(m_Actor->GetPosition() + Vector2(0.0f, -1.0f));
+	if (Vector2::SqrMagnitude(m_Velocity) > 0.5f * 0.5f)
+	{
+		return;
+	}
+
+	Vector2 offset;
+	if (CInputManager::Get().GetAxis(Axis::Horizontal) > 0.5f) // Right
+	{
+		offset = Vector2(1.0f, 0.0f);
+	}
+	else if (CInputManager::Get().GetAxis(Axis::Horizontal) < -0.5f) // Left
+	{
+		offset = Vector2(-1.0f, 0.0f);
+	}
+	else // No input -> down digging
+	{
+		offset = Vector2(0.0f, -1.0f);
+	}
+
+	const auto& tile = CWorld::GetWorld()->GetTileAt(m_Actor->GetPosition() + offset);
 	if (!tile || tile->GetTileType() == TileType::Air)
 	{
 		return;

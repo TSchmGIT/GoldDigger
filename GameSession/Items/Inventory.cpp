@@ -2,6 +2,8 @@
 #include "Inventory.h"
 
 #include "GameSession/Items/ItemBase.h"
+#include "GameSession/Manager/RenderManager.h"
+#include "GameSession/Rendering/Fonts/EnumsFont.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -27,6 +29,22 @@ CInventory::CInventory(const CInventory&)
 CInventory::~CInventory()
 {
 
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CInventory::Draw() const
+{
+	CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, 100.0f), "Inventory", FontName::Arial);
+
+	int counter = 0;
+	for (const auto& item : m_Items)
+	{
+		float y = 200 + counter * 50.0f;
+
+		CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, y), item->GetDisplayName(), FontName::Arial, 40U);
+		counter++;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

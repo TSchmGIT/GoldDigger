@@ -7,16 +7,14 @@ namespace hvgs::ui
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CUIElement
+class ISpriteHandler
 {
 
 public:
-	CUIElement();
-	virtual ~CUIElement();
+	ISpriteHandler();
+	virtual ~ISpriteHandler();
 
-public:
-	virtual void Tick() { };
-	virtual void Draw() = 0;
+	virtual void Draw() const = 0;
 };
 
 /////////////////////////////////////////////////////////////////////////////

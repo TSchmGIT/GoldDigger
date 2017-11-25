@@ -106,6 +106,8 @@ void CInputManager::RegisterMouseButtonPressed(MouseButton button)
 
 	// Update pressed Array
 	m_MouseButtonArrayPressed[size_t(button)] = true;
+
+	m_SignalMouseClicked(m_MousePos);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -132,6 +134,8 @@ void CInputManager::UpdateMouseCursorPosition(int x, int y)
 	// Set position
 	m_MousePos.x = x;
 	m_MousePos.y = y;
+
+	m_SignalMouseMove(m_MouseDelta, m_MousePos);
 }
 
 //////////////////////////////////////////////////////////////////////////

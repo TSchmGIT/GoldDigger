@@ -9,6 +9,16 @@
 
 #include <windows.h>
 
+#ifdef max
+#undef max
+#endif
+
+#ifdef min
+#undef min
+#endif
+
+#pragma warning (push)
+#pragma warning (disable : 4996)
 #include <iostream>
 #include <stdio.h>
 #include <tchar.h>
@@ -27,6 +37,9 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/pointer_cast.hpp>
+
+#include <boost/signals2.hpp>
+#pragma warning (pop)
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -50,6 +63,7 @@
 //////////////////////////////////////////////////////////////////////////
 // Haven GameSession
 #include "GameSession/Meta/Defines.h"
+#include "GameSession/Meta/Events.h"
 #include "GameSession/Meta/TrackTime.h"
 
 #include "GameSession/Time/DefinesTime.h"

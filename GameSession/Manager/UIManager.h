@@ -1,24 +1,28 @@
 #pragma once
+#include "SingletonBase.h"
 
 /////////////////////////////////////////////////////////////////////////////
+
+namespace hvgs::ui
+{
+class IUIEventHandler;
+}
 
 namespace hvgs::ui
 {
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CUIElement
+class CUIManager : public CSingletonBase<CUIManager>
 {
 
 public:
-	CUIElement();
-	virtual ~CUIElement();
+	CUIManager();
+	virtual ~CUIManager();
 
-public:
-	virtual void Tick() { };
-	virtual void Draw() = 0;
+protected:
 };
 
 /////////////////////////////////////////////////////////////////////////////
 
-} // hvgs::ui
+} // hvgs

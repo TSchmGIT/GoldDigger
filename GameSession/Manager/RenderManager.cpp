@@ -12,14 +12,15 @@
 #include "GameSession/World/ChunkSlice.h"
 #include "GameSession/World/World.h"
 #include "Rendering/DebugRender.h"
+#include "UI/ISpriteHandler.h"
 
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
 {
 
-static const int	SCREEN_WIDTH = 1920;
-static const int	SCREEN_HEIGHT = 1080;
+static const int	SCREEN_WIDTH = 1664;
+static const int	SCREEN_HEIGHT = 936;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -70,6 +71,11 @@ void CRenderManager::Render()
 	for (const IRenderElement* renderElement : m_RenderElementSet)
 	{
 		renderElement->Draw();
+	}
+
+	for (const auto& spriteHandler : m_SpriteHandlerSet)
+	{
+		spriteHandler->Draw();
 	}
 
 	DrawRenderManager();
@@ -134,6 +140,26 @@ void CRenderManager::UnregisterRenderElement(const IRenderElement* renderElement
 
 //////////////////////////////////////////////////////////////////////////
 
+void CRenderManager::RegisterSpriteHandler(const ui::ISpriteHandler* spriteHandler)
+{
+	ASSERT_OR_EXECUTE(spriteHandler, return);
+	m_SpriteHandlerSet.emplace(spriteHandler);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHandler)
+{
+	ASSERT_OR_EXECUTE(spriteHandler, return);
+
+	auto it = m_SpriteHandlerSet.find(spriteHandler);
+	ASSERT_OR_EXECUTE(it != m_SpriteHandlerSet.end(), return);
+
+	m_SpriteHandlerSet.erase(it);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CRenderManager::DrawText(const ScreenPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, charSize, textColor);
@@ -164,11 +190,22 @@ void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, c
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawSpriteWorld(const WorldPos& pos, const TextureName& textureName, Alignment alignment /*= Alignment::Center*/)
+void CRenderManager::DrawSpriteWorld(const WorldPos& pos, TextureName textureName, Alignment alignment /*= Alignment::Center*/)
 {
 	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
 	Vector2 screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
 
+	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
+	ASSERT_OR_EXECUTE(texture, return);
+
+	float scaleFactor = BASE_TILE_SIZE_PX / float(texture->getSize().x) * CCameraManager::Get().GetActive()->GetZoomFactor();
+	DrawSpriteInternal(screenPos, texture, scaleFactor, alignment);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureName, Alignment alignment /*= Alignment::Center*/)
+{
 	// Do not render objects outside the view
 	if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
 		screenPos.y < 0 || screenPos.y > GetScreenHeight())
@@ -179,29 +216,7 @@ void CRenderManager::DrawSpriteWorld(const WorldPos& pos, const TextureName& tex
 	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
 	ASSERT_OR_EXECUTE(texture, return);
 
-	sf::Vector2u textureSize = texture->getSize();
-
-	// Do not render objects outside the view
-	if (screenPos.x + textureSize.x < 0 || screenPos.x - textureSize.x > GetScreenWidth() ||
-		screenPos.y + textureSize.y < 0 || screenPos.y - textureSize.y > GetScreenHeight())
-	{
-		return;
-	}
-
-	sf::Sprite* sprite = m_PoolSprites.New();
-	sprite->setTexture(*texture);
-
-	ASSERT_OR_EXECUTE(CCameraManager::Get().GetActive(), return);
-	float scaleFactor = BASE_TILE_SIZE_PX / texture->getSize().x * CCameraManager::Get().GetActive()->GetZoomFactor();
-	sprite->setScale(scaleFactor, scaleFactor);
-
-	AdjustSpritePivot(screenPos, Vector2(textureSize) * scaleFactor, alignment);
-
-	sprite->setPosition(screenPos.x, screenPos.y);
-
-	m_Window->draw(*sprite);
-
-	m_PoolSprites.Delete(sprite);
+	DrawSpriteInternal(screenPos, texture, 1.0f, alignment);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -278,6 +293,36 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 
 		m_Window->draw(va, CTextureManager::Get().GetTexture(TextureName::TileAtlas));
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawSpriteInternal(const ScreenPos& pos, const sf::Texture* texture, float scaleFactor /*= 1.0f*/, Alignment alignment /*= Alignment::Center*/)
+{
+	ASSERT_OR_EXECUTE(texture, return);
+
+	sf::Vector2u textureSize = texture->getSize();
+
+	// Do not render objects outside the view
+	if (pos.x + textureSize.x < 0 || pos.x - textureSize.x > GetScreenWidth() ||
+		pos.y + textureSize.y < 0 || pos.y - textureSize.y > GetScreenHeight())
+	{
+		return;
+	}
+
+	sf::Sprite* sprite = m_PoolSprites.New();
+	sprite->setTexture(*texture);
+	sprite->setScale(scaleFactor, scaleFactor);
+
+	Vector2 screenPosAdjusted = pos;
+	AdjustSpritePivot(screenPosAdjusted, Vector2(textureSize) * scaleFactor, alignment);
+
+	sprite->setPosition(screenPosAdjusted.x, screenPosAdjusted.y);
+
+	m_Window->draw(*sprite);
+
+	m_PoolSprites.Delete(sprite);
+
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,6 @@
 #include "stdafx.h"
-#include "UIElement.h"
+#include "ISpriteHandler.h"
+#include "..\Manager\RenderManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -8,16 +9,16 @@ namespace hvgs::ui
 
 //////////////////////////////////////////////////////////////////////////
 
-CUIElement::CUIElement()
+ISpriteHandler::ISpriteHandler()
 {
-
+	CRenderManager::GetMutable().RegisterSpriteHandler(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-CUIElement::~CUIElement()
+ISpriteHandler::~ISpriteHandler()
 {
-
+	CRenderManager::GetMutable().UnregisterSpriteHandler(this);
 }
 
 //////////////////////////////////////////////////////////////////////////

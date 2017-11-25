@@ -4,19 +4,25 @@
 
 namespace hvgs::ui
 {
+enum class EventType : hvuint8;
+}
+
+namespace hvgs::ui
+{
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CUIElement
+class CEvent
 {
 
 public:
-	CUIElement();
-	virtual ~CUIElement();
+	CEvent();
+	virtual ~CEvent();
 
-public:
-	virtual void Tick() { };
-	virtual void Draw() = 0;
+	EventType GetType() const;
+
+protected:
+	EventType	m_Type;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -9,6 +9,7 @@
 #include "GameSession/Manager/GameManager.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/World/World.h"
+#include "UI/UIButton.h"
 
 using namespace hvgs;
 
@@ -19,6 +20,10 @@ int main()
 	CGameManager::GetMutable().Init();
 
 	CWorld world;
+
+	ui::CUIButton button;
+	button.SetPosition({ 100, 100 });
+	button.SetSize({ 100, 100 });
 
 	CGameManager::GetMutable().Run();
 

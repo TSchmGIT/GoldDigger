@@ -4,6 +4,11 @@
 #include <queue>
 #include <set>
 
+namespace hvgs
+{
+
+//////////////////////////////////////////////////////////////////////////
+
 template<typename T>
 using UniquePtr = std::unique_ptr<T>;
 template<typename T>
@@ -34,3 +39,5 @@ using hvuint64 = uint64_t;
 
 using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
 using DurationMS = std::chrono::duration<float, std::milli>;
+
+} // hvgs

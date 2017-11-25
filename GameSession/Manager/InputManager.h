@@ -73,6 +73,13 @@ public:
 	bool GetButtonDown(Button button, JoystickID id = JoystickID::Player1) const;
 	bool GetButtonUp(Button button, JoystickID id = JoystickID::Player1) const;
 
+	//////////////////////////////////////////////////////////////////////////
+	// Signals
+	//////////////////////////////////////////////////////////////////////////
+public:
+	template<typename T>
+	constexpr void ConnectSignal(T function);
+
 protected:
 	std::tuple<KeyCode, JoystickButton> GetDataForButton(Button button) const;
 
@@ -94,7 +101,34 @@ protected:
 	Vector2i	m_MouseDelta;
 	float		m_MouseWheelDelta;
 	float		m_MouseWheelPos;
+
+	SignalMouseMove		m_SignalMouseMove;
+	SignalMouseClicked	m_SignalMouseClicked;
+	SignalMouseDown		m_SignalMouseDown;
 };
+
+//////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+constexpr void hvgs::CInputManager::ConnectSignal(T function)
+{
+	if constexpr (std::is_same<T, SignalMouseMoveConnector>::value)
+	{
+		m_SignalMouseMove.connect(function);
+	}
+	else if constexpr (std::is_same<T, SignalMouseClickedConnector>::value)
+	{
+		m_SignalMouseClicked.connect(function);
+	}
+	else if constexpr (std::is_same<T, SignalMouseDownConnector>::value)
+	{
+		m_SignalMouseDown.connect(function);
+	}
+	else
+	{
+		WRONG_CONNECTOR_TYPE;
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////
 

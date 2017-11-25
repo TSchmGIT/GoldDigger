@@ -43,6 +43,18 @@ void CTextureManager::Init()
 		case TextureName::TileAtlas:
 			fileName += "TileAtlas/Final_Atlas.png";
 			break;
+		case TextureName::Button_Default:
+			fileName += "Button/Default.png";
+			break;
+		case TextureName::Button_Hover:
+			fileName += "Button/Hover.png";
+			break;
+		case TextureName::Button_Pressed:
+			fileName += "Button/Pressed.png";
+			break;
+		case TextureName::Button_Deactivated:
+			fileName += "Button/Deactivated.png";
+			break;
 		default:
 			break;
 		}

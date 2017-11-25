@@ -9,6 +9,11 @@ enum class TextureName : hvuint8
 	Background,
 	TileAtlas,
 
+	Button_Default,
+	Button_Hover,
+	Button_Pressed,
+	Button_Deactivated,
+
 	Count
 };
 

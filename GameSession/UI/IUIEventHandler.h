@@ -7,16 +7,17 @@ namespace hvgs::ui
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CUIElement
+class IUIEventHandler
 {
 
 public:
-	CUIElement();
-	virtual ~CUIElement();
+	IUIEventHandler();
+	virtual ~IUIEventHandler();
 
-public:
-	virtual void Tick() { };
-	virtual void Draw() = 0;
+protected:
+	virtual void OnMouseMove(const ScreenPos&, const ScreenPos&) { }
+	virtual void OnMouseClicked(const ScreenPos&) { }
+	virtual void OnMousePressed(const ScreenPos&) { }
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -9,6 +9,7 @@
 #include "GameSession/Manager/InputManager.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/Manager/TimeManager.h"
+#include "GameSession/Manager/UIManager.h"
 #include "GameSession/Rendering/Textures/EnumsTexture.h"
 
 //////////////////////////////////////////////////////////////////////////

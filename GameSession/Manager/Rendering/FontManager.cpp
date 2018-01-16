@@ -67,10 +67,10 @@ sf::Text* CFontManager::PopText(String content, const FontName& fontName /*= Fon
 
 	sf::Text* text = m_PoolText.New();
 	text->setFont(itFont->second);
-	text->setString(content);
 	text->setCharacterSize(charSize);
 	text->setFillColor(textColor);
 	text->setStyle(sf::Text::Style::Regular);
+	text->setString(content);
 
 	return text;
 }

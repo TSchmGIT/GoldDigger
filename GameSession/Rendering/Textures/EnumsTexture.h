@@ -3,18 +3,38 @@
 namespace hvgs
 {
 
-enum class TextureName : hvuint8
+//////////////////////////////////////////////////////////////////////////
+
+enum class TextureName
 {
-	Actor = 0,
-	Background,
-	TileAtlas,
+	INVALID = -1,
+	BACKGROUND,
+	ACTOR,
+	BUTTON_DEFAULT,
+	BUTTON_HOVER,
+	BUTTON_DEACTIVATED,
+	BUTTON_PRESSED,
+	TILEATLAS,
+	INVENTORYMAINSPRITE,
+	ITEM_DIRT,
+	ITEM_STONE,
+	ITEM_IRON,
+	WHITE,
+	BLACK,
+	BUILDING_BROKER,
+	SCENEBUILDINGBROKER,
+	ACTOR_THRUSTER,
+	BUTTONICON_XBOX_ONE_A,
+	BUTTONICON_XBOX_ONE_B,
+	BUTTONICON_XBOX_ONE_X,
+	BUTTONICON_XBOX_ONE_Y,
+	KEYBOARDICON_E,
+	BUTTON_SPECIAL_INTERACTION,
+	BACKGROUND_SPACE,
+	COUNT
 
-	Button_Default,
-	Button_Hover,
-	Button_Pressed,
-	Button_Deactivated,
-
-	Count
 };
+
+//////////////////////////////////////////////////////////////////////////
 
 }

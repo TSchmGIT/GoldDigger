@@ -2,12 +2,20 @@
 
 namespace hvgs
 {
-const hvuint8 BASE_TILE_SIZE_PX = 64;
+const hvuint8 BASE_TILE_SIZE_PX = 76;
 
 enum class Alignment
 {
-	Center = 0,
+	Left = 0,
+	TopLeft,
+	BottomLeft,
+
+	Center,
+	CenterTop,
 	CenterBottom,
-	Left,
+
+	Right,	
+	TopRight,
+	BottomRight,
 };
 }

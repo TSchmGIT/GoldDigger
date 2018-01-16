@@ -4,6 +4,8 @@
 #include "GameSession/Items/ItemBase.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/Rendering/Fonts/EnumsFont.h"
+#include "ItemStack.h"
+#include "ItemBlock.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -35,14 +37,19 @@ CInventory::~CInventory()
 
 void CInventory::Draw() const
 {
-	CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, 100.0f), "Inventory", FontName::Arial);
+	CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, 100.0f), "Inventory", Alignment::TopLeft, FontName::Arial);
 
 	int counter = 0;
-	for (const auto& item : m_Items)
+	for (const auto& itemStack : m_ItemStackList)
 	{
 		float y = 200 + counter * 50.0f;
 
-		CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, y), item->GetDisplayName(), FontName::Arial, 40U);
+		const auto* item = itemStack->GetFirstItem();
+		ASSERT_OR_EXECUTE(item, continue);
+
+		String text = item->GetDisplayName() + " (" + std::to_string(itemStack->GetCurrentAmount()) + ")";
+
+		CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, y), text, Alignment::TopLeft, FontName::Arial, 40U);
 		counter++;
 	}
 }
@@ -51,46 +58,75 @@ void CInventory::Draw() const
 
 bool CInventory::HasItems() const
 {
-	return m_Items.size() > 0;
+	return m_ItemStackList.size() > 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void CInventory::AddItem(UniquePtr<CItemBase> itemBase)
 {
-	m_Items.emplace_back(std::move(itemBase));
+	ASSERT_OR_EXECUTE(itemBase, return);
+	const auto* itemBlock = dynamic_cast<const CItemBlock*>(itemBase.get());
+	ASSERT_OR_EXECUTE(itemBlock, return);
+
+	for (auto& itemStack : m_ItemStackList)
+	{
+		if (itemStack->GetTileType() != itemBlock->GetTileType())
+		{
+			continue;
+		}
+
+		if (itemStack->Full())
+		{
+			continue;
+		}
+
+		itemStack->AddItem(std::move(itemBase));
+		return;
+	}
+
+	// Create new item stack and add item to it
+	CItemStack stack(itemBlock->GetTileType());
+	stack.AddItem(std::move(itemBase));
+
+	// Add stack to list
+	m_ItemStackList.push_back(std::make_unique<CItemStack>(std::move(stack)));
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CInventory::RemoveItemAt(size_t index)
+void CInventory::RemoveAllItems()
 {
-	ASSERT_OR_EXECUTE(index >= 0 && index < m_Items.size(), return);
-
-	m_Items.erase(m_Items.begin() + index);
+	m_ItemStackList.clear();
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const hvgs::CItemBase* CInventory::GetItemAt(size_t index) const
+void CInventory::RemoveStackAt(size_t index)
 {
-	ASSERT_OR_EXECUTE(index >= 0, return nullptr);
+	ASSERT_OR_EXECUTE(index >= 0 && index < m_ItemStackList.size(), return);
 
-	if (m_Items.size() == 0)
+	m_ItemStackList.erase(m_ItemStackList.begin() + index);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::CItemStack* CInventory::GetStackAt(size_t index)
+{
+	if (m_ItemStackList.size() == 0)
 	{
 		return nullptr;
 	}
 
-	ASSERT_OR_EXECUTE(index < m_Items.size(), return nullptr);
-
-	return m_Items[index].get();
+	ASSERT_OR_EXECUTE(index < m_ItemStackList.size(), return nullptr);
+	return m_ItemStackList[index].get();
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const Vector<UniquePtr<hvgs::CItemBase>>& CInventory::GetItems() const
+const Vector<UniquePtr<hvgs::CItemStack>>& CInventory::GetStackList() const
 {
-	return m_Items;
+	return m_ItemStackList;
 }
 
 //////////////////////////////////////////////////////////////////////////

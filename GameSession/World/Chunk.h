@@ -29,7 +29,7 @@ public:
 	const CChunkSlice* GetChunkSliceAt(int yLevel) const;
 
 public:
-	int GetPosX() const;
+	ChunkInterval GetPosX() const;
 
 public:
 	const CTile* GetTileAt(int yLevel, const ChunkSlicePos& chunkPos) const;

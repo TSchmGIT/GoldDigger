@@ -7,10 +7,12 @@
 #include "GameSession/Manager/CameraManager.h"
 #include "GameSession/Manager/GameObjectManager.h"
 #include "GameSession/Manager/InputManager.h"
+#include "GameSession/Manager/InteractionManager.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/Manager/TimeManager.h"
 #include "GameSession/Manager/UIManager.h"
 #include "GameSession/Rendering/Textures/EnumsTexture.h"
+#include "GameSession/UI/Scenes/Meta/SceneManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +51,11 @@ void CGameManager::Init()
 	// Input
 	//////////////////////////////////////////////////////////////////////////
 	CInputManager::GetMutable().Init();
+
+	//////////////////////////////////////////////////////////////////////////
+	// UI
+	//////////////////////////////////////////////////////////////////////////
+	ui::CSceneManager::GetMutable().Init();
 
 }
 
@@ -140,6 +147,9 @@ void CGameManager::Tick()
 {
 	CCameraManager::GetMutable().Tick();
 	CGameObjectManager::GetMutable().Tick();
+	CInteractionManager::GetMutable().Tick();
+
+	hvgs::ui::CSceneManager::GetMutable().SyncTick();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -166,8 +176,9 @@ void CGameManager::Draw() const
 		timestamp = CTimeManager::Get().GetAppTime();
 	}
 	std::ostringstream ss;
+	ss.precision(3);
 	ss << "FPS: " << lastFPS;
-	CRenderManager::GetMutable().DrawText(ScreenPos(0.0f, 0.0f), ss.str(), FontName::Courier_New);
+	CRenderManager::GetMutable().DrawText(ScreenPos(0.0f, 0.0f), ss.str(), Alignment::TopLeft, FontName::Courier_New);
 }
 
 //////////////////////////////////////////////////////////////////////////

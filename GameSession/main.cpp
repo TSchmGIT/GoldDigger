@@ -9,7 +9,9 @@
 #include "GameSession/Manager/GameManager.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/World/World.h"
-#include "UI/UIButton.h"
+#include "GameSession/UI/UIButton.h"
+#include "GameSession/UI/Scenes/Meta/SceneManager.h"
+#include "GameSession/UI/Scenes/Meta/SceneEnum.h"
 
 using namespace hvgs;
 
@@ -20,10 +22,12 @@ int main()
 	CGameManager::GetMutable().Init();
 
 	CWorld world;
+	world.Construct();
 
 	ui::CUIButton button;
-	button.SetPosition({ 100, 100 });
-	button.SetSize({ 100, 100 });
+	button.SetPosition(ScreenPos({ 100.0f, 100.0f }));
+	button.SetSize(ScreenPos({ 100.0f, 100.0f }));
+	button.SetAction([]() { hvgs::ui::CSceneManager::GetMutable().ToggleState(hvgs::ui::SceneID::Inventory); });
 
 	CGameManager::GetMutable().Run();
 

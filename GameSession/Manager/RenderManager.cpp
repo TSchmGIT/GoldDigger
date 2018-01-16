@@ -5,22 +5,24 @@
 
 #include "GameSession/Camera/Camera.h"
 #include "GameSession/Manager/CameraManager.h"
+#include "GameSession/Manager/InteractionManager.h"
 #include "GameSession/Manager/Rendering/FontManager.h"
 #include "GameSession/Manager/Rendering/TextureManager.h"
+#include "GameSession/Rendering/DebugRender.h"
 #include "GameSession/Rendering/IRenderElement.h"
+#include "GameSession/UI/ISpriteHandler.h"
+#include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/Chunk.h"
 #include "GameSession/World/ChunkSlice.h"
 #include "GameSession/World/World.h"
-#include "Rendering/DebugRender.h"
-#include "UI/ISpriteHandler.h"
 
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
 {
 
-static const int	SCREEN_WIDTH = 1664;
-static const int	SCREEN_HEIGHT = 936;
+static const int	SCREEN_WIDTH = 1920;
+static const int	SCREEN_HEIGHT = 1080;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -55,14 +57,26 @@ void CRenderManager::Init()
 	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Gold Digger");
 	m_Window->setJoystickThreshold(0.25f);
 	m_Window->setKeyRepeatEnabled(false);
-	m_Window->setVerticalSyncEnabled(false);
+	m_Window->setVerticalSyncEnabled(true);
+
+	sf::Image icon;
+	bool loadFromFile = icon.loadFromFile("D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Actor.png");
+	ASSERT_OR_EXECUTE(loadFromFile, return);
+
+	if (loadFromFile)
+	{
+		m_Window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void CRenderManager::Render()
 {
-	CWorld* world = CWorld::GetWorldMutable();
+	// Background
+	DrawBackground();
+
+	CWorld* world = CWorld::GetMutable();
 	for (const auto& kvPair : world->GetChunks())
 	{
 		DrawChunk(*kvPair.second);
@@ -77,6 +91,11 @@ void CRenderManager::Render()
 	{
 		spriteHandler->Draw();
 	}
+
+
+	// Draw UI
+	hvgs::ui::CSceneManager::Get().Draw();
+	CInteractionManager::Get().Draw();
 
 	DrawRenderManager();
 }
@@ -116,6 +135,14 @@ hvuint CRenderManager::GetScreenHeight() const
 {
 	ASSERT_OR_EXECUTE(m_Window, return 0);
 	return m_Window->getSize().y;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::ScreenPos CRenderManager::GetScreenCenter() const
+{
+	ASSERT_OR_EXECUTE(m_Window, return ScreenPos());
+	return ScreenPos(m_Window->getSize()) * 0.5f;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -160,9 +187,11 @@ void CRenderManager::UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHan
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawText(const ScreenPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, charSize, textColor);
+
+	AdjustTextPivot(*text, alignment);
 	text->setPosition(pos);
 
 	auto globalBounds = text->getGlobalBounds();
@@ -173,7 +202,14 @@ void CRenderManager::DrawText(const ScreenPos& pos, const String& content, const
 		return;
 	}
 
+#ifdef DEBUG_RENDER_TEXT
+	Vector2 rectSize(text->getGlobalBounds().width, text->getGlobalBounds().height);
+	DrawSprite(pos + ScreenPos(text->getLocalBounds().left, text->getLocalBounds().top), TextureName::WHITE, rectSize, alignment);
+	text->setFillColor(sf::Color::Black);
 	m_Window->draw(*text);
+#else
+	m_Window->draw(*text);
+#endif
 
 	CFontManager::GetMutable().PushText(text);
 }
@@ -185,7 +221,7 @@ void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, c
 	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
 	ScreenPos screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
 
-	DrawText(screenPos, content, fontName, charSize, textColor);
+	DrawText(screenPos, content, Alignment::TopLeft, fontName, charSize, textColor);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -199,7 +235,63 @@ void CRenderManager::DrawSpriteWorld(const WorldPos& pos, TextureName textureNam
 	ASSERT_OR_EXECUTE(texture, return);
 
 	float scaleFactor = BASE_TILE_SIZE_PX / float(texture->getSize().x) * CCameraManager::Get().GetActive()->GetZoomFactor();
-	DrawSpriteInternal(screenPos, texture, scaleFactor, alignment);
+	DrawSpriteInternal(screenPos, texture, { scaleFactor, scaleFactor }, alignment);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawSpriteWorld(const WorldPos& pos, TextureName textureName, const ScreenPos& size, Alignment alignment /*= Alignment::Center*/)
+{
+	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
+	Vector2 screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
+
+	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
+	ASSERT_OR_EXECUTE(texture, return);
+
+	// Calculate scale that should be applied to the texture (min scale of x and y dimension)
+	Vector2 textureSize = texture->getSize();
+	ASSERT_OR_EXECUTE(textureSize.x > 0 && textureSize.y > 0, return);
+	Vector2 scale(size.x / textureSize.x, size.y / textureSize.y);
+
+	DrawSpriteInternal(screenPos, texture, scale, alignment);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawSpriteWorld(const WorldPos& pos, TextureName textureName, float scaleFactor, Alignment alignment /*= Alignment::Center*/)
+{
+	const auto* camera = CCameraManager::Get().GetActive();
+	ASSERT_OR_EXECUTE(camera, return);
+	Vector2 screenPos = camera->WorldToScreenPoint(pos);
+
+	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
+	ASSERT_OR_EXECUTE(texture, return);
+
+	scaleFactor *= camera->GetZoomFactor();
+
+	DrawSpriteInternal(screenPos, texture, { scaleFactor, scaleFactor }, alignment);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureName, const ScreenPos& size, Alignment alignment /*= Alignment::Center*/)
+{
+	// Do not render objects outside the view
+	if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
+		screenPos.y < 0 || screenPos.y > GetScreenHeight())
+	{
+		return;
+	}
+
+	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
+	ASSERT_OR_EXECUTE(texture, return);
+
+	// Calculate scale that should be applied to the texture (min scale of x and y dimension)
+	Vector2 textureSize = texture->getSize();
+	ASSERT_OR_EXECUTE(textureSize.x > 0 && textureSize.y > 0, return);
+	Vector2 scale(size.x / textureSize.x, size.y / textureSize.y);
+
+	DrawSpriteInternal(screenPos, texture, scale, alignment);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -216,7 +308,7 @@ void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureN
 	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
 	ASSERT_OR_EXECUTE(texture, return);
 
-	DrawSpriteInternal(screenPos, texture, 1.0f, alignment);
+	DrawSpriteInternal(screenPos, texture, { 1.0f, 1.0f }, alignment);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -291,13 +383,13 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 			}
 		}
 
-		m_Window->draw(va, CTextureManager::Get().GetTexture(TextureName::TileAtlas));
+		m_Window->draw(va, CTextureManager::Get().GetTexture(TextureName::TILEATLAS));
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawSpriteInternal(const ScreenPos& pos, const sf::Texture* texture, float scaleFactor /*= 1.0f*/, Alignment alignment /*= Alignment::Center*/)
+void CRenderManager::DrawSpriteInternal(const ScreenPos& pos, const sf::Texture* texture, const Vector2& scaleFactor /*= Vector2(1.0, 1.0f)*/, Alignment alignment /*= Alignment::Center*/)
 {
 	ASSERT_OR_EXECUTE(texture, return);
 
@@ -312,10 +404,10 @@ void CRenderManager::DrawSpriteInternal(const ScreenPos& pos, const sf::Texture*
 
 	sf::Sprite* sprite = m_PoolSprites.New();
 	sprite->setTexture(*texture);
-	sprite->setScale(scaleFactor, scaleFactor);
+	sprite->setScale(scaleFactor);
 
 	Vector2 screenPosAdjusted = pos;
-	AdjustSpritePivot(screenPosAdjusted, Vector2(textureSize) * scaleFactor, alignment);
+	AdjustPivot(screenPosAdjusted, Vector2::Scale(textureSize, scaleFactor), alignment);
 
 	sprite->setPosition(screenPosAdjusted.x, screenPosAdjusted.y);
 
@@ -327,16 +419,117 @@ void CRenderManager::DrawSpriteInternal(const ScreenPos& pos, const sf::Texture*
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::AdjustSpritePivot(ScreenPos& original, const Vector2& renderSize, Alignment alignment /*= Alignment::Center*/)
+void CRenderManager::AdjustPivot(ScreenPos& original, const Vector2& renderSize, Alignment alignment /*= Alignment::Center*/)
 {
 	switch (alignment)
 	{
+	case Alignment::TopLeft: /* no adjustments to original */
+		AdjustPivot(original, renderSize, Vector2(0.0f, 0.0f));
+		return;
+	case Alignment::Left:
+		AdjustPivot(original, renderSize, Vector2(0.0f, 0.5f));
+		break;
+	case Alignment::BottomLeft:
+		AdjustPivot(original, renderSize, Vector2(0.0f, 1.0f));
+		break;
+
+	case Alignment::CenterTop:
+		AdjustPivot(original, renderSize, Vector2(0.5f, 0.0f));
+		break;
 	case hvgs::Alignment::Center:
-		original += ScreenPos{ renderSize.x * -0.5f, renderSize.y * -0.5f };
+		AdjustPivot(original, renderSize, Vector2(0.5f, 0.5f));
 		break;
 	case Alignment::CenterBottom:
-		original += ScreenPos{ renderSize.x * -0.5f, renderSize.y * -1.0f };
+		AdjustPivot(original, renderSize, Vector2(0.5f, 1.0f));
+		break;
+
+	case Alignment::TopRight:
+		AdjustPivot(original, renderSize, Vector2(1.0f, 0.0f));
+		break;
+	case Alignment::Right:
+		AdjustPivot(original, renderSize, Vector2(1.0f, 0.5f));
+		break;
+	case Alignment::BottomRight:
+		AdjustPivot(original, renderSize, Vector2(1.0f, 1.0f));
+		original += ScreenPos{ renderSize.x * -1.0f, renderSize.y * -1.0f };
+		break;
+	default:
+		break;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::AdjustPivot(ScreenPos& original, const Vector2& renderSize, const Vector2& pivot)
+{
+	original += ScreenPos::Scale(renderSize, -pivot);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::AdjustTextPivot(sf::Text& text, Alignment alignment /*= Alignment::TopLeft*/)
+{
+	auto bounds = text.getLocalBounds();
+	Vector2 size(bounds.width, bounds.height);
+
+	Vector2 newOrigin(0.0f, 0.0f);
+
+	switch (alignment)
+	{
+	case Alignment::TopLeft:
+		/* no adjustments to original */
+		break;
+	case Alignment::Left:
+		newOrigin += Vector2::Scale(size, Vector2{ 0.0f, 0.5f });
+
+		newOrigin.y += bounds.top * 0.5f;
+		break;
+	case Alignment::BottomLeft:
+		newOrigin += Vector2::Scale(size, Vector2{ 0.0f, 1.0f });
+
+		newOrigin.y += bounds.top;
+		break;
+
+	case Alignment::CenterTop:
+		newOrigin += Vector2::Scale(size, Vector2{ 0.5f, 0.0f });
+
+		newOrigin.x += bounds.left * 0.5f;
+		break;
+	case hvgs::Alignment::Center:
+		newOrigin += Vector2::Scale(size, Vector2{ 0.5f, 0.5f });
+
+		newOrigin.x += bounds.left * 0.5f;
+		newOrigin.y += bounds.top * 0.5f;
+		break;
+	case Alignment::CenterBottom:
+		newOrigin += Vector2::Scale(size, Vector2{ 0.5f, 1.0f });
+
+		newOrigin.x += bounds.left * 0.5f;
+		newOrigin.y += bounds.top;
+		break;
+
+	case Alignment::TopRight:
+		newOrigin += Vector2::Scale(size, Vector2{ 1.0f, 0.0f });
+
+		newOrigin.x += bounds.left;
+		break;
+	case Alignment::Right:
+		newOrigin += Vector2::Scale(size, Vector2{ 1.0f, 0.5f });
+
+		newOrigin.x += bounds.left;
+		newOrigin.y += bounds.top * 0.5f;
+		break;
+	case Alignment::BottomRight:
+		newOrigin += Vector2::Scale(size, Vector2{ 1.0f, 1.0f });
+
+		newOrigin.x += bounds.left;
+		newOrigin.y += bounds.top;
+		break;
+	default:
+		break;
+	}
+
+	text.setOrigin(newOrigin);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -344,6 +537,21 @@ void CRenderManager::AdjustSpritePivot(ScreenPos& original, const Vector2& rende
 void CRenderManager::DrawRenderManager()
 {
 	CCameraManager::GetMutable().GetActive()->DrawDebug();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::DrawBackground()
+{
+	DrawSpriteWorld({ 0.0f, 0.0f }, TextureName::BACKGROUND_SPACE, 1.0f, Alignment::BottomLeft);
+	DrawSpriteWorld({ 2160.0f / BASE_TILE_SIZE_PX, 0.0f }, TextureName::BACKGROUND_SPACE, 1.0f, Alignment::BottomLeft);
+	DrawSpriteWorld({ 2160.0f * 2.0f / BASE_TILE_SIZE_PX, 0.0f }, TextureName::BACKGROUND_SPACE, 1.0f, Alignment::BottomLeft);
+	DrawSpriteWorld({ 2160.0f * 3.0f / BASE_TILE_SIZE_PX, 0.0f }, TextureName::BACKGROUND_SPACE, 1.0f, Alignment::BottomLeft);
+
+	DrawSpriteWorld({ -2160.0f / BASE_TILE_SIZE_PX, 0.0f }, TextureName::BACKGROUND_SPACE, 1.0f, Alignment::BottomLeft);
+	DrawSpriteWorld({ -2160.0f * 2.0f / BASE_TILE_SIZE_PX, 0.0f }, TextureName::BACKGROUND_SPACE, 1.0f, Alignment::BottomLeft);
+	DrawSpriteWorld({ -2160.0f * 3.0f / BASE_TILE_SIZE_PX, 0.0f }, TextureName::BACKGROUND_SPACE, 1.0f, Alignment::BottomLeft);
+	DrawSpriteWorld({ -2160.0f * 4.0f / BASE_TILE_SIZE_PX, 0.0f }, TextureName::BACKGROUND_SPACE, 1.0f, Alignment::BottomLeft);
 }
 
 //////////////////////////////////////////////////////////////////////////

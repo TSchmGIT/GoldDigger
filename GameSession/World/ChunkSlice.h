@@ -20,7 +20,7 @@ class CChunkSlice
 public:
 	//CChunkSlice(const CChunkSlice& other);
 	//CChunkSlice(CChunkSlice&& other);
-	CChunkSlice(const CChunk* parent, ChunkInterval height);
+	CChunkSlice(const CChunk* parent, ChunkSliceInterval height);
 	virtual ~CChunkSlice();
 
 public:
@@ -36,9 +36,9 @@ protected:
 	inline size_t GetIndex(hvuint8 x, hvuint8 y) const;
 
 protected:
-	CTile			m_Tiles[CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y];
-	const CChunk*	m_Parent = nullptr;
-	ChunkInterval	m_YLevel = 0;
+	std::array<CTile, CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y>	m_Tiles;
+	const CChunk*		m_Parent = nullptr;
+	ChunkSliceInterval	m_YLevel = ChunkSliceInterval(0);
 };
 
 /////////////////////////////////////////////////////////////////////////////

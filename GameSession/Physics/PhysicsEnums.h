@@ -8,7 +8,8 @@ namespace hvgs
 enum class Layer : int
 {
 	Actor = 1 << 0,
-	Environment = 1 << 1
+	Environment = 1 << 1,
+	Building = 1 << 2
 };
 
 enum class CollisionFlags : hvuint8

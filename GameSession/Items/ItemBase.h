@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GameSession/Rendering/Textures/EnumsTexture.h"
+
 /////////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
@@ -11,11 +13,12 @@ class CItemBase
 {
 
 public:
-	CItemBase();
-	virtual ~CItemBase();
+	CItemBase() = default;
+	virtual ~CItemBase() = default;
 
 public:
 	virtual String GetDisplayName() const;
+	virtual TextureName GetTextureName() const = 0;
 };
 
 /////////////////////////////////////////////////////////////////////////////

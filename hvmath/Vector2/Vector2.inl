@@ -85,6 +85,15 @@ inline Vector2<T> Vector2<T>::MoveTowards(const Vector2<T>& current, const Vecto
 //////////////////////////////////////////////////////////////////////////
 
 template<typename T>
+template<typename U>
+inline bool Vector2<T>::DistanceCheck(const Vector2<T>& a, const Vector2<U>& b, float distance)
+{
+	return SqrMagnitude(a - b) < distance * distance;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+template<typename T>
 inline Vector2<T>& Vector2<T>::Normalize()
 {
 	if (x != T(0) || y != T(0))

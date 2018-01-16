@@ -1,0 +1,13 @@
+
+Haven Scene - Elements that needs to be designed and can be imported to the core engine:
+
+Sprites:
+- What sprites are in the scene?
+- Where is each sprite placed?
+
+Buttons:
+- What buttons are in the scene?
+- Where are the buttons located?
+- What is the appearance of the buttons? (sprites)
+(- They need to fire a callback when they are clicked)
+

@@ -21,12 +21,17 @@ public:
 	virtual ~CMotorBase();
 
 	virtual void Tick();
+
 	const Vector2& GetVelocity() const;
 	void SetVelocity(const Vector2& velocity);
+
+	/// Indicates whether the actor is currently using a thruster
+	bool IsThrusterInUse() const;
 
 protected:
 	CActor*	m_Actor = nullptr;
 	Vector2 m_Velocity = Vector2(0.0f, 0.0f);
+	bool	m_IsThrusting = false;
 };
 
 /////////////////////////////////////////////////////////////////////////////

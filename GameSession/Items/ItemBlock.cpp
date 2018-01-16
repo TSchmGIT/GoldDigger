@@ -8,24 +8,9 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CItemBlock::CItemBlock()
-	: CItemBase()
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
 CItemBlock::CItemBlock(TileType tileType)
 	: CItemBase()
 	, m_TileType(tileType)
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CItemBlock::~CItemBlock()
 {
 
 }
@@ -57,6 +42,23 @@ String CItemBlock::GetDisplayName() const
 		return "Gold Ore";
 	default:
 		return "Block invalid";
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::TextureName CItemBlock::GetTextureName() const
+{
+	switch (m_TileType)
+	{
+	case hvgs::TileType::Dirt:
+		return TextureName::ITEM_DIRT;
+	case hvgs::TileType::Stone:
+		return TextureName::ITEM_STONE;
+	case hvgs::TileType::IronOre:
+		return TextureName::ITEM_IRON;
+	default:
+		return TextureName::INVALID;
 	}
 }
 

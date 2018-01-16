@@ -49,7 +49,7 @@ const hvgs::CChunkSlice* CChunk::GetChunkSliceAt(int yLevel) const
 
 //////////////////////////////////////////////////////////////////////////
 
-int CChunk::GetPosX() const
+hvgs::ChunkInterval CChunk::GetPosX() const
 {
 	return m_PositionX;
 }
@@ -76,6 +76,7 @@ void CChunk::SetTileAt(int yLevel, const ChunkSlicePos& chunkPos, TileType tileT
 	ChunkSliceInterval yChunkInterval = FindNextChunkSlicePos(yLevel);
 
 	auto it = m_ChunkSliceMap.find(yChunkInterval);
+	CChunkSlice* chunkSlice = nullptr;
 	if (it == m_ChunkSliceMap.end())
 	{
 		if (!allowCreation)
@@ -85,11 +86,19 @@ void CChunk::SetTileAt(int yLevel, const ChunkSlicePos& chunkPos, TileType tileT
 		else
 		{
 			// Create chunk slice
+			UniquePtr<CChunkSlice> slice = std::make_unique<CChunkSlice>(this, yChunkInterval);
+			auto emplaceResult = m_ChunkSliceMap.emplace(yChunkInterval, std::move(slice));
+			chunkSlice = emplaceResult.first->second.get();
 			return;
 		}
 	}
+	else
+	{
+		chunkSlice = it->second.get();
+	}
 
-	it->second->SetTileAt(chunkPos.x, chunkPos.y, tileType);
+	ASSERT_OR_EXECUTE(chunkSlice, return);
+	chunkSlice->SetTileAt(chunkPos.x, chunkPos.y, tileType);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -102,9 +111,9 @@ void CChunk::UpdateSlicesAt(int yLevel, int yRange)
 	//std::ostringstream ss;
 	//ss << "Chunk Update " << m_PositionX;
 	//TT_BEGIN(ss.str());
-	for (ChunkSliceInterval i = sliceLevelMin; i < sliceLevelMax; i += CHUNKSLICE_SIZE_Y)
+	for (ChunkSliceInterval i = sliceLevelMin; i < sliceLevelMax; i += ChunkSliceInterval(CHUNKSLICE_SIZE_Y))
 	{
-		int height = i;
+		ChunkSliceInterval height = i;
 
 		auto it = m_ChunkSliceMap.find(height);
 		if (it != m_ChunkSliceMap.end())
@@ -126,11 +135,11 @@ inline ChunkSliceInterval CChunk::FindNextChunkSlicePos(int yLevel) const
 {
 	if (yLevel >= 0)
 	{
-		return (yLevel / CHUNKSLICE_SIZE_Y) * CHUNKSLICE_SIZE_Y;
+		return ChunkSliceInterval((yLevel / CHUNKSLICE_SIZE_Y) * CHUNKSLICE_SIZE_Y);
 	}
 	else
 	{
-		return ((yLevel + 1 - CHUNKSLICE_SIZE_Y) / CHUNKSLICE_SIZE_Y) * CHUNKSLICE_SIZE_Y;
+		return ChunkSliceInterval(((yLevel + 1 - CHUNKSLICE_SIZE_Y) / CHUNKSLICE_SIZE_Y) * CHUNKSLICE_SIZE_Y);
 	}
 }
 

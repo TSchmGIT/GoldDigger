@@ -36,6 +36,7 @@ public:
 	static float SqrMagnitude(const Vector2<T>& a);
 	static Vector2<T> Normalize(const Vector2<T>& a);
 	static Vector2<T> MoveTowards(const Vector2<T>& current, const Vector2<T> target, float maxDelta);
+	template<typename U>	static bool DistanceCheck(const Vector2<T>& a, const Vector2<U>& b, float distance);
 
 	Vector2<T>& Normalize();
 

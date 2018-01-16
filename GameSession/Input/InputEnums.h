@@ -6,7 +6,10 @@ namespace hvgs
 enum class Button : hvuint8
 {
 	Jump,
-	Dig
+	Dig,
+	ToggleInventory,
+	Interaction,
+	Count
 };
 
 enum class Axis : hvuint8
@@ -28,9 +31,10 @@ enum class MouseButton : hvuint8
 	Count ///< Keep last -- the total number of mouse buttons
 };
 
-enum class JoystickID : hvuint8
+enum class JoystickID : hvint8
 {
-	Player1 = 0,
+	Unknown = -1,
+	Player1,
 	Player2,
 	Player3,
 	Player4,

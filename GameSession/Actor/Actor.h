@@ -11,6 +11,7 @@ namespace hvgs
 {
 class CTile;
 class CInventory;
+class CActorEconomy;
 
 enum class Layer : int;
 }
@@ -47,11 +48,14 @@ protected: // ICollisionObject
 public:
 	WorldPos GetAABBOriginOffset() const;
 
-	WorldPos GetPosition() const;
+	const WorldPos& GetPosition() const;
 	void SetPosition(const WorldPos& position);
 
-	const CInventory* GetInventory() const;
-	CInventory* GetInventory();
+	const CInventory& GetInventory() const;
+	CInventory& GetInventory();
+
+	const CActorEconomy& GetEconomy() const;
+	CActorEconomy& GetEconomy();
 
 
 	void StartDigging(const CTile& tile);
@@ -59,15 +63,14 @@ public:
 
 protected:
 	void UpdateCamera(const Vector2& deltaMovement) const;
-
-	bool PerformSingleSweep(const Vector2& pos, const Vector2& halfs, const Vector2& delta, Vector2& newPos, Vector2& newDelta) const;
+	void UpdateUI() const;
 
 protected:
-	WorldPos				m_Position = Vector2(0.0f, 0.0f);
+	WorldPos				m_Position = WorldPos({ 0.0f, 0.0f });
 
-	hvuint64				m_Money = 0;
-	UniquePtr<CInventory>	m_Inventory = std::make_unique<CInventory>();
-	UniquePtr<CMotorBase>	m_Motor = std::make_unique<CMotorDefault>(this);
+	UniquePtr<CActorEconomy>	m_Economy = std::make_unique<CActorEconomy>();
+	UniquePtr<CInventory>		m_Inventory = std::make_unique<CInventory>();
+	UniquePtr<CMotorBase>		m_Motor = std::make_unique<CMotorDefault>(this);
 
 };
 

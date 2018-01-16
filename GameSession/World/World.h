@@ -1,5 +1,6 @@
 #pragma once
-#include "GameSession/World/Chunk.h"
+
+#include <GameSession/World/WorldEnums.h>
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -8,6 +9,7 @@ namespace hvgs
 class CTile;
 class CChunk;
 class CActor;
+class CBuildingBase;
 }
 
 namespace hvgs
@@ -22,13 +24,19 @@ public:
 	CWorld();
 	virtual ~CWorld();
 
-	static CWorld* GetWorldMutable();
-	static const CWorld* GetWorld();
+	static CWorld* GetMutable();
+	static const CWorld* Get();
 
 public:
-	const Map<int, UniquePtr<CChunk>>& GetChunks() const;
+	void Construct();
+
+public:
+	const Map<ChunkInterval, UniquePtr<CChunk>>& GetChunks() const;
 	const CActor& GetActor() const;
 	CActor& GetActor();
+
+	template<class T>
+	const T* GetBuilding() const;
 
 public:
 	void WorldToChunkPos(const WorldPos& worldPos, ChunkInterval& outWorldX, ChunkSlicePos& outChunkPos) const;
@@ -40,6 +48,9 @@ public:
 	void SetTileAt(const WorldPos& worldPos, TileType tileType, bool allowCreation = false);
 
 protected:
+	void ConstructActor();
+	void ConstructBulidings();
+
 	CChunk* CreateChunk(ChunkInterval worldX);
 
 	inline ChunkInterval FindNextChunkPos(int x) const;
@@ -49,11 +60,34 @@ protected:
 
 	hvsdk::CObjectPool<CChunk>	m_ChunkPool;
 
+	//////////////////////////////////////////////////////////////////////////
+	// Buildings
+	Vector<UniquePtr<CBuildingBase>>	m_Buildings;
+
 private:
 	static CWorld* s_instance;
 
-	UniquePtr<CActor> m_Actor = std::make_unique<CActor>();
+	UniquePtr<CActor> m_Actor = nullptr;
 };
+
+//////////////////////////////////////////////////////////////////////////
+
+template<class T>
+const T* hvgs::CWorld::GetBuilding() const
+{
+	for (const auto& building : m_Buildings)
+	{
+		const T* result = dynamic_cast<const T*>(building.get());
+		if (!result)
+		{
+			continue;
+		}
+
+		return result;
+	}
+
+	return nullptr;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 

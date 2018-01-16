@@ -13,14 +13,15 @@ class CItemBlock : public CItemBase
 {
 
 public:
-	CItemBlock();
+	CItemBlock() = default;
 	CItemBlock(TileType tileType);
 
-	virtual ~CItemBlock();
+	virtual ~CItemBlock() = default;
 
 	TileType GetTileType() const;
 
 	virtual String GetDisplayName() const override;
+	virtual TextureName GetTextureName() const override;
 
 protected:
 	TileType m_TileType = TileType::Air;

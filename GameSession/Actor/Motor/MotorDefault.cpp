@@ -16,7 +16,8 @@
 namespace hvgs
 {
 
-const float ACCELERATION_FORCE = 20.0f;
+const float ACCELERATION_FORCE_Y = 17.0f;
+const float ACCELERATION_FORCE_X = 10.0f;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -69,20 +70,35 @@ void CMotorDefault::Tick()
 	// Get Input
 	float hor = CInputManager::Get().GetAxis(Axis::Horizontal);
 	float ver = CInputManager::Get().GetButton(Button::Jump) ? 1.0f : 0.0f;
+	if (m_Actor->GetPosition().y > 5.0f)
+	{
+		ver = hvmath::Min({ ver, 0.0f });
+	}
+
+	m_IsThrusting = ver > 0.0f; //< Update thrusting flag
 
 	// Calculate delta movement
-	Vector2 acceleration = Vector2(hor, ver).Normalize() * ACCELERATION_FORCE;
+	Vector2 acceleration = Vector2::Scale(Vector2(hor, ver).Normalize(), Vector2{ ACCELERATION_FORCE_X, ACCELERATION_FORCE_Y });
 	if (!m_IsGrounded)
 	{
 		m_Velocity += CPhysicsManager::Get().GetGravity() * CTimeManager::Get().GetGameDeltaTime();
 	}
 	else
 	{
-		m_Velocity += Vector2{ 0.0f, -0.1f };
+		m_Velocity += Vector2{ 0.0f, -0.1f }; //< apply artificial gravity to ensure grounding
 	}
 
 	m_Velocity += acceleration * CTimeManager::Get().GetGameDeltaTime();
-	m_Velocity *= (1.0f - 0.45f * CTimeManager::Get().GetGameDeltaTime());
+
+	{
+		float drag = 0.45f;
+		if (m_IsGrounded)
+		{
+			drag += 0.35f;
+		}
+
+		m_Velocity *= (1.0f - drag * CTimeManager::Get().GetGameDeltaTime());
+	}
 
 	Vector2 deltaMovement = m_Velocity * CTimeManager::Get().GetGameDeltaTime();
 
@@ -146,7 +162,8 @@ hvgs::SweepResult CMotorDefault::PerformSingleSweep(const Vector2& pos, const Ve
 	// Prepare result values
 	hvmath::AABB collider;
 
-	bool collided = CPhysicsManager::Get().SweepTest(aabb, delta, Layer::Environment, result.sweep, collider);
+	Layer layerMask = Layer(int(Layer::Environment) | int(Layer::Building));
+	bool collided = CPhysicsManager::Get().SweepTest(aabb, delta, layerMask, result.sweep, collider);
 
 	if (!collided)
 	{
@@ -211,7 +228,7 @@ void CMotorDefault::CheckDigging()
 		return;
 	}
 
-	if (Vector2::SqrMagnitude(m_Velocity) > 0.5f * 0.5f)
+	if (Vector2::SqrMagnitude(m_Velocity) > 0.8f * 0.8f)
 	{
 		return;
 	}
@@ -230,12 +247,13 @@ void CMotorDefault::CheckDigging()
 		offset = Vector2(0.0f, -1.0f);
 	}
 
-	const auto& tile = CWorld::GetWorld()->GetTileAt(m_Actor->GetPosition() + offset);
+	const auto& tile = CWorld::Get()->GetTileAt(m_Actor->GetPosition() + offset);
 	if (!tile || tile->GetTileType() == TileType::Air)
 	{
 		return;
 	}
 
+	SetVelocity({ 0.0f, 0.0f });
 	m_Actor->StartDigging(*tile);
 }
 

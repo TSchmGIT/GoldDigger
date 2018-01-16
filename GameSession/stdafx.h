@@ -29,6 +29,7 @@
 #include <chrono>
 #include <numeric>
 
+#include <array>
 #include <memory>
 
 #include <vector>
@@ -52,6 +53,9 @@
 
 //////////////////////////////////////////////////////////////////////////
 // Haven libs
+#include "GameSession/Config/config_default.h"
+
+#include <hvsdk/Meta/NamedType.h>
 #include <hvsdk/Meta/DefinesSTL.h>
 #include <hvsdk/Meta/Log.h>
 #include <hvsdk/Meta/Assert.h>

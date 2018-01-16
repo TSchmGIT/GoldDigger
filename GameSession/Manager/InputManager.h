@@ -8,6 +8,16 @@ namespace hvgs
 
 /////////////////////////////////////////////////////////////////////////////
 
+using KeyCodeArray = std::array<bool, size_t(KeyCode::Count)>;
+using MouseButtonArray = std::array<bool, size_t(MouseButton::Count)>;
+using ButtonArray = std::array<bool, size_t(Button::Count)>;
+using JoystickButtonArray = std::array<bool, size_t(JoystickButton::Count)>;
+using JoystickAxisArray = std::array<float, size_t(JoystickAxis::Count)>;
+
+template<typename T>
+using JoystickIDArray = std::array<T, size_t(JoystickID::Count)>;
+
+
 class CInputManager : public CSingletonBase<CInputManager>
 {
 
@@ -73,29 +83,34 @@ public:
 	bool GetButtonDown(Button button, JoystickID id = JoystickID::Player1) const;
 	bool GetButtonUp(Button button, JoystickID id = JoystickID::Player1) const;
 
+	bool GetButtonUsed(Button button, JoystickID id = JoystickID::Player1) const;
+	void SetButtonUsed(Button button, JoystickID id = JoystickID::Player1);
+
 	//////////////////////////////////////////////////////////////////////////
 	// Signals
 	//////////////////////////////////////////////////////////////////////////
 public:
 	template<typename T>
-	constexpr void ConnectSignal(T function);
+	constexpr SignalConnection ConnectSignal(T function);
 
 protected:
 	std::tuple<KeyCode, JoystickButton> GetDataForButton(Button button) const;
 
-	bool m_KeyCodeArrayPressed[size_t(KeyCode::Count)];
-	bool m_KeyCodeArrayDown[size_t(KeyCode::Count)];
-	bool m_KeyCodeArrayUp[size_t(KeyCode::Count)];
+	JoystickIDArray<ButtonArray>	m_ButtonUsedArray; ///< Array that indicated whehter a button was used during this frame
 
-	bool m_MouseButtonArrayPressed[size_t(MouseButton::Count)];
-	bool m_MouseButtonArrayDown[size_t(MouseButton::Count)];
-	bool m_MouseButtonArrayUp[size_t(MouseButton::Count)];
+	KeyCodeArray		m_KeyCodeArrayPressed;
+	KeyCodeArray		m_KeyCodeArrayDown;
+	KeyCodeArray		m_KeyCodeArrayUp;
 
-	Map<JoystickID, bool*> m_JoystickButtonMapPressed;
-	Map<JoystickID, bool*> m_JoystickButtonMapDown;
-	Map<JoystickID, bool*> m_JoystickButtonMapUp;
+	MouseButtonArray	m_MouseButtonArrayPressed;
+	MouseButtonArray	m_MouseButtonArrayDown;
+	MouseButtonArray	m_MouseButtonArrayUp;
 
-	Map<JoystickID, Map<JoystickAxis, float>> m_JoystickAxis;
+	JoystickIDArray<JoystickButtonArray>	m_JoystickButtonArrayPressed;
+	JoystickIDArray<JoystickButtonArray>	m_JoystickButtonArrayDown;
+	JoystickIDArray<JoystickButtonArray>	m_JoystickButtonArrayUp;
+
+	JoystickIDArray<JoystickAxisArray>	m_JoystickAxis;
 
 	Vector2i	m_MousePos;
 	Vector2i	m_MouseDelta;
@@ -105,24 +120,29 @@ protected:
 	SignalMouseMove		m_SignalMouseMove;
 	SignalMouseClicked	m_SignalMouseClicked;
 	SignalMouseDown		m_SignalMouseDown;
+	SignalMouseUp		m_SignalMouseUp;
 };
 
 //////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-constexpr void hvgs::CInputManager::ConnectSignal(T function)
+constexpr SignalConnection hvgs::CInputManager::ConnectSignal(T function)
 {
-	if constexpr (std::is_same<T, SignalMouseMoveConnector>::value)
+	if constexpr (std::is_same_v<T, SignalMouseMoveConnector>)
 	{
-		m_SignalMouseMove.connect(function);
+		return m_SignalMouseMove.get().connect(function.get());
 	}
-	else if constexpr (std::is_same<T, SignalMouseClickedConnector>::value)
+	else if constexpr (std::is_same_v<T, SignalMouseClickedConnector>)
 	{
-		m_SignalMouseClicked.connect(function);
+		return m_SignalMouseClicked.get().connect(function.get());
 	}
-	else if constexpr (std::is_same<T, SignalMouseDownConnector>::value)
+	else if constexpr (std::is_same_v<T, SignalMouseDownConnector>)
 	{
-		m_SignalMouseDown.connect(function);
+		return m_SignalMouseDown.get().connect(function.get());
+	}
+	else if constexpr (std::is_same_v<T, SignalMouseUpConnector>)
+	{
+		return m_SignalMouseUp.get().connect(function.get());
 	}
 	else
 	{

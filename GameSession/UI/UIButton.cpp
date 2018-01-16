@@ -3,6 +3,7 @@
 #include "..\Manager\RenderManager.h"
 #include "..\Rendering\Textures\EnumsTexture.h"
 #include "..\..\hvmath\Physics\AABB.h"
+#include "Manager\InputManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +28,7 @@ CUIButton::~CUIButton()
 
 void CUIButton::Draw() const
 {
-	CRenderManager::GetMutable().DrawSprite(m_Position, GetTextureName());
+	CRenderManager::GetMutable().DrawSprite(m_Position, GetTextureName(), m_Size, Alignment::TopLeft);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -63,20 +64,26 @@ void CUIButton::SetPosition(const ScreenPos& position)
 void CUIButton::OnMouseClicked(const ScreenPos& pos)
 {
 	IUIEventHandler::OnMouseClicked(pos);
+
+	// execute action
+	if (!IsOverButton(pos))
+	{
+		return;
+	}
+
+	if (m_Action)
+	{
+		m_Action();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void CUIButton::OnMouseMove(const ScreenPos&, const ScreenPos& pos)
 {
-	hvmath::AABB aabb(m_Position, m_Size * 0.5f);
-
-	hvmath::Hit hit;
-	bool isOverButton = aabb.IntersectPoint(pos, hit);
-
-	if (isOverButton)
+	if (IsOverButton(pos))
 	{
-		m_State = ButtonState::Hover;
+		m_State = m_IsPressed ? ButtonState::Pressed : ButtonState::Hover;
 	}
 	else
 	{
@@ -86,20 +93,69 @@ void CUIButton::OnMouseMove(const ScreenPos&, const ScreenPos& pos)
 
 //////////////////////////////////////////////////////////////////////////
 
+void CUIButton::OnMouseDown(const ScreenPos& pos)
+{
+	if (IsOverButton(pos))
+	{
+		m_IsPressed = true;
+		m_State = ButtonState::Pressed;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::OnMouseUp(const ScreenPos& pos)
+{
+	m_IsPressed = false;
+	m_State = IsOverButton(pos) ? ButtonState::Hover : ButtonState::Default;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 hvgs::TextureName CUIButton::GetTextureName() const
 {
-	switch (m_State)
-	{
-	default: /* fallthrough */
-	case hvgs::ui::ButtonState::Default:
-		return TextureName::Button_Default;
-	case hvgs::ui::ButtonState::Hover:
-		return TextureName::Button_Hover;
-	case hvgs::ui::ButtonState::Pressed:
-		return TextureName::Button_Pressed;
-	case hvgs::ui::ButtonState::Deactivated:
-		return TextureName::Button_Deactivated;
-	}
+	auto it = m_ButtonTextures.find(m_State);
+	ASSERT_OR_EXECUTE(it != m_ButtonTextures.end(), return TextureName::INVALID);
+
+	return it->second;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CUIButton::IsOverButton(const ScreenPos& pos) const
+{
+	hvmath::AABB aabb(m_Position + m_Size * 0.5f, m_Size * 0.5f);
+
+	static hvmath::Hit hit;
+	return aabb.IntersectPoint(pos, hit);
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::SetAction(std::function<void()> action)
+{
+	m_Action = action;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::TextureName CUIButton::GetTextureForState(ButtonState state) const
+{
+	auto it = m_ButtonTextures.find(state);
+	ASSERT_OR_EXECUTE(it != m_ButtonTextures.end(), return TextureName::INVALID);
+
+	return it->second;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::SetTextureForState(ButtonState state, TextureName textureName)
+{
+	auto it = m_ButtonTextures.find(state);
+	ASSERT_OR_EXECUTE(it != m_ButtonTextures.end(), return);
+
+	it->second = textureName;
 }
 
 //////////////////////////////////////////////////////////////////////////

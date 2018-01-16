@@ -17,37 +17,29 @@ ICollisionObject::ICollisionObject()
 
 //////////////////////////////////////////////////////////////////////////
 
-ICollisionObject::ICollisionObject(const ICollisionObject& other)
+ICollisionObject::ICollisionObject(const ICollisionObject&)
 {
-	m_AABB = other.m_AABB;
-
 	CPhysicsManager::GetMutable().RegisterCollisionObject(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-ICollisionObject::ICollisionObject(ICollisionObject&& other)
+ICollisionObject::ICollisionObject(ICollisionObject&&)
 {
-	m_AABB = std::move(other.m_AABB);
-
 	CPhysicsManager::GetMutable().RegisterCollisionObject(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-ICollisionObject& ICollisionObject::operator=(const ICollisionObject& other)
+ICollisionObject& ICollisionObject::operator=(const ICollisionObject&)
 {
-	m_AABB = other.m_AABB;
-
 	return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-ICollisionObject& ICollisionObject::operator=(ICollisionObject&& other)
+ICollisionObject& ICollisionObject::operator=(ICollisionObject&&)
 {
-	m_AABB = std::move(other.m_AABB);
-
 	return *this;
 }
 
@@ -67,9 +59,9 @@ inline bool ICollisionObject::IsEnabled() const
 
 //////////////////////////////////////////////////////////////////////////
 
-const hvmath::AABB& ICollisionObject::GetAABB() const
+hvmath::AABB ICollisionObject::GetAABB() const
 {
-	return m_AABB;
+	return { GetAABBOrigin(), GetAABBHalfs() };
 }
 
 //////////////////////////////////////////////////////////////////////////

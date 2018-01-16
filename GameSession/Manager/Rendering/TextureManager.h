@@ -13,8 +13,8 @@ class CTextureManager : public CSingletonBase<CTextureManager>
 {
 
 public:
-	CTextureManager();
-	virtual ~CTextureManager();
+	CTextureManager() = default;
+	virtual ~CTextureManager() = default;
 
 	void Init();
 

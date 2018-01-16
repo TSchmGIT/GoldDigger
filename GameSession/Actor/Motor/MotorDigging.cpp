@@ -82,15 +82,15 @@ void CMotorDigging::Tick()
 void CMotorDigging::ProcessTileDigging()
 {
 	// Get tile that should be mined
-	const CTile* tile = CWorld::GetWorldMutable()->GetTileAt(m_TargetPos);
+	const CTile* tile = CWorld::GetMutable()->GetTileAt(m_TargetPos);
 	ASSERT_OR_EXECUTE_TEXT(tile, "Tried to mine tile that is not available", return);
 	TileType tileType = tile->GetTileType();
 
 	// Destroy tile
-	CWorld::GetWorldMutable()->SetTileAt(m_TargetPos, TileType::Air);
+	CWorld::GetMutable()->SetTileAt(m_TargetPos, TileType::Air);
 
 	// Collect resource dropped
-	m_Actor->GetInventory()->AddItem(std::make_unique<CItemBlock>(tileType));
+	m_Actor->GetInventory().AddItem(std::make_unique<CItemBlock>(tileType));
 
 	// Notify actor to stop digging
 }

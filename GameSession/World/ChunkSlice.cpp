@@ -10,7 +10,7 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CChunkSlice::CChunkSlice(const CChunk* parent, ChunkInterval height)
+CChunkSlice::CChunkSlice(const CChunk* parent, ChunkSliceInterval height)
 	: m_Parent(parent)
 	, m_YLevel(height)
 {
@@ -43,7 +43,7 @@ void CChunkSlice::SetTileAt(hvuint8 x, hvuint8 y, TileType tileType)
 hvgs::WorldPos CChunkSlice::GetWorldPos() const
 {
 	ASSERT_OR_EXECUTE(m_Parent, return Vector2i());
-	return WorldPos(float(m_Parent->GetPosX()), float(m_YLevel));
+	return WorldPos(float(m_Parent->GetPosX().get()), float(m_YLevel.get()));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ hvgs::WorldPos CChunkSlice::GetWorldPos() const
 void CChunkSlice::CalculateTiles()
 {
 	FastNoiseSIMD* noise = FastNoiseSIMD::NewFastNoiseSIMD();
-	float* noiseMap = noise->GetSimplexSet(m_Parent->GetPosX(), m_YLevel, 0, CHUNKSLICE_SIZE_X, CHUNKSLICE_SIZE_Y, 1, 10.0f);
+	float* noiseMap = noise->GetSimplexSet(m_Parent->GetPosX().get(), m_YLevel.get(), 0, CHUNKSLICE_SIZE_X, CHUNKSLICE_SIZE_Y, 1, 10.0f);
 
 	for (hvuint8 x = 0; x < CHUNKSLICE_SIZE_X; x++)
 		for (hvuint8 y = 0; y < CHUNKSLICE_SIZE_Y; y++)

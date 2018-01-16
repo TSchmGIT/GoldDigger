@@ -174,16 +174,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="Actor\Economy\ActorEconomy.h" />
+    <ClInclude Include="Actor\Economy\EconomyTypes.h" />
+    <ClInclude Include="Actor\Interaction\IInteractionObject.h" />
     <ClInclude Include="Actor\Motor\MotorBase.h" />
     <ClInclude Include="Actor\Motor\MotorDefault.h" />
     <ClInclude Include="Actor\Motor\MotorDigging.h" />
+    <ClInclude Include="Buildings\BuildingBase.h" />
+    <ClInclude Include="Buildings\BuildingBroker.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Config\config_default.h" />
     <ClInclude Include="GameObjects\IGameObject.h" />
     <ClInclude Include="Input\InputEnums.h" />
     <ClInclude Include="Items\Inventory.h" />
     <ClInclude Include="Items\ItemBase.h" />
+    <ClInclude Include="Items\ItemStack.h" />
     <ClInclude Include="Manager\CameraManager.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
+    <ClInclude Include="Manager\InteractionManager.h" />
     <ClInclude Include="Manager\Rendering\FontManager.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\InputManager.h" />
@@ -211,6 +219,11 @@
     <ClInclude Include="UI\Event.h" />
     <ClInclude Include="UI\ISpriteHandler.h" />
     <ClInclude Include="UI\IUIEventHandler.h" />
+    <ClInclude Include="UI\Scenes\BaseScene.h" />
+    <ClInclude Include="UI\Scenes\BuildingBrokerScene.h" />
+    <ClInclude Include="UI\Scenes\InventoryScene.h" />
+    <ClInclude Include="UI\Scenes\Meta\SceneEnum.h" />
+    <ClInclude Include="UI\Scenes\Meta\SceneManager.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="UI\UIElement.h" />
     <ClInclude Include="UI\UIEnums.h" />
@@ -223,16 +236,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="Actor\Economy\ActorEconomy.cpp" />
+    <ClCompile Include="Actor\Interaction\IInteractionObject.cpp" />
     <ClCompile Include="Actor\Motor\MotorBase.cpp" />
     <ClCompile Include="Actor\Motor\MotorDefault.cpp" />
     <ClCompile Include="Actor\Motor\MotorDigging.cpp" />
+    <ClCompile Include="Buildings\BuildingBase.cpp" />
+    <ClCompile Include="Buildings\BuildingBroker.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GameObjects\IGameObject.cpp" />
     <ClCompile Include="Items\Inventory.cpp" />
     <ClCompile Include="Items\ItemBase.cpp" />
     <ClCompile Include="Items\ItemBlock.cpp" />
+    <ClCompile Include="Items\ItemStack.cpp" />
     <ClCompile Include="Manager\CameraManager.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
+    <ClCompile Include="Manager\InteractionManager.cpp" />
     <ClCompile Include="Manager\Rendering\FontManager.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\InputManager.cpp" />
@@ -255,6 +274,10 @@
     <ClCompile Include="UI\Event.cpp" />
     <ClCompile Include="UI\ISpriteHandler.cpp" />
     <ClCompile Include="UI\IUIEventHandler.cpp" />
+    <ClCompile Include="UI\Scenes\BaseScene.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingBrokerScene.cpp" />
+    <ClCompile Include="UI\Scenes\InventoryScene.cpp" />
+    <ClCompile Include="UI\Scenes\Meta\SceneManager.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="UI\UIElement.cpp" />
     <ClCompile Include="World\Chunk.cpp" />

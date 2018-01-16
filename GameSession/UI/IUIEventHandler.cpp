@@ -12,15 +12,20 @@ namespace hvgs::ui
 
 IUIEventHandler::IUIEventHandler()
 {
-	CInputManager::GetMutable().ConnectSignal<SignalMouseClickedConnector>(boost::bind(&IUIEventHandler::OnMouseClicked, this, _1));
-	CInputManager::GetMutable().ConnectSignal<SignalMouseMoveConnector>(boost::bind(&IUIEventHandler::OnMouseMove, this, _1, _2));
+	m_MouseClickedConnection = CInputManager::GetMutable().ConnectSignal<SignalMouseClickedConnector>(SignalMouseClickedConnector(boost::bind(&IUIEventHandler::OnMouseClicked, this, _1)));
+	m_MouseMoveConnection = CInputManager::GetMutable().ConnectSignal<SignalMouseMoveConnector>(SignalMouseMoveConnector(boost::bind(&IUIEventHandler::OnMouseMove, this, _1, _2)));
+	m_MouseDownConnection = CInputManager::GetMutable().ConnectSignal<SignalMouseDownConnector>(SignalMouseDownConnector(boost::bind(&IUIEventHandler::OnMouseDown, this, _1)));
+	m_MouseUpConnection = CInputManager::GetMutable().ConnectSignal<SignalMouseUpConnector>(SignalMouseUpConnector(boost::bind(&IUIEventHandler::OnMouseUp, this, _1)));
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 IUIEventHandler::~IUIEventHandler()
 {
-
+	m_MouseClickedConnection.disconnect();
+	m_MouseMoveConnection.disconnect();
+	m_MouseDownConnection.disconnect();
+	m_MouseUpConnection.disconnect();
 }
 
 //////////////////////////////////////////////////////////////////////////

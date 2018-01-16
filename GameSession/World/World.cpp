@@ -2,6 +2,8 @@
 #include "World.h"
 
 #include "GameSession/Actor/Actor.h"
+#include "GameSession/Buildings/BuildingBase.h"
+#include "GameSession/Buildings/BuildingBroker.h"
 #include "GameSession/World/Chunk.h"
 #include "GameSession/World/ChunkSlice.h"
 #include "GameSession/World/Tile.h"
@@ -18,8 +20,6 @@ CWorld* CWorld::s_instance = nullptr;
 CWorld::CWorld()
 	: m_ChunkPool(32, 100)
 {
-	m_Actor->SetPosition({ 0.0f, 0.0f });
-
 	s_instance = this;
 
 	m_ChunkMap.reserve(64);
@@ -27,7 +27,7 @@ CWorld::CWorld()
 	TT_BEGIN("Chunk Calculation");
 	for (int i = -4; i < 4; i++)
 	{
-		ChunkInterval posX = i * CHUNKSLICE_SIZE_X;
+		ChunkInterval posX(i * CHUNKSLICE_SIZE_X);
 
 		UniquePtr<CChunk> chunk = std::make_unique<CChunk>(posX);
 		chunk->UpdateSlicesAt(-32, 40);
@@ -36,6 +36,20 @@ CWorld::CWorld()
 	}
 	TT_END("Chunk Calculation");
 
+	//ChunkInterval leftMostX(-5 * CHUNKSLICE_SIZE_X);
+	//ChunkInterval rightMostX(4 * CHUNKSLICE_SIZE_X);
+
+	//UniquePtr<CChunk> chunkLeftMost = std::make_unique<CChunk>(leftMostX);
+	//UniquePtr<CChunk> chunkRightMost = std::make_unique<CChunk>(rightMostX);
+
+	//for (int y = -256; y < 64; ++y)
+	//{
+	//	chunkLeftMost->SetTileAt(y, ChunkSlicePos(CHUNKSLICE_SIZE_X - 1, ((y % CHUNKSLICE_SIZE_Y) + CHUNKSLICE_SIZE_Y) % CHUNKSLICE_SIZE_Y), TileType::Stone, true);
+	//	chunkRightMost->SetTileAt(y, ChunkSlicePos(0, ((y % CHUNKSLICE_SIZE_Y) + CHUNKSLICE_SIZE_Y) % CHUNKSLICE_SIZE_Y), TileType::Stone, true);
+	//}
+
+	//m_ChunkMap.emplace(leftMostX, std::move(chunkLeftMost));
+	//m_ChunkMap.emplace(rightMostX, std::move(chunkRightMost));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -47,21 +61,29 @@ CWorld::~CWorld()
 
 //////////////////////////////////////////////////////////////////////////
 
-CWorld* CWorld::GetWorldMutable()
+CWorld* CWorld::GetMutable()
 {
 	return s_instance;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const CWorld* CWorld::GetWorld()
+const CWorld* CWorld::Get()
 {
 	return s_instance;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const Map<int, UniquePtr<CChunk>>& CWorld::GetChunks() const
+void CWorld::Construct()
+{
+	ConstructActor();
+	ConstructBulidings();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+const hvgs::Map<ChunkInterval, UniquePtr<hvgs::CChunk>>& CWorld::GetChunks() const
 {
 	return m_ChunkMap;
 }
@@ -163,6 +185,24 @@ void CWorld::SetTileAt(const WorldPos& worldPos, TileType tileType, bool allowCr
 
 //////////////////////////////////////////////////////////////////////////
 
+void CWorld::ConstructActor()
+{
+	m_Actor = std::make_unique<CActor>();
+	m_Actor->SetPosition(WorldPos({ 0.0f, 0.0f }));
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CWorld::ConstructBulidings()
+{
+	// Broker
+	m_Buildings.reserve(1);
+	auto& buildingBroker = m_Buildings.emplace_back(std::make_unique<CBuildingBroker>());
+	buildingBroker->SetPosition({ 3.0f, 0.0f });
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 CChunk* CWorld::CreateChunk(ChunkInterval worldX)
 {
 	auto chunk = std::make_unique<CChunk>(worldX);
@@ -178,11 +218,11 @@ inline ChunkInterval CWorld::FindNextChunkPos(int x) const
 {
 	if (x >= 0)
 	{
-		return (x / CHUNKSLICE_SIZE_X) * CHUNKSLICE_SIZE_X;
+		return ChunkInterval((x / CHUNKSLICE_SIZE_X) * CHUNKSLICE_SIZE_X);
 	}
 	else
 	{
-		return ((x + 1 - CHUNKSLICE_SIZE_X) / CHUNKSLICE_SIZE_X) * CHUNKSLICE_SIZE_X;
+		return ChunkInterval(((x + 1 - CHUNKSLICE_SIZE_X) / CHUNKSLICE_SIZE_X) * CHUNKSLICE_SIZE_X);
 	}
 }
 

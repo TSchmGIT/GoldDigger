@@ -29,14 +29,11 @@ public:
 public:
 	virtual Layer GetLayer() const = 0;
 	virtual bool IsEnabled() const;
-	const hvmath::AABB& GetAABB() const;
+	hvmath::AABB GetAABB() const;
 
 protected:
 	virtual WorldPos GetAABBOrigin() const = 0;
 	virtual WorldPos GetAABBHalfs() const = 0;
-
-protected:
-	hvmath::AABB	m_AABB;
 };
 
 /////////////////////////////////////////////////////////////////////////////

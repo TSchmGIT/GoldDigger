@@ -23,28 +23,7 @@ CInputManager::~CInputManager()
 
 void CInputManager::Init()
 {
-	for (int i = 0; i < int(JoystickID::Count); i++)
-	{
-		JoystickID joystickId = JoystickID(i);
-		auto itPairUp = m_JoystickButtonMapUp.emplace(joystickId, new bool[size_t(JoystickButton::Count)]);
-		auto itPairDown = m_JoystickButtonMapDown.emplace(joystickId, new bool[size_t(JoystickButton::Count)]);
-		auto itPairPressed = m_JoystickButtonMapPressed.emplace(joystickId, new bool[size_t(JoystickButton::Count)]);
 
-		for (hvint8 j = 0; j < hvint8(JoystickButton::Count); j++)
-		{
-			itPairUp.first->second[j] = false;
-			itPairDown.first->second[j] = false;
-			itPairPressed.first->second[j] = false;
-		}
-
-		Map<JoystickAxis, float> mapAxis;
-		for (int j = 0; j < int(JoystickAxis::Count); j++)
-		{
-			mapAxis.emplace(JoystickAxis(j), 0.0f);
-		}
-
-		m_JoystickAxis.emplace(JoystickID(i), std::move(mapAxis));
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -57,11 +36,31 @@ void CInputManager::PrepareTick()
 		m_KeyCodeArrayUp[i] = false;
 	}
 
+	for (int i = 0; i < int(JoystickID::Count); i++)
+	{
+		JoystickID joystickId = JoystickID(i);
+		auto& joystickButtonArrayDown = m_JoystickButtonArrayDown[size_t(joystickId)];
+		auto& joystickButtonArrayUp = m_JoystickButtonArrayUp[size_t(joystickId)];
+
+		for (int j = 0; j < int(JoystickButton::Count); j++)
+		{
+			joystickButtonArrayDown[j] = false;
+			joystickButtonArrayUp[j] = false;
+		}
+
+		auto &buttonUsedArray = m_ButtonUsedArray[size_t(joystickId)];
+		for (int j = 0; j < int(Button::Count); j++)
+		{
+			buttonUsedArray[j] = false;
+		}
+	}
+
 	for (int i = 0; i < int(MouseButton::Count); i++)
 	{
 		m_MouseButtonArrayDown[i] = false;
 		m_MouseButtonArrayUp[i] = false;
 	}
+
 
 	m_MouseWheelDelta = 0.0f;
 }
@@ -107,7 +106,7 @@ void CInputManager::RegisterMouseButtonPressed(MouseButton button)
 	// Update pressed Array
 	m_MouseButtonArrayPressed[size_t(button)] = true;
 
-	m_SignalMouseClicked(m_MousePos);
+	m_SignalMouseDown.get()(m_MousePos);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -121,6 +120,9 @@ void CInputManager::RegisterMouseButtonReleased(MouseButton button)
 
 	// Update pressed Array
 	m_MouseButtonArrayPressed[size_t(button)] = false;
+
+	m_SignalMouseUp.get()(m_MousePos);
+	m_SignalMouseClicked.get()(m_MousePos);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -135,7 +137,7 @@ void CInputManager::UpdateMouseCursorPosition(int x, int y)
 	m_MousePos.x = x;
 	m_MousePos.y = y;
 
-	m_SignalMouseMove(m_MouseDelta, m_MousePos);
+	m_SignalMouseMove.get()(m_MouseDelta, m_MousePos);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -270,6 +272,11 @@ float CInputManager::GetAxis(Axis axis, JoystickID id /*= JoystickID::Player1*/)
 
 bool CInputManager::GetButton(Button button, JoystickID id /*= JoystickID::Player1*/) const
 {
+	if (GetButtonUsed(button, id))
+	{
+		return false;
+	}
+
 	auto[keyButton, joystickButton] = GetDataForButton(button);
 
 	return IsKeyPressed(keyButton) || IsJoystickButtonPressed(joystickButton, id);
@@ -279,6 +286,11 @@ bool CInputManager::GetButton(Button button, JoystickID id /*= JoystickID::Playe
 
 bool CInputManager::GetButtonDown(Button button, JoystickID id /*= JoystickID::Player1*/) const
 {
+	if (GetButtonUsed(button, id))
+	{
+		return false;
+	}
+
 	auto[keyButton, joystickButton] = GetDataForButton(button);
 
 	return IsKeyDown(keyButton) || IsJoystickButtonDown(joystickButton, id);
@@ -288,9 +300,32 @@ bool CInputManager::GetButtonDown(Button button, JoystickID id /*= JoystickID::P
 
 bool CInputManager::GetButtonUp(Button button, JoystickID id /*= JoystickID::Player1*/) const
 {
+	if (GetButtonUsed(button, id))
+	{
+		return false;
+	}
+
 	auto[keyButton, joystickButton] = GetDataForButton(button);
 
 	return IsKeyPressed(keyButton) || IsJoystickButtonPressed(joystickButton, id);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CInputManager::GetButtonUsed(Button button, JoystickID id /*= JoystickID::Player1*/) const
+{
+	ASSERT_OR_EXECUTE(id >= JoystickID(0) && id < JoystickID::Count, return false);
+	ASSERT_OR_EXECUTE(button >= Button(0) && button < Button::Count, return false);
+	return m_ButtonUsedArray[size_t(id)][size_t(button)];
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CInputManager::SetButtonUsed(Button button, JoystickID id /*= JoystickID::Player1*/)
+{
+	ASSERT_OR_EXECUTE(id >= JoystickID(0) && id < JoystickID::Count, return);
+	ASSERT_OR_EXECUTE(button >= Button(0) && button < Button::Count, return);
+	m_ButtonUsedArray[size_t(id)][size_t(button)] = true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -300,11 +335,17 @@ std::tuple<hvgs::KeyCode, hvgs::JoystickButton> CInputManager::GetDataForButton(
 	switch (button)
 	{
 	case hvgs::Button::Jump:
-		return{ KeyCode::Space, JoystickButton::XBOX_A };
+		return{ KeyCode::Space,		JoystickButton::XBOX_A };
 	case hvgs::Button::Dig:
-		return{ KeyCode::LShift, JoystickButton::XBOX_B };
+		return{ KeyCode::LShift,	JoystickButton::XBOX_B };
+	case hvgs::Button::ToggleInventory:
+		return{ KeyCode::E,			JoystickButton::XBOX_Back };
+	case hvgs::Button::Interaction:
+		return{ KeyCode::F,			JoystickButton::XBOX_X };
+
 	default:
 		return{ KeyCode::Unknown, JoystickButton::Unknown };
+		break;
 	}
 
 }
@@ -313,33 +354,21 @@ std::tuple<hvgs::KeyCode, hvgs::JoystickButton> CInputManager::GetDataForButton(
 
 void CInputManager::UpdateJoystickAxisPosition(JoystickID id, JoystickAxis axis, float position)
 {
-	if (axis == JoystickAxis::LeftY)
+	if (axis == JoystickAxis::LeftY) //< Workaround for sfml's input. The LeftY axis is inverted and needs adjustment
 	{
 		position = -position;
 	}
 
-	auto itID = m_JoystickAxis.find(id);
-	ASSERT_OR_EXECUTE(itID != m_JoystickAxis.end(), return);
-	auto itAxis = itID->second.find(axis);
-	ASSERT_OR_EXECUTE(itAxis != itID->second.end(), return);
-
-	itAxis->second = hvmath::Deadzone(position * 0.01f, 0.25f); // The sfml value is between -100.0f and 100.0f
+	m_JoystickAxis[size_t(id)][size_t(axis)] = hvmath::Deadzone(position * 0.01f, 0.25f); // The sfml value is between -100.0f and 100.0f
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void CInputManager::RegisterJoystickButtonPressed(JoystickID id, JoystickButton button)
 {
-	auto itDownID = m_JoystickButtonMapDown.find(id);
-	auto itUpID = m_JoystickButtonMapUp.find(id);
-	auto itPressedID = m_JoystickButtonMapPressed.find(id);
-	ASSERT_OR_EXECUTE(itDownID != m_JoystickButtonMapDown.end() && itUpID != m_JoystickButtonMapUp.end() && itPressedID != m_JoystickButtonMapPressed.end(), return);
-
-	bool* downArray = itDownID->second;
-	bool* upArray = itUpID->second;
-	bool* pressedArray = itPressedID->second;
-	ASSERT_OR_EXECUTE(downArray && upArray && pressedArray, return);
-
+	auto& downArray = m_JoystickButtonArrayDown[size_t(id)];
+	auto& upArray = m_JoystickButtonArrayUp[size_t(id)];
+	auto& pressedArray = m_JoystickButtonArrayPressed[size_t(id)];
 
 	// When the button was released it cannot be pressed down
 	upArray[size_t(button)] = false;
@@ -354,15 +383,9 @@ void CInputManager::RegisterJoystickButtonPressed(JoystickID id, JoystickButton 
 
 void CInputManager::RegisterJoystickButtonReleased(JoystickID id, JoystickButton button)
 {
-	auto itDownID = m_JoystickButtonMapDown.find(id);
-	auto itUpID = m_JoystickButtonMapUp.find(id);
-	auto itPressedID = m_JoystickButtonMapPressed.find(id);
-	ASSERT_OR_EXECUTE(itDownID != m_JoystickButtonMapDown.end() && itUpID != m_JoystickButtonMapUp.end() && itPressedID != m_JoystickButtonMapPressed.end(), return);
-
-	bool* downArray = itDownID->second;
-	bool* upArray = itUpID->second;
-	bool* pressedArray = itPressedID->second;
-	ASSERT_OR_EXECUTE(downArray && upArray && pressedArray, return);
+	auto& downArray = m_JoystickButtonArrayDown[size_t(id)];
+	auto& upArray = m_JoystickButtonArrayUp[size_t(id)];
+	auto& pressedArray = m_JoystickButtonArrayPressed[size_t(id)];
 
 	// When the button was released it cannot be pressed down
 	downArray[size_t(button)] = false;
@@ -377,45 +400,37 @@ void CInputManager::RegisterJoystickButtonReleased(JoystickID id, JoystickButton
 
 bool CInputManager::IsJoystickButtonDown(JoystickButton button, JoystickID id /*= JoystickID::Player1*/) const
 {
+	ASSERT_OR_EXECUTE(id != JoystickID::Unknown && id < JoystickID::Count, return false);
 	ASSERT_OR_EXECUTE(button != JoystickButton::Unknown && button < JoystickButton::Count, return false);
-	auto it = m_JoystickButtonMapDown.find(id);
-	ASSERT_OR_EXECUTE(it != m_JoystickButtonMapDown.end(), return false);
-	return it->second[size_t(button)];
+	return m_JoystickButtonArrayDown[size_t(id)][size_t(button)];
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 bool CInputManager::IsJoystickButtonUp(JoystickButton button, JoystickID id /*= JoystickID::Player1*/) const
 {
+	ASSERT_OR_EXECUTE(id != JoystickID::Unknown && id < JoystickID::Count, return false);
 	ASSERT_OR_EXECUTE(button != JoystickButton::Unknown && button < JoystickButton::Count, return false);
-	auto it = m_JoystickButtonMapUp.find(id);
-	ASSERT_OR_EXECUTE(it != m_JoystickButtonMapUp.end(), return false);
-	return it->second[size_t(button)];
+	return m_JoystickButtonArrayUp[size_t(id)][size_t(button)];
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 bool CInputManager::IsJoystickButtonPressed(JoystickButton button, JoystickID id /*= JoystickID::Player1*/) const
 {
+	ASSERT_OR_EXECUTE(id != JoystickID::Unknown && id < JoystickID::Count, return false);
 	ASSERT_OR_EXECUTE(button != JoystickButton::Unknown && button < JoystickButton::Count, return false);
-	auto it = m_JoystickButtonMapPressed.find(id);
-	ASSERT_OR_EXECUTE(it != m_JoystickButtonMapPressed.end(), return false);
-	return it->second[size_t(button)];
+	return m_JoystickButtonArrayPressed[size_t(id)][size_t(button)];
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 float CInputManager::GetJoystickAxis(JoystickAxis axis, JoystickID id /*= JoystickID::Player1*/) const
 {
-	auto itId = m_JoystickAxis.find(id);
-	if (itId == m_JoystickAxis.end())
-	{
-		return 0.0f;
-	}
+	ASSERT_OR_EXECUTE(id != JoystickID::Unknown && id < JoystickID::Count, return 0.0f);
+	ASSERT_OR_EXECUTE(axis != JoystickAxis::Unknown && axis < JoystickAxis::Count, return 0.0f);
 
-	auto itAxis = itId->second.find(axis);
-	ASSERT_OR_EXECUTE(itAxis != itId->second.end(), return 0.0f);
-	return itAxis->second;
+	return m_JoystickAxis[size_t(id)][size_t(axis)];
 }
 
 //////////////////////////////////////////////////////////////////////////

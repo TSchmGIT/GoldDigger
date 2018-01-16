@@ -10,7 +10,8 @@ const hvuint8 CHUNKSLICE_SIZE_Y = 16;
 
 enum class TileType : hvuint8
 {
-	Grass = 0,
+	Invalid = 0,
+	Grass,
 	Air,
 	Dirt,
 	Stone,

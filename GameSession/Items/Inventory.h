@@ -6,6 +6,7 @@
 namespace hvgs
 {
 class CItemBase;
+class CItemStack;
 }
 
 namespace hvgs
@@ -30,14 +31,14 @@ public:
 
 	void AddItem(UniquePtr<CItemBase> itemBase);
 
-	void RemoveItemAt(size_t index);
+	void RemoveAllItems();
+	void RemoveStackAt(size_t index);
 
-
-	const CItemBase* GetItemAt(size_t index) const;
-	const Vector<UniquePtr<CItemBase>>& GetItems() const;
+	CItemStack* GetStackAt(size_t index);
+	const Vector<UniquePtr<CItemStack>>& GetStackList() const;
 
 protected:
-	Vector<UniquePtr<CItemBase>> m_Items;
+	Vector<UniquePtr<CItemStack>> m_ItemStackList;
 };
 
 /////////////////////////////////////////////////////////////////////////////

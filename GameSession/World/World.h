@@ -28,7 +28,7 @@ public:
 	static const CWorld* Get();
 
 public:
-	void Construct();
+	void Init();
 
 public:
 	const Map<ChunkInterval, UniquePtr<CChunk>>& GetChunks() const;

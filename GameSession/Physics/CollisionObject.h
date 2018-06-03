@@ -29,6 +29,7 @@ public:
 public:
 	virtual Layer GetLayer() const = 0;
 	virtual bool IsEnabled() const;
+
 	hvmath::AABB GetAABB() const;
 
 protected:

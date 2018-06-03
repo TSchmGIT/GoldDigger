@@ -342,8 +342,11 @@ std::tuple<hvgs::KeyCode, hvgs::JoystickButton> CInputManager::GetDataForButton(
 		return{ KeyCode::E,			JoystickButton::XBOX_Back };
 	case hvgs::Button::Interaction:
 		return{ KeyCode::F,			JoystickButton::XBOX_X };
+	case hvgs::Button::Cancel:
+		return{ KeyCode::Escape,	JoystickButton::XBOX_Back };
 
 	default:
+		LOG_ERROR("Unknown button type! Have you forgotten to define inputs for this button?");
 		return{ KeyCode::Unknown, JoystickButton::Unknown };
 		break;
 	}

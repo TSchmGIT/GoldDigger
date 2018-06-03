@@ -1,72 +1,53 @@
 #include "stdafx.h"
-#include "BaseScene.h"
-#include "GameSession/UI/Scenes/Meta/SceneManager.h"
+#include "ActorHealth.h"
 
 //////////////////////////////////////////////////////////////////////////
 
-namespace hvgs::ui
+namespace hvgs
 {
 
 //////////////////////////////////////////////////////////////////////////
 
-CBaseScene::CBaseScene()
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CBaseScene::~CBaseScene()
+CActorHealth::CActorHealth()
 {
 
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CBaseScene::EnterBase()
+CActorHealth::~CActorHealth()
 {
-	m_IsShown = true;
 
-	Enter();
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CBaseScene::ExitBase()
+hvuint CActorHealth::GetHealth() const
 {
-	m_IsShown = false;
-
-	Exit();
+	return m_Health;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CBaseScene::DrawBase()
+void CActorHealth::SetHealth(hvuint health)
 {
-	if (!m_IsShown)
-	{
-		return;
-	}
-
-	Draw();
+	m_Health = health;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CBaseScene::IsShown() const
+hvuint CActorHealth::GetArmor() const
 {
-	return m_IsShown;
+	return m_Armor;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CBaseScene::OnCustomEscHandling()
+void CActorHealth::SetArmor(hvuint armor)
 {
-	CSceneManager::GetMutable().LeaveState(GetSceneID());
-
-	return true;
+	m_Armor = armor;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-} // hvgs::ui
+} // hvgs

@@ -5,6 +5,13 @@
 
 namespace hvgs
 {
+class CWorld;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+namespace hvgs
+{
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,12 +23,16 @@ public:
 	virtual ~CGameManager();
 
 public:
-	void Init();
+	void Construct();
+
 	void Shutdown();
 
 	void Run();
 
 protected:
+	void Init();
+	void InitAfterCreation();
+
 	void PrepareTick();
 
 	void PollEvents();
@@ -33,7 +44,8 @@ protected:
 protected:
 	void Draw() const;
 
-	sf::RenderWindow m_GameWindow;
+	sf::RenderWindow	m_GameWindow;
+	UniquePtr<CWorld>	m_World = std::make_unique<CWorld>();
 };
 
 /////////////////////////////////////////////////////////////////////////////

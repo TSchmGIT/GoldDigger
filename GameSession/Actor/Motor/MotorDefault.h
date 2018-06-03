@@ -33,7 +33,11 @@ public:
 	virtual void Tick() override;
 
 protected:
+	void ProcessMovementTick();
+
 	SweepResult PerformSingleSweep(const Vector2& pos, const Vector2& halfs, const Vector2& delta) const;
+
+	std::pair<float, float> GetUserInput() const;
 
 	void UpdateGravityVelocity();
 	void CheckDigging();

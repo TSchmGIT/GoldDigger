@@ -17,10 +17,13 @@ public:
 	virtual ~CBaseScene();
 
 	virtual SceneID GetSceneID() const = 0;
+	virtual bool IsFullscreenMenu() const = 0;
 
 public:
 	void EnterBase();
 	void ExitBase();
+
+	virtual bool OnCustomEscHandling();
 
 	void DrawBase();
 
@@ -31,6 +34,7 @@ protected:
 	virtual void Exit() {};
 
 	virtual void Draw() const = 0;
+
 
 public:
 

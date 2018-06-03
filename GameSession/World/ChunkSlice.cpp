@@ -53,8 +53,8 @@ void CChunkSlice::CalculateTiles()
 	FastNoiseSIMD* noise = FastNoiseSIMD::NewFastNoiseSIMD();
 	float* noiseMap = noise->GetSimplexSet(m_Parent->GetPosX().get(), m_YLevel.get(), 0, CHUNKSLICE_SIZE_X, CHUNKSLICE_SIZE_Y, 1, 10.0f);
 
-	for (hvuint8 x = 0; x < CHUNKSLICE_SIZE_X; x++)
-		for (hvuint8 y = 0; y < CHUNKSLICE_SIZE_Y; y++)
+	for (hvuint8 x = 0; x < CHUNKSLICE_SIZE_X; ++x)
+		for (hvuint8 y = 0; y < CHUNKSLICE_SIZE_Y; ++y)
 		{
 			size_t index = GetIndex(x, y);
 			float noiseValue = noiseMap[index];

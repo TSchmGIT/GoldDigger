@@ -8,6 +8,7 @@
 #include "GameSession/Manager/PhysicsManager.h"
 #include "GameSession/Manager/TimeManager.h"
 #include "GameSession/Physics/PhysicsEnums.h"
+#include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/Tile.h"
 #include "GameSession/World/World.h"
 
@@ -59,6 +60,13 @@ void CMotorDefault::Tick()
 {
 	CMotorBase::Tick(); // Base call
 
+	ProcessMovementTick();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CMotorDefault::ProcessMovementTick()
+{
 	// Update gravity velocity
 	UpdateGravityVelocity();
 
@@ -68,8 +76,8 @@ void CMotorDefault::Tick()
 	const hvmath::AABB& aabb = m_Actor->GetAABB();
 
 	// Get Input
-	float hor = CInputManager::Get().GetAxis(Axis::Horizontal);
-	float ver = CInputManager::Get().GetButton(Button::Jump) ? 1.0f : 0.0f;
+	auto[hor, ver] = GetUserInput();
+
 	if (m_Actor->GetPosition().y > 5.0f)
 	{
 		ver = hvmath::Min({ ver, 0.0f });
@@ -77,7 +85,7 @@ void CMotorDefault::Tick()
 
 	m_IsThrusting = ver > 0.0f; //< Update thrusting flag
 
-	// Calculate delta movement
+								// Calculate delta movement
 	Vector2 acceleration = Vector2::Scale(Vector2(hor, ver).Normalize(), Vector2{ ACCELERATION_FORCE_X, ACCELERATION_FORCE_Y });
 	if (!m_IsGrounded)
 	{
@@ -205,6 +213,22 @@ hvgs::SweepResult CMotorDefault::PerformSingleSweep(const Vector2& pos, const Ve
 
 		return result;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+std::pair<float, float> CMotorDefault::GetUserInput() const
+{
+	// Do not process any user input when a fullscreen menu is visible
+	if (hvgs::ui::CSceneManager::Get().IsFullscreenMenuVisble())
+	{
+		return { 0.0f, 0.0f };
+	}
+
+	float hor = CInputManager::Get().GetAxis(Axis::Horizontal);
+	float ver = CInputManager::Get().GetButton(Button::Jump) ? 1.0f : 0.0f;
+
+	return { hor, ver };
 }
 
 //////////////////////////////////////////////////////////////////////////

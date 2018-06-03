@@ -176,6 +176,14 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Economy\ActorEconomy.h" />
     <ClInclude Include="Actor\Economy\EconomyTypes.h" />
+    <ClInclude Include="Actor\Equipment\Modules\BaseModule.h" />
+    <ClInclude Include="Actor\Equipment\Equipment.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleCargo.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleDrill.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleFuelTank.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleHull.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleMotor.h" />
+    <ClInclude Include="Actor\Health\ActorHealth.h" />
     <ClInclude Include="Actor\Interaction\IInteractionObject.h" />
     <ClInclude Include="Actor\Motor\MotorBase.h" />
     <ClInclude Include="Actor\Motor\MotorDefault.h" />
@@ -237,6 +245,15 @@
   <ItemGroup>
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Economy\ActorEconomy.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\BaseModule.cpp" />
+    <ClCompile Include="Actor\Equipment\Equipment.cpp" />
+    <ClCompile Include="Actor\Equipment\EquipmentEnums.h" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleCargo.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleDrill.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleFuelTank.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleHull.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleMotor.cpp" />
+    <ClCompile Include="Actor\Health\ActorHealth.cpp" />
     <ClCompile Include="Actor\Interaction\IInteractionObject.cpp" />
     <ClCompile Include="Actor\Motor\MotorBase.cpp" />
     <ClCompile Include="Actor\Motor\MotorDefault.cpp" />

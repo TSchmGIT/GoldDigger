@@ -82,7 +82,7 @@ protected:
 protected:
 	UniquePtr<sf::RenderWindow>		m_Window;
 	Set<const IRenderElement*>		m_RenderElementSet;
-	Set<const ui::ISpriteHandler*>		m_SpriteHandlerSet;
+	Set<const ui::ISpriteHandler*>	m_SpriteHandlerSet;
 
 	hvsdk::CObjectPool<sf::Sprite>	m_PoolSprites;
 };

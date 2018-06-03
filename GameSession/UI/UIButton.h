@@ -1,6 +1,5 @@
 #pragma once
 #include "GameSession/UI/IUIEventHandler.h"
-#include "GameSession/UI/ISpriteHandler.h"
 #include "GameSession/Rendering/Textures/EnumsTexture.h"
 
 /////////////////////////////////////////////////////////////////////////////

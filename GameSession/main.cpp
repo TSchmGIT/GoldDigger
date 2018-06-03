@@ -19,18 +19,11 @@ int main()
 {
 	std::srand(unsigned int(std::time(nullptr)));
 
-	CGameManager::GetMutable().Init();
-
-	CWorld world;
-	world.Construct();
-
-	ui::CUIButton button;
-	button.SetPosition(ScreenPos({ 100.0f, 100.0f }));
-	button.SetSize(ScreenPos({ 100.0f, 100.0f }));
-	button.SetAction([]() { hvgs::ui::CSceneManager::GetMutable().ToggleState(hvgs::ui::SceneID::Inventory); });
+	CGameManager::GetMutable().Construct();
 
 	CGameManager::GetMutable().Run();
 
 	CGameManager::GetMutable().Shutdown();
+
 	return 0;
 }

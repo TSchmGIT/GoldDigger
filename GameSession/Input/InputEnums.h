@@ -9,6 +9,7 @@ enum class Button : hvuint8
 	Dig,
 	ToggleInventory,
 	Interaction,
+	Cancel,
 	Count
 };
 
@@ -23,12 +24,12 @@ enum class Axis : hvuint8
 enum class MouseButton : hvuint8
 {
 	Left = 0,       ///< The left mouse button
-	Right,      ///< The right mouse button
-	Middle,     ///< The middle (wheel) mouse button
-	XButton1,   ///< The first extra mouse button
-	XButton2,   ///< The second extra mouse button
+	Right,			///< The right mouse button
+	Middle,			///< The middle (wheel) mouse button
+	XButton1,		///< The first extra mouse button
+	XButton2,		///< The second extra mouse button
 
-	Count ///< Keep last -- the total number of mouse buttons
+	Count			///< Keep last -- the total number of mouse buttons
 };
 
 enum class JoystickID : hvint8

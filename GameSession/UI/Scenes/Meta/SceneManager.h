@@ -39,8 +39,13 @@ public:
 	void LeaveState(SceneID sceneID);
 	void ToggleState(SceneID sceneID);
 
+public:
+	bool IsFullscreenMenuVisble() const;
+
 protected:
-	Vector<SceneData> m_sceneDataList;
+	Vector<SceneData> m_SceneDataList;
+	
+	int			m_FullScreenUIVisibile = 0;
 };
 
 /////////////////////////////////////////////////////////////////////////////

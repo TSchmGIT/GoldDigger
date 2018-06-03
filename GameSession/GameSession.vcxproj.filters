@@ -198,6 +198,30 @@
     <ClInclude Include="Actor\Interaction\IInteractionObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Actor\Equipment\Equipment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Health\ActorHealth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\BaseModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleMotor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleFuelTank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleDrill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleCargo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleHull.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -330,6 +354,33 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Actor\Interaction\IInteractionObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Equipment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Health\ActorHealth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\EquipmentEnums.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\BaseModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\ModuleHull.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\ModuleMotor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\ModuleFuelTank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\ModuleDrill.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\ModuleCargo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

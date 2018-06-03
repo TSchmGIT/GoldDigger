@@ -21,6 +21,10 @@ public:
 	virtual ~CGameObjectManager();
 
 public:
+	void InitAfterCreation();
+
+public:
+
 	void RegisterGameObject(IGameObject* gameObject);
 	void UnregisterGameObject(IGameObject* gameObject);
 

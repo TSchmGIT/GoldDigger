@@ -92,7 +92,6 @@ void CRenderManager::Render()
 		spriteHandler->Draw();
 	}
 
-
 	// Draw UI
 	hvgs::ui::CSceneManager::Get().Draw();
 	CInteractionManager::Get().Draw();

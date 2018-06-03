@@ -4,6 +4,9 @@
 #include <hvmath/Physics/AABB.h>
 
 #include "GameSession/Actor/Economy/ActorEconomy.h"
+#include "GameSession/Actor/Equipment/Equipment.h"
+#include "GameSession/Actor/Health/ActorHealth.h"
+#include "GameSession/Actor/Interaction/IInteractionObject.h"
 #include "GameSession/Actor/Motor/MotorDefault.h"
 #include "GameSession/Actor/Motor/MotorDigging.h"
 #include "GameSession/Camera/Camera.h"
@@ -12,6 +15,7 @@
 #include "GameSession/Items/ItemStack.h"
 #include "GameSession/Manager/CameraManager.h"
 #include "GameSession/Manager/InputManager.h"
+#include "GameSession/Manager/InteractionManager.h"
 #include "GameSession/Manager/PhysicsManager.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/Manager/TimeManager.h"
@@ -22,8 +26,6 @@
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/Tile.h"
 #include "GameSession/World/World.h"
-#include "Manager/InteractionManager.h"
-#include "Interaction/IInteractionObject.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +54,7 @@ CActor::CActor(const CActor& other)
 CActor::CActor(CActor&& other)
 	: m_Position(other.m_Position)
 	, m_Inventory(std::move(other.m_Inventory))
+	, m_Equipment(std::move(other.m_Equipment))
 	, m_Motor(std::move(other.m_Motor))
 {
 
@@ -66,18 +69,18 @@ CActor::~CActor()
 
 //////////////////////////////////////////////////////////////////////////
 
-void CActor::PrepareTick()
+void CActor::InitAfterCreation()
 {
-
+	m_Equipment->InitAfterCreation();
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void CActor::Tick()
 {
-	if (CInputManager::Get().IsMouseButtonDown(MouseButton::Middle) 
-		|| std::abs(m_Position.x) > 200.0f 
-		|| m_Position.y > 20.0f 
+	if (CInputManager::Get().IsMouseButtonDown(MouseButton::Middle)
+		|| std::abs(m_Position.x) > 200.0f
+		|| m_Position.y > 20.0f
 		|| m_Position.y <= -100.0f
 		|| m_Position.x <= CHUNKSLICE_SIZE_X * -4
 		|| m_Position.x >= CHUNKSLICE_SIZE_X * 4)
@@ -91,38 +94,6 @@ void CActor::Tick()
 
 	// Update motor
 	m_Motor->Tick();
-
-	//// Collect tiles
-	//if (CInputManager::Get().IsMouseButtonDown(MouseButton::Left))
-	//{
-	//	CCamera* cam = CCameraManager::GetMutable().GetActive();
-	//	ASSERT_OR_EXECUTE(cam, return);
-
-	//	auto&& tile = CWorld::GetMutable()->GetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()));
-
-	//	if (tile && tile->GetTileType() != TileType::Air)
-	//	{
-	//		m_Inventory->AddItem(std::make_unique<CItemBlock>(tile->GetTileType()));
-
-	//		CWorld::GetMutable()->SetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()), TileType::Air, false);
-	//	}
-	//}
-
-	//// Place tiles
-	//if (CInputManager::Get().IsMouseButtonDown(MouseButton::Right) && m_Inventory->HasItems())
-	//{
-	//	CCamera* cam = CCameraManager::GetMutable().GetActive();
-	//	ASSERT_OR_EXECUTE(cam, return);
-
-	//	auto&& item = m_Inventory->GetStackAt(0)->GetFirstItem();
-	//	auto&& itemBlock = dynamic_cast<const CItemBlock*>(item);
-	//	if (itemBlock)
-	//	{
-	//		CWorld::GetMutable()->SetTileAt(cam->ScreenToWorldPoint(CInputManager::Get().GetMousePos()), itemBlock->GetTileType(), false);
-
-	//		m_Inventory->RemoveStackAt(0);
-	//	}
-	//}
 
 	// Make camera focus the player
 	UpdateCamera(m_Position - oldPos);
@@ -198,6 +169,34 @@ const hvgs::CActorEconomy& CActor::GetEconomy() const
 hvgs::CActorEconomy& CActor::GetEconomy()
 {
 	return *m_Economy;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+const hvgs::CActorHealth& CActor::GetHealth() const
+{
+	return *m_Health;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::CActorHealth& CActor::GetHealth()
+{
+	return *m_Health;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+const hvgs::CEquipment& CActor::GetEquipment() const
+{
+	return *m_Equipment;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::CEquipment& CActor::GetEquipment()
+{
+	return *m_Equipment;
 }
 
 //////////////////////////////////////////////////////////////////////////

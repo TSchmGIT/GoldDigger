@@ -35,21 +35,6 @@ CWorld::CWorld()
 		m_ChunkMap.emplace(posX, std::move(chunk));
 	}
 	TT_END("Chunk Calculation");
-
-	//ChunkInterval leftMostX(-5 * CHUNKSLICE_SIZE_X);
-	//ChunkInterval rightMostX(4 * CHUNKSLICE_SIZE_X);
-
-	//UniquePtr<CChunk> chunkLeftMost = std::make_unique<CChunk>(leftMostX);
-	//UniquePtr<CChunk> chunkRightMost = std::make_unique<CChunk>(rightMostX);
-
-	//for (int y = -256; y < 64; ++y)
-	//{
-	//	chunkLeftMost->SetTileAt(y, ChunkSlicePos(CHUNKSLICE_SIZE_X - 1, ((y % CHUNKSLICE_SIZE_Y) + CHUNKSLICE_SIZE_Y) % CHUNKSLICE_SIZE_Y), TileType::Stone, true);
-	//	chunkRightMost->SetTileAt(y, ChunkSlicePos(0, ((y % CHUNKSLICE_SIZE_Y) + CHUNKSLICE_SIZE_Y) % CHUNKSLICE_SIZE_Y), TileType::Stone, true);
-	//}
-
-	//m_ChunkMap.emplace(leftMostX, std::move(chunkLeftMost));
-	//m_ChunkMap.emplace(rightMostX, std::move(chunkRightMost));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -75,7 +60,7 @@ const CWorld* CWorld::Get()
 
 //////////////////////////////////////////////////////////////////////////
 
-void CWorld::Construct()
+void CWorld::Init()
 {
 	ConstructActor();
 	ConstructBulidings();

@@ -23,6 +23,7 @@ public:
 	virtual ~CBuildingBrokerScene();
 
 	virtual SceneID GetSceneID() const override;
+	virtual bool IsFullscreenMenu() const override;
 
 protected:
 	virtual void Enter() override;

@@ -11,7 +11,9 @@ namespace hvgs
 {
 class CTile;
 class CInventory;
+class CActorHealth;
 class CActorEconomy;
+class CEquipment;
 
 enum class Layer : int;
 }
@@ -34,7 +36,7 @@ public:
 	virtual ~CActor();
 
 public: // IGameObject
-	virtual void PrepareTick() override;
+	virtual void InitAfterCreation() override;
 	virtual void Tick() override;
 
 public: // IRenderElement
@@ -57,6 +59,11 @@ public:
 	const CActorEconomy& GetEconomy() const;
 	CActorEconomy& GetEconomy();
 
+	const CActorHealth& GetHealth() const;
+	CActorHealth& GetHealth();
+
+	const CEquipment& GetEquipment() const;
+	CEquipment& GetEquipment();
 
 	void StartDigging(const CTile& tile);
 	void StopDigging();
@@ -66,10 +73,12 @@ protected:
 	void UpdateUI() const;
 
 protected:
-	WorldPos				m_Position = WorldPos({ 0.0f, 0.0f });
+	WorldPos					m_Position = WorldPos({ 0.0f, 0.0f });
 
+	UniquePtr<CActorHealth>		m_Health = std::make_unique<CActorHealth>();
 	UniquePtr<CActorEconomy>	m_Economy = std::make_unique<CActorEconomy>();
 	UniquePtr<CInventory>		m_Inventory = std::make_unique<CInventory>();
+	UniquePtr<CEquipment>		m_Equipment = std::make_unique<CEquipment>();
 	UniquePtr<CMotorBase>		m_Motor = std::make_unique<CMotorDefault>(this);
 
 };

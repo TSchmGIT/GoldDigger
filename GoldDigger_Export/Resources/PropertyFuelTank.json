@@ -1,0 +1,9 @@
+{
+  "name": "DataFuelTank",
+  "attributes": 
+  [
+    { "type" : "int", "name": "Capacity", "defaultValue" : 100 },
+    { "type" : "float", "name": "FuelEfficiency", "defaultValue" : "1.0f" },
+    { "type" : "int", "name": "AnotherValue", "defaultValue" : "0" }
+  ]
+}

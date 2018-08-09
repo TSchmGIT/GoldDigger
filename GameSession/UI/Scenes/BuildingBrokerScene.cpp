@@ -100,10 +100,10 @@ void CBuildingBrokerScene::Enter()
 
 void CBuildingBrokerScene::OnSellAllButtonPressed()
 {
-	const auto* buildingBroker = CWorld::Get()->GetBuilding<CBuildingBroker>();
+	const auto* buildingBroker = CWorld::Get().GetBuilding<CBuildingBroker>();
 	ASSERT_OR_EXECUTE(buildingBroker, return);
 
-	buildingBroker->PerformTransactionBuy(CWorld::GetMutable()->GetActor());
+	buildingBroker->PerformTransactionBuy(CWorld::GetMutable().GetActor());
 
 	UpdateInventory();
 }
@@ -120,7 +120,7 @@ void CBuildingBrokerScene::OnExitButtonPressed()
 void CBuildingBrokerScene::UpdateInventory()
 {
 	// Gather inventory data from actor
-	const auto& actor = hvgs::CWorld::Get()->GetActor();
+	const auto& actor = hvgs::CWorld::Get().GetActor();
 	const auto& inventory = actor.GetInventory();
 
 	int i = 0;

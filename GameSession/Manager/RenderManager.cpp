@@ -76,8 +76,7 @@ void CRenderManager::Render()
 	// Background
 	DrawBackground();
 
-	CWorld* world = CWorld::GetMutable();
-	for (const auto& kvPair : world->GetChunks())
+	for (const auto& kvPair : CWorld::Get().GetChunks())
 	{
 		DrawChunk(*kvPair.second);
 	}

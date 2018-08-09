@@ -29,6 +29,9 @@ public:
 
 	void Run();
 
+public:
+	CWorld& GetWorld() const;
+
 protected:
 	void Init();
 	void InitAfterCreation();

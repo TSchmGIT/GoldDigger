@@ -72,6 +72,8 @@ protected:
 	void UpdateCamera(const Vector2& deltaMovement) const;
 	void UpdateUI() const;
 
+	void CheckActorReset();
+
 protected:
 	WorldPos					m_Position = WorldPos({ 0.0f, 0.0f });
 

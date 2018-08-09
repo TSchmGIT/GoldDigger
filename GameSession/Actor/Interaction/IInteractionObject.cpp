@@ -62,7 +62,7 @@ void IInteractionObject::Tick()
 	// #TODO @tschmiedel: May interchange the showing of interaction symbols to the actor, because there may be too many things to check
 
 	// Check if the interaction symbol should be shown
-	const auto& actor = CWorld::Get()->GetActor();
+	const auto& actor = CWorld::Get().GetActor();
 
 	m_IsInInteractionRange = Vector2::DistanceCheck(actor.GetPosition(), GetInteractionOriginPosition(), m_InteractionDistance);
 

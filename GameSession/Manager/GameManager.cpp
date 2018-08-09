@@ -106,6 +106,13 @@ void CGameManager::Run()
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::CWorld& CGameManager::GetWorld() const
+{
+	return *m_World;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CGameManager::PrepareTick()
 {
 	CRenderManager::GetMutable().PrepareTick();
@@ -166,6 +173,8 @@ void CGameManager::PollEvents()
 
 void CGameManager::Tick()
 {
+	m_World->Tick();
+
 	CCameraManager::GetMutable().Tick();
 	CGameObjectManager::GetMutable().Tick();
 	CInteractionManager::GetMutable().Tick();

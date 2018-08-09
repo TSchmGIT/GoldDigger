@@ -78,17 +78,7 @@ void CActor::InitAfterCreation()
 
 void CActor::Tick()
 {
-	if (CInputManager::Get().IsMouseButtonDown(MouseButton::Middle)
-		|| std::abs(m_Position.x) > 200.0f
-		|| m_Position.y > 20.0f
-		|| m_Position.y <= -100.0f
-		|| m_Position.x <= CHUNKSLICE_SIZE_X * -4
-		|| m_Position.x >= CHUNKSLICE_SIZE_X * 4)
-	{
-		UpdateCamera(-m_Position);
-		SetPosition(Vector2(0.0f, 0.0f));
-		m_Motor->SetVelocity({ 0.0f, 0.0f });
-	}
+	//CheckActorReset();
 
 	Vector2 oldPos = m_Position;
 
@@ -116,12 +106,6 @@ void CActor::Draw() const
 	{
 		renderManager.DrawSpriteWorld(m_Position, TextureName::ACTOR_THRUSTER, Alignment::CenterTop);
 	}
-
-	// Debug
-	//std::ostringstream ss;
-	//ss << "(" << m_Position.x << ", " << m_Position.y << ")\n" <<
-	//	m_Motor->GetVelocity().x << ", " << m_Motor->GetVelocity().y << ")";
-	//CRenderManager::GetMutable().DrawTextWorld(m_Position, ss.str(), FontName::Courier_New, 30);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -253,6 +237,23 @@ void CActor::UpdateUI() const
 				ui::CSceneManager::GetMutable().ToggleState(ui::SceneID::Inventory);
 			}
 		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CActor::CheckActorReset()
+{
+	if (CInputManager::Get().IsMouseButtonDown(MouseButton::Middle)
+		|| std::abs(m_Position.x) > 200.0f
+		|| m_Position.y > 20.0f
+		|| m_Position.y <= -100.0f
+		|| m_Position.x <= CHUNKSLICE_SIZE_X * -4
+		|| m_Position.x >= CHUNKSLICE_SIZE_X * 4)
+	{
+		UpdateCamera(-m_Position);
+		SetPosition(Vector2(0.0f, 0.0f));
+		m_Motor->SetVelocity({ 0.0f, 0.0f });
 	}
 }
 

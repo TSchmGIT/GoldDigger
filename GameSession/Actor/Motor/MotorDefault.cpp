@@ -271,7 +271,7 @@ void CMotorDefault::CheckDigging()
 		offset = Vector2(0.0f, -1.0f);
 	}
 
-	const auto& tile = CWorld::Get()->GetTileAt(m_Actor->GetPosition() + offset);
+	const auto& tile = CWorld::Get().GetTileAt(m_Actor->GetPosition() + offset);
 	if (!tile || tile->GetTileType() == TileType::Air)
 	{
 		return;

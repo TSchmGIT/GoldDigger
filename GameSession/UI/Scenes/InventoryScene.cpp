@@ -34,7 +34,7 @@ CInventoryScene::~CInventoryScene()
 void CInventoryScene::Enter()
 {
 	// Gather inventory data from actor
-	const auto& actor = hvgs::CWorld::Get()->GetActor();
+	const auto& actor = hvgs::CWorld::Get().GetActor();
 	const auto& inventory = actor.GetInventory();
 
 	int i = 0;

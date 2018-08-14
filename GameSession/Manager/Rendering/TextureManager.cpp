@@ -22,52 +22,52 @@ void CTextureManager::Init()
 		switch (textureName)
 		{
 		case TextureName::BACKGROUND:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\background.png";
+			fileName = "..\\Resources\\Textures\\background.png";
 			break;
 		case TextureName::ACTOR:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Actor.png";
+			fileName = "..\\Resources\\Textures\\Actor.png";
 			break;
 		case TextureName::BUTTON_DEFAULT:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Button\\Default.png";
+			fileName = "..\\Resources\\Textures\\Button\\Default.png";
 			break;
 		case TextureName::BUTTON_HOVER:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Button\\Hover.png";
+			fileName = "..\\Resources\\Textures\\Button\\Hover.png";
 			break;
 		case TextureName::BUTTON_DEACTIVATED:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Button\\Deactivated.png";
+			fileName = "..\\Resources\\Textures\\Button\\Deactivated.png";
 			break;
 		case TextureName::BUTTON_PRESSED:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Button\\Pressed.png";
+			fileName = "..\\Resources\\Textures\\Button\\Pressed.png";
 			break;
 		case TextureName::TILEATLAS:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\TileAtlas\\Final_Atlas.png";
+			fileName = "..\\Resources\\Textures\\TileAtlas\\Final_Atlas.png";
 			break;
 		case TextureName::INVENTORYMAINSPRITE:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Scenes\\InventoryMainSprite.png";
+			fileName = "..\\Resources\\Textures\\Scenes\\InventoryMainSprite.png";
 			break;
 		case TextureName::ITEM_DIRT:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\TileAtlas\\Dirt.png";
+			fileName = "..\\Resources\\Textures\\TileAtlas\\Dirt.png";
 			break;
 		case TextureName::ITEM_STONE:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\TileAtlas\\Stone.png";
+			fileName = "..\\Resources\\Textures\\TileAtlas\\Stone.png";
 			break;
 		case TextureName::ITEM_IRON:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\TileAtlas\\Iron.png";
+			fileName = "..\\Resources\\Textures\\TileAtlas\\Iron.png";
 			break;
 		case TextureName::WHITE:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\TileAtlas\\White.png";
+			fileName = "..\\Resources\\Textures\\TileAtlas\\White.png";
 			break;
 		case TextureName::BLACK:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\TileAtlas\\Black.png";
+			fileName = "..\\Resources\\Textures\\TileAtlas\\Black.png";
 			break;
 		case TextureName::BUILDING_BROKER:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Buildings\\Broker.png";
+			fileName = "..\\Resources\\Textures\\Buildings\\Broker.png";
 			break;
 		case TextureName::SCENEBUILDINGBROKER:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Scenes\\BrokerUI.png";
+			fileName = "..\\Resources\\Textures\\Scenes\\BrokerUI.png";
 			break;
 		case TextureName::ACTOR_THRUSTER:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Actor_Thruster.png";
+			fileName = "..\\Resources\\Textures\\Actor_Thruster.png";
 			break;
 		case TextureName::BUTTONICON_XBOX_ONE_A:
 			fileName = "D:\\Users\\Thorsten\\Documents\\Graphics\\Platform Buttons\\Xelu_FREE_keyboard&controller_prompts_pack\\Xbox One\\XboxOne_A.png";
@@ -85,10 +85,13 @@ void CTextureManager::Init()
 			fileName = "D:\\Users\\Thorsten\\Documents\\Graphics\\Platform Buttons\\Xelu_FREE_keyboard&controller_prompts_pack\\Keyboard & Mouse\\Light\\Keyboard_White_E.png";
 			break;
 		case TextureName::BUTTON_SPECIAL_INTERACTION:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Special Button Sprites\\Interaction.png";
+			fileName = "..\\Resources\\Textures\\Special Button Sprites\\Interaction.png";
 			break;
 		case TextureName::BACKGROUND_SPACE:
-			fileName = "D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\background_space.png";
+			fileName = "..\\Resources\\Textures\\background_space.png";
+			break;
+		case TextureName::COAL:
+			fileName = "..\\Resources\\Textures\\TileAtlas\\Coal.png";
 			break;
 
 		default:

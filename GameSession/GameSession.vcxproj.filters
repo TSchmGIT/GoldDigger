@@ -204,22 +204,55 @@
     <ClInclude Include="Actor\Health\ActorHealth.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\Equipment\Modules\BaseModule.h">
+    <ClInclude Include="Data\DataManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\Equipment\Modules\ModuleMotor.h">
+    <ClInclude Include="Data\DataDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleCargo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleDrill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleFuelTank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleHull.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleMotor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleHull.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actor\Equipment\Modules\ModuleFuelTank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\Equipment\Modules\ModuleDrill.h">
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\DefinesModules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\EnumsModules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\EquipmentFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleMotor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actor\Equipment\Modules\ModuleCargo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\Equipment\Modules\ModuleHull.h">
+    <ClInclude Include="Actor\Equipment\Modules\ModuleDrill.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -362,19 +395,40 @@
     <ClCompile Include="Actor\Health\ActorHealth.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actor\Equipment\EquipmentEnums.h">
+    <ClCompile Include="Data\DataManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actor\Equipment\Modules\BaseModule.cpp">
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleCargo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleDrill.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleFuelTank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleHull.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleMotor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\ModuleBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Actor\Equipment\Modules\ModuleHull.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actor\Equipment\Modules\ModuleMotor.cpp">
+    <ClCompile Include="Actor\Equipment\Modules\ModuleFuelTank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actor\Equipment\Modules\ModuleFuelTank.cpp">
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\EquipmentFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\ModuleMotor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Actor\Equipment\Modules\ModuleDrill.cpp">

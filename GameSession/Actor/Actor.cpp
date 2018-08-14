@@ -82,7 +82,8 @@ void CActor::Tick()
 
 	Vector2 oldPos = m_Position;
 
-	// Update motor
+	// Update member
+	m_Equipment->Tick();
 	m_Motor->Tick();
 
 	// Make camera focus the player

@@ -4,6 +4,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "GameSession/Actor/Actor.h"
+#include "GameSession/Data/DataManager.h"
 #include "GameSession/Manager/CameraManager.h"
 #include "GameSession/Manager/GameObjectManager.h"
 #include "GameSession/Manager/InputManager.h"
@@ -49,6 +50,10 @@ void CGameManager::Construct()
 
 void CGameManager::Init()
 {
+	hvda::CDataManager::GetMutable().Init();
+
+	//////////////////////////////////////////////////////////////////////////
+
 	CTimeManager::GetMutable().Init();
 
 	//////////////////////////////////////////////////////////////////////////

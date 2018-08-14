@@ -1,0 +1,42 @@
+[
+  {
+    "guid": 500,
+    "name": "Basic Tank",
+    "fueltype": "oil",
+    "consumption": 100,
+    "capacity": 10000,
+    "price": 0
+  },
+  {
+    "guid": 501,
+    "name": "Advanced Tank",
+    "fueltype": "oil",
+    "consumption": 150,
+    "capacity": 30000,
+    "price": 500
+  },
+  {
+    "guid": 502,
+    "name": "Pro Tank",
+    "fueltype": "oil",
+    "consumption": 300,
+    "capacity": 100000,
+    "price": 1500
+  },
+  {
+    "guid": 520,
+    "name": "Gas Tank",
+    "fueltype": "gas",
+    "consumption": 30,
+    "capacity": 15000,
+    "price": 4000
+  },
+  {
+    "guid": 521,
+    "name": "Advanced Gas Tank",
+    "fueltype": "gas",
+    "consumption": 75,
+    "capacity": 75000,
+    "price": 10000
+  }
+]

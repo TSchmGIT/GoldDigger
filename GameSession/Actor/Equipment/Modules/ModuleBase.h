@@ -1,15 +1,5 @@
 #pragma once
-
 #include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleBase.h"
-#include "GameSession/Actor/Equipment/Modules/EnumsModules.h"
-
-
-/////////////////////////////////////////////////////////////////////////////
-
-namespace hvgs
-{
-class CModuleBase;
-}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -18,20 +8,22 @@ namespace hvgs
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CEquipment
+class CModuleBase
 {
 
 public:
-	CEquipment();
-	virtual ~CEquipment() = default;
+	CModuleBase(ModuleID moduleID, const hvda::CDataTemplateModuleBase& dataTemplate);
+	virtual ~CModuleBase() = default;
 
-	void InitAfterCreation();
-	void InitAfterLoading();
-
-	void Tick();
+public:
+	virtual void Tick();
 
 protected:
-	Map<hvgs::ModuleType, WeakPtr<CModuleBase>> m_ModuleMap;
+	const hvda::CDataTemplateModuleBase& m_Template;
+
+	ModuleID m_ID = MODULE_ID_INVALID;
+	ModuleGUID m_GUID = MODULE_GUID_INVALID;
+	String m_Name = "";
 };
 
 /////////////////////////////////////////////////////////////////////////////

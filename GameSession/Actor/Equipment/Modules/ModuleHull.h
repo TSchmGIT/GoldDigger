@@ -1,5 +1,6 @@
 #pragma once
-#include "GameSession/Actor/Equipment/Modules/BaseModule.h"
+#include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleHull.h"
+#include "GameSession/Actor/Equipment/Modules/ModuleBase.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -8,13 +9,19 @@ namespace hvgs
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CModuleHull : public CBaseModule
+class CModuleHull : public CModuleBase
 {
 
 public:
-	CModuleHull() = default;
+	CModuleHull(ModuleID moduleID, const hvda::CDataTemplateModuleHull& dataTemplate);
 	virtual ~CModuleHull() = default;
 
+public:
+	HullPoints GetHP() const;
+	void SetHP(HullPoints hp);
+
+protected:
+	HullPoints m_HP = HullPoints(0);
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "SceneManager.h"
-#include "GameSession/UI/Scenes/InventoryScene.h"
+
+#include "GameSession/Manager/InputManager.h"
 #include "GameSession/UI/Scenes/BuildingBrokerScene.h"
-#include "Manager/InputManager.h"
+#include "GameSession/UI/Scenes/InventoryScene.h"
 
 //////////////////////////////////////////////////////////////////////////
 

@@ -57,7 +57,7 @@ void CChunkSlice::CalculateTiles()
 		for (hvuint8 y = 0; y < CHUNKSLICE_SIZE_Y; ++y)
 		{
 			size_t index = GetIndex(x, y);
-			float noiseValue = noiseMap[index];
+			float noiseValue = noiseMap[index] * 0.5f + 0.5f;
 
 			TileType tileType;
 			if (noiseValue >= 0.85f)
@@ -66,11 +66,11 @@ void CChunkSlice::CalculateTiles()
 			}
 			else if (noiseValue >= 0.3f)
 			{
-				tileType = TileType::Stone;
+				tileType = TileType::Dirt;
 			}
 			else
 			{
-				tileType = TileType::Dirt;
+				tileType = TileType::Air;
 			}
 
 			m_Tiles[index].Init(GetWorldPos() + WorldPos(float(x), float(y)), tileType);

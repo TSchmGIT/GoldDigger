@@ -7,7 +7,7 @@ namespace hvsdk
 
 /////////////////////////////////////////////////////////////////////////////
 
-#define  NamedTemplate template<typename T, typename TAG>
+#define NamedTemplate template<typename T, typename TAG>
 #define NamedType hvsdk::CNamedType<T, TAG>
 
 NamedTemplate
@@ -15,6 +15,8 @@ class CNamedType
 {
 
 public:
+	using value_type = T;
+
 	explicit CNamedType() : m_Value() {}
 	explicit CNamedType(const T& value) : m_Value(value) {}
 	constexpr const T& get() const { return m_Value; }
@@ -53,6 +55,17 @@ NamedTemplate constexpr bool operator <=(const NamedType& lhs, const NamedType& 
 //////////////////////////////////////////////////////////////////////////
 
 } // hvsdk
+
+namespace std
+{
+NamedTemplate struct hash<NamedType>
+{
+	constexpr size_t operator()(const NamedType& namedType) const
+	{
+		return std::hash<T>()(namedType.get());
+	}
+};
+}
 
 namespace boost
 {

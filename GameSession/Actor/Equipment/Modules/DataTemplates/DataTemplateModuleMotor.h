@@ -1,21 +1,22 @@
 #pragma once
-#include "GameSession/Actor/Equipment/EquipmentEnums.h"
+#include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleBase.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
-namespace hvgs
+namespace hvda
 {
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CBaseModule
+class CDataTemplateModuleMotor : public CDataTemplateModuleBase
 {
 
 public:
-	CBaseModule() = default;
-	virtual ~CBaseModule() = default;
+	CDataTemplateModuleMotor(const JSON& json);
+	virtual ~CDataTemplateModuleMotor() = default;
+
 };
 
 /////////////////////////////////////////////////////////////////////////////
 
-} // hvgs
+} // hvda

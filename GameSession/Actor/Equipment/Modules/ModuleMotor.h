@@ -1,5 +1,6 @@
 #pragma once
-#include "GameSession/Actor/Equipment/Modules/BaseModule.h"
+#include "DataTemplates/DataTemplateModuleMotor.h"
+#include "GameSession/Actor/Equipment/Modules/ModuleBase.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -8,11 +9,11 @@ namespace hvgs
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CModuleMotor : public CBaseModule
+class CModuleMotor : public CModuleBase
 {
 
 public:
-	CModuleMotor() = default;
+	CModuleMotor(ModuleID moduleID, const hvda::CDataTemplateModuleMotor& dataTemplate);
 	virtual ~CModuleMotor() = default;
 
 };

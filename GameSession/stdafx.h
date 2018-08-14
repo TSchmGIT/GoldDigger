@@ -68,6 +68,8 @@
 
 //////////////////////////////////////////////////////////////////////////
 // Haven GameSession
+#include "GameSession/Data/DataDefines.h"
+
 #include "GameSession/Meta/Defines.h"
 #include "GameSession/Meta/Events.h"
 #include "GameSession/Meta/TrackTime.h"

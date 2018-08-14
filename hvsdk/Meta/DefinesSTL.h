@@ -17,7 +17,7 @@ template<typename T>
 using WeakPtr = std::weak_ptr<T>;
 
 template<typename Key, typename Value>
-using Map = boost::unordered_map<Key, Value>;
+using Map = std::unordered_map<Key, Value>;
 
 template<typename Key>
 using Vector = std::vector<Key>;

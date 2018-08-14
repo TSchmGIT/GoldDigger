@@ -1,0 +1,31 @@
+#include "stdafx.h"
+#include "ModuleBase.h"
+
+#include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleBase.h"
+
+//////////////////////////////////////////////////////////////////////////
+
+namespace hvgs
+{
+
+//////////////////////////////////////////////////////////////////////////
+
+CModuleBase::CModuleBase(ModuleID moduleID, const hvda::CDataTemplateModuleBase& dataTemplate)
+	: m_Template(dataTemplate)
+	, m_ID(moduleID)
+	, m_GUID(dataTemplate.GetGUID())
+	, m_Name(dataTemplate.GetName())
+{
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CModuleBase::Tick()
+{
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+} // hvgs

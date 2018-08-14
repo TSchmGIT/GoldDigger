@@ -1,19 +1,20 @@
 #include "stdafx.h"
-#include "ModuleCargo.h"
+#include "DataTemplateModuleDrill.h"
 
 //////////////////////////////////////////////////////////////////////////
 
-namespace hvgs
+namespace hvda
 {
 
 //////////////////////////////////////////////////////////////////////////
 
-CModuleCargo::CModuleCargo(ModuleID moduleID, hvda::CDataTemplateModuleCargo dataTemplate)
-	: CModuleBase(moduleID, dataTemplate)
+CDataTemplateModuleDrill::CDataTemplateModuleDrill(const JSON& json)
+	: CDataTemplateModuleBase(json)
 {
 
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-} // hvgs
+
+} // hvda

@@ -1,0 +1,26 @@
+[
+  {
+    "guid": 100,
+    "price": 0,
+    "name": "Basic Hull",
+    "hp": 100
+  },
+  {
+    "guid": 101,
+    "price": 0,
+    "name": "Advanced Hull",
+    "hp": 150
+  },
+  {
+    "guid": 102,
+    "price": 0,
+    "name": "Hyper Hull",
+    "hp": 250
+  },
+  {
+    "guid": 103,
+    "price": 0,
+    "name": "Black Hull",
+    "hp": 1000
+  }
+]

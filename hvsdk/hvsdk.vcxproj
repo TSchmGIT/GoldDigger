@@ -166,6 +166,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="JSON\json.hpp" />
     <ClInclude Include="Meta\Assert.h" />
     <ClInclude Include="Meta\DefinesSTL.h" />
     <ClInclude Include="Meta\Log.h" />

@@ -2,7 +2,6 @@
 #include "Equipment.h"
 
 #include "GameSession/Actor/Equipment/EquipmentFactory.h"
-#include "GameSession/Actor/Equipment/Modules/ModuleBase.h"
 #include "GameSession/Actor/Equipment/Modules/ModuleFuelTank.h"
 #include "GameSession/Actor/Equipment/Modules/ModuleHull.h"
 
@@ -13,18 +12,12 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CEquipment::CEquipment()
-{
-}
-
-//////////////////////////////////////////////////////////////////////////
-
 void CEquipment::InitAfterCreation()
 {
 	// Fill with default data
 	for (auto equipmentType = ModuleType(0); equipmentType < ModuleType::Count; equipmentType = ModuleType(int(equipmentType) + 1))
 	{
-		WeakPtr<CModuleBase> module = CEquipmentFactory::GetMutable().CreateDefaultModule(equipmentType);
+		ModulePtr module = CEquipmentFactory::GetMutable().CreateDefaultModule(equipmentType, *this);
 
 		m_ModuleMap.emplace(equipmentType, std::move(module));
 	}
@@ -44,13 +37,23 @@ void CEquipment::Tick()
 	// Tick all modules
 	for (const auto& kvPair : m_ModuleMap)
 	{
-		auto& weakPtr = kvPair.second;
-		ASSERT_OR_EXECUTE(!weakPtr.expired(), continue);
+		auto& moduleInstance = kvPair.second;
+		moduleInstance->Tick();
+	}
+}
 
-		auto sharedPtr = weakPtr.lock();
-		ASSERT_OR_EXECUTE(sharedPtr, continue);
+//////////////////////////////////////////////////////////////////////////
 
-		sharedPtr->Tick();
+hvgs::CModuleBase* CEquipment::GetModule(hvgs::ModuleType moduleType) const
+{
+	auto itFind = m_ModuleMap.find(moduleType);
+	if (itFind != m_ModuleMap.end())
+	{
+		return itFind->second.get();
+	}
+	else
+	{
+		return nullptr;
 	}
 }
 

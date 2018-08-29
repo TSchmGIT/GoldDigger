@@ -42,10 +42,10 @@ void CInventoryScene::Enter()
 	m_InventorySlotButtonList.clear();
 	for (const auto& itemStack : inventory.GetStackList())
 	{
-		auto& itemButton = m_InventorySlotButtonList.emplace_back(std::make_unique<CUIButton>(), itemStack->GetCurrentAmount());
+		auto& itemButton = m_InventorySlotButtonList.emplace_back(std::make_unique<CUIButton>(), itemStack.GetCurrentAmount());
 
 		// Update texture
-		const auto* item = itemStack->GetFirstItem();
+		const auto* item = itemStack.GetFirstItem();
 		ASSERT_OR_EXECUTE(item, continue); //< item stacks in the inventory must have items in their stack
 
 		itemButton.first->SetTextureForState(ButtonState::Default, item->GetTextureName());

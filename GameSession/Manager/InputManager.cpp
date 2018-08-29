@@ -69,6 +69,8 @@ void CInputManager::PrepareTick()
 
 void CInputManager::RegisterKeyPressed(KeyCode keycode)
 {
+	ASSERT_OR_EXECUTE(keycode > KeyCode::Unknown && keycode < KeyCode::Count, return);
+
 	// When the key is pressed it cannot be released
 	m_KeyCodeArrayUp[size_t(keycode)] = false;
 
@@ -83,6 +85,8 @@ void CInputManager::RegisterKeyPressed(KeyCode keycode)
 
 void CInputManager::RegisterKeyReleased(KeyCode keycode)
 {
+	ASSERT_OR_EXECUTE(keycode > KeyCode::Unknown && keycode < KeyCode::Count, return);
+
 	// When the key was released it cannot be pressed down
 	m_KeyCodeArrayDown[size_t(keycode)] = false;
 

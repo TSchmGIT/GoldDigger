@@ -1,4 +1,5 @@
 #pragma once
+#include "GameSession/Items/ItemStack.h"
 #include "GameSession/Rendering/IRenderElement.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -6,7 +7,6 @@
 namespace hvgs
 {
 class CItemBase;
-class CItemStack;
 }
 
 namespace hvgs
@@ -19,9 +19,8 @@ class CInventory
 {
 
 public:
-	CInventory();
-	CInventory(const CInventory& other);
-	virtual ~CInventory();
+	CInventory() = default;
+	virtual ~CInventory() = default;
 
 public:
 	virtual void Draw() const override; // Render element
@@ -35,10 +34,10 @@ public:
 	void RemoveStackAt(size_t index);
 
 	CItemStack* GetStackAt(size_t index);
-	const Vector<UniquePtr<CItemStack>>& GetStackList() const;
+	const Vector<CItemStack>& GetStackList() const;
 
 protected:
-	Vector<UniquePtr<CItemStack>> m_ItemStackList;
+	Vector<CItemStack> m_ItemStackList;
 };
 
 /////////////////////////////////////////////////////////////////////////////

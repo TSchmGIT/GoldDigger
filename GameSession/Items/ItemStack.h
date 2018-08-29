@@ -1,12 +1,7 @@
 #pragma once
 #include "GameSession/World/WorldEnums.h"
+#include "ItemBase.h"
 
-/////////////////////////////////////////////////////////////////////////////
-
-namespace hvgs
-{
-class CItemBase;
-}
 
 namespace hvgs
 {
@@ -18,8 +13,12 @@ class CItemStack
 
 public:
 	CItemStack(TileType tileType);
+	CItemStack(const CItemStack& other);
 	CItemStack(CItemStack&& other) = default;
 	virtual ~CItemStack() = default;
+
+	CItemStack& operator=(const CItemStack& other);
+	CItemStack& operator=(CItemStack&& other) = default;
 
 public:
 	/// Adds a new item to the stack
@@ -44,7 +43,7 @@ public:
 
 public: ///< Convenient helper methods
 	bool Empty() const;
-	bool Full() const;
+	bool IsFull() const;
 
 protected:
 	size_t		m_Capacity = 16; ///< The maximum allowed amount of items in this stack

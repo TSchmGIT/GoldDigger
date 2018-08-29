@@ -13,7 +13,7 @@ class CModuleMotor : public CModuleBase
 {
 
 public:
-	CModuleMotor(ModuleID moduleID, const hvda::CDataTemplateModuleMotor& dataTemplate);
+	CModuleMotor(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleMotor& dataTemplate);
 	virtual ~CModuleMotor() = default;
 
 };

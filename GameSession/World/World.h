@@ -22,7 +22,7 @@ class CWorld
 
 public:
 	CWorld();
-	virtual ~CWorld();
+	virtual ~CWorld() = default;
 
 	static CWorld& GetMutable();
 	static const CWorld& Get();
@@ -31,6 +31,8 @@ public:
 	void Init();
 
 	void Tick();
+
+	void Shutdown();
 
 public:
 	const Map<ChunkInterval, UniquePtr<CChunk>>& GetChunks() const;
@@ -62,13 +64,10 @@ protected:
 protected:
 	Map<ChunkInterval, UniquePtr<CChunk>> m_ChunkMap;
 
-	hvsdk::CObjectPool<CChunk>	m_ChunkPool;
-
 	//////////////////////////////////////////////////////////////////////////
 	// Buildings
 	Vector<UniquePtr<CBuildingBase>>	m_Buildings;
 
-private:
 	UniquePtr<CActor> m_Actor = nullptr;
 };
 

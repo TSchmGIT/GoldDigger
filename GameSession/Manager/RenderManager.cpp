@@ -30,14 +30,6 @@ CRenderManager::CRenderManager()
 	: CSingletonBase()
 	, m_PoolSprites(32, 1000)
 {
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CRenderManager::~CRenderManager()
-{
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -60,7 +52,7 @@ void CRenderManager::Init()
 	m_Window->setVerticalSyncEnabled(true);
 
 	sf::Image icon;
-	bool loadFromFile = icon.loadFromFile("D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Actor.png");
+	bool loadFromFile = icon.loadFromFile(R"(D:\Users\Thorsten\Documents\Programming\C++\Projects\GoldDigger\Resources\Textures\Actor.png)");
 	ASSERT_OR_EXECUTE(loadFromFile, return);
 
 	if (loadFromFile)
@@ -123,7 +115,6 @@ sf::RenderWindow* CRenderManager::GetWindow()
 
 hvuint CRenderManager::GetScreenWidth() const
 {
-	ASSERT_OR_EXECUTE(m_Window, return 0);
 	return m_Window->getSize().x;
 }
 
@@ -131,7 +122,6 @@ hvuint CRenderManager::GetScreenWidth() const
 
 hvuint CRenderManager::GetScreenHeight() const
 {
-	ASSERT_OR_EXECUTE(m_Window, return 0);
 	return m_Window->getSize().y;
 }
 
@@ -139,7 +129,6 @@ hvuint CRenderManager::GetScreenHeight() const
 
 hvgs::ScreenPos CRenderManager::GetScreenCenter() const
 {
-	ASSERT_OR_EXECUTE(m_Window, return ScreenPos());
 	return ScreenPos(m_Window->getSize()) * 0.5f;
 }
 

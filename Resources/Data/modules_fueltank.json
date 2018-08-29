@@ -3,7 +3,7 @@
     "guid": 500,
     "name": "Basic Tank",
     "fueltype": "oil",
-    "consumption": 100,
+    "consumption": 20,
     "capacity": 10000,
     "price": 0
   },

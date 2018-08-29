@@ -14,27 +14,6 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CInventory::CInventory()
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CInventory::CInventory(const CInventory&)
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CInventory::~CInventory()
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
 void CInventory::Draw() const
 {
 	CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, 100.0f), "Inventory", Alignment::TopLeft, FontName::Arial);
@@ -44,10 +23,10 @@ void CInventory::Draw() const
 	{
 		float y = 200 + counter * 50.0f;
 
-		const auto* item = itemStack->GetFirstItem();
+		const auto* item = itemStack.GetFirstItem();
 		ASSERT_OR_EXECUTE(item, continue);
 
-		String text = item->GetDisplayName() + " (" + std::to_string(itemStack->GetCurrentAmount()) + ")";
+		String text = item->GetDisplayName() + " (" + std::to_string(itemStack.GetCurrentAmount()) + ")";
 
 		CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, y), text, Alignment::TopLeft, FontName::Arial, 40U);
 		counter++;
@@ -58,7 +37,7 @@ void CInventory::Draw() const
 
 bool CInventory::HasItems() const
 {
-	return m_ItemStackList.size() > 0;
+	return !m_ItemStackList.empty();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -71,17 +50,17 @@ void CInventory::AddItem(UniquePtr<CItemBase> itemBase)
 
 	for (auto& itemStack : m_ItemStackList)
 	{
-		if (itemStack->GetTileType() != itemBlock->GetTileType())
+		if (itemStack.GetTileType() != itemBlock->GetTileType())
 		{
 			continue;
 		}
 
-		if (itemStack->Full())
+		if (itemStack.IsFull())
 		{
 			continue;
 		}
 
-		itemStack->AddItem(std::move(itemBase));
+		itemStack.AddItem(std::move(itemBase));
 		return;
 	}
 
@@ -90,7 +69,7 @@ void CInventory::AddItem(UniquePtr<CItemBase> itemBase)
 	stack.AddItem(std::move(itemBase));
 
 	// Add stack to list
-	m_ItemStackList.push_back(std::make_unique<CItemStack>(std::move(stack)));
+	m_ItemStackList.emplace_back(std::move(stack));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -113,18 +92,13 @@ void CInventory::RemoveStackAt(size_t index)
 
 hvgs::CItemStack* CInventory::GetStackAt(size_t index)
 {
-	if (m_ItemStackList.size() == 0)
-	{
-		return nullptr;
-	}
-
 	ASSERT_OR_EXECUTE(index < m_ItemStackList.size(), return nullptr);
-	return m_ItemStackList[index].get();
+	return &m_ItemStackList[index];
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const Vector<UniquePtr<hvgs::CItemStack>>& CInventory::GetStackList() const
+const Vector<hvgs::CItemStack>& CInventory::GetStackList() const
 {
 	return m_ItemStackList;
 }

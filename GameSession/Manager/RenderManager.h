@@ -1,4 +1,6 @@
 #pragma once
+#include <hvsdk/Meta/ObjectPool.h>
+
 #include "GameSession/Manager/SingletonBase.h"
 #include "GameSession/Rendering/Fonts/EnumsFont.h"
 
@@ -28,7 +30,7 @@ class CRenderManager : public CSingletonBase<CRenderManager>
 
 public:
 	CRenderManager();
-	virtual ~CRenderManager();
+	virtual ~CRenderManager() = default;
 
 	void PrepareTick();
 

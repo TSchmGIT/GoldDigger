@@ -15,7 +15,6 @@ class CItemBlock : public CItemBase
 public:
 	CItemBlock() = default;
 	CItemBlock(TileType tileType);
-
 	virtual ~CItemBlock() = default;
 
 	TileType GetTileType() const;

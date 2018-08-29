@@ -66,7 +66,7 @@ void CBuildingBroker::PerformTransactionBuy(CActor& actor) const
 	MoneyAmount reward;
 	for (const auto& itemStack : inventory.GetStackList())
 	{
-		reward += GetPrice(itemStack->GetTileType()) * MoneyAmount(itemStack->GetCurrentAmount());
+		reward += GetPrice(itemStack.GetTileType()) * MoneyAmount(itemStack.GetCurrentAmount());
 	}
 	economy.AddMoney(reward);
 

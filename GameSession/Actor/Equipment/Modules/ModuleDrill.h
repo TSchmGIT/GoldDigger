@@ -13,7 +13,7 @@ class CModuleDrill : public CModuleBase
 {
 
 public:
-	CModuleDrill(ModuleID moduleID, const hvda::CDataTemplateModuleDrill& dataTemplate);
+	CModuleDrill(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleDrill& dataTemplate);
 	virtual ~CModuleDrill() = default;
 };
 

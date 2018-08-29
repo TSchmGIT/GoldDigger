@@ -19,6 +19,35 @@ CItemStack::CItemStack(TileType tileType)
 
 //////////////////////////////////////////////////////////////////////////
 
+CItemStack::CItemStack(const CItemStack& other)
+	: m_Capacity(other.m_Capacity)
+	, m_TileType(other.m_TileType)
+{
+	m_ItemList.clear();
+	for (const UniquePtr<CItemBase>& item : other.m_ItemList)
+	{
+		m_ItemList.emplace_back(std::make_unique<CItemBase>(*item));
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::CItemStack& CItemStack::operator=(const CItemStack& other)
+{
+	m_Capacity = other.m_Capacity;
+	m_TileType = other.m_TileType;
+
+	m_ItemList.clear();
+	for (const UniquePtr<CItemBase>& item : other.m_ItemList)
+	{
+		m_ItemList.emplace_back(std::make_unique<CItemBase>(*item));
+	}
+
+	return *this;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CItemStack::AddItem(UniquePtr<CItemBase> item)
 {
 	ASSERT_OR_EXECUTE(item, return);
@@ -28,7 +57,7 @@ void CItemStack::AddItem(UniquePtr<CItemBase> item)
 		return;
 	}
 
-	m_ItemList.push_back(std::move(item));
+	m_ItemList.emplace_back(std::move(item));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -121,7 +150,7 @@ bool CItemStack::Empty() const
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CItemStack::Full() const
+bool CItemStack::IsFull() const
 {
 	return m_Capacity > 0 && GetCurrentAmount() == int(m_Capacity);
 }

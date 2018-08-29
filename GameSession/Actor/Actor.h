@@ -31,9 +31,9 @@ class CActor
 {
 public:
 	CActor();
-	CActor(const CActor& other);
-	CActor(CActor&& other);
-	virtual ~CActor();
+	CActor(const CActor& other) = delete;
+	CActor(CActor&& other) = default;
+	virtual ~CActor() = default;
 
 public: // IGameObject
 	virtual void InitAfterCreation() override;
@@ -77,11 +77,11 @@ protected:
 protected:
 	WorldPos					m_Position = WorldPos({ 0.0f, 0.0f });
 
-	UniquePtr<CActorHealth>		m_Health = std::make_unique<CActorHealth>();
-	UniquePtr<CActorEconomy>	m_Economy = std::make_unique<CActorEconomy>();
-	UniquePtr<CInventory>		m_Inventory = std::make_unique<CInventory>();
-	UniquePtr<CEquipment>		m_Equipment = std::make_unique<CEquipment>();
-	UniquePtr<CMotorBase>		m_Motor = std::make_unique<CMotorDefault>(this);
+	UniquePtr<CActorHealth>		m_Health;
+	UniquePtr<CActorEconomy>	m_Economy;
+	UniquePtr<CInventory>		m_Inventory;
+	UniquePtr<CEquipment>		m_Equipment;
+	UniquePtr<CMotorBase>		m_Motor;
 
 };
 

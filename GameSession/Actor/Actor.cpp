@@ -26,6 +26,7 @@
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/Tile.h"
 #include "GameSession/World/World.h"
+#include "Equipment/Modules/ModuleFuelTank.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -36,35 +37,12 @@ namespace hvgs
 ////////////////////////////////////////////////////////////////////////////
 
 CActor::CActor()
+	: m_Health(std::make_unique<CActorHealth>())
+	, m_Economy(std::make_unique<CActorEconomy>())
+	, m_Inventory(std::make_unique<CInventory>())
+	, m_Equipment(std::make_unique<CEquipment>())
+	, m_Motor(std::make_unique<CMotorDefault>(*this))
 {
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CActor::CActor(const CActor& other)
-{
-	if (other.m_Inventory)
-	{
-		m_Inventory = std::make_unique<CInventory>(*other.m_Inventory);
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CActor::CActor(CActor&& other)
-	: m_Position(other.m_Position)
-	, m_Inventory(std::move(other.m_Inventory))
-	, m_Equipment(std::move(other.m_Equipment))
-	, m_Motor(std::move(other.m_Motor))
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CActor::~CActor()
-{
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -100,7 +78,12 @@ void CActor::Draw() const
 	renderManager.DrawSpriteWorld(m_Position, TextureName::ACTOR, Alignment::CenterBottom);
 
 	// Money
-	renderManager.DrawText(ScreenPos(CRenderManager::Get().GetScreenWidth() - 400.0f, 0.0f), "Money: " + std::to_string(m_Economy->GetMoney().get()));
+	//renderManager.DrawText(ScreenPos(CRenderManager::Get().GetScreenWidth() - 400.0f, 0.0f), "Money: " + std::to_string(m_Economy->GetMoney().get()));
+
+	const auto* module = m_Equipment->GetModule(ModuleType::FuelTank);
+	const auto* moduleFuelTank = static_cast<const CModuleFuelTank*>(module);
+	ASSERT_OR_EXECUTE(moduleFuelTank, return);
+	renderManager.DrawText(ScreenPos(CRenderManager::Get().GetScreenWidth() - 400.0f, 0.0f), "Fuel: " + std::to_string(int(moduleFuelTank->GetFuelPercentage() * 100)) + " %");
 
 	// Thruster sprite
 	if (m_Motor->IsThrusterInUse())
@@ -189,7 +172,7 @@ hvgs::CEquipment& CActor::GetEquipment()
 void CActor::StartDigging(const CTile& tile)
 {
 	m_Motor = std::make_unique<CMotorDigging>(*m_Motor);
-	CMotorDigging* motorDigging = boost::dynamic_pointer_cast<CMotorDigging>(m_Motor.get());
+	auto motorDigging = static_cast<CMotorDigging*>(m_Motor.get());
 	motorDigging->SetTargetPosition(tile.GetCenter() - WorldPos{ 0.0f, 0.5f });
 	motorDigging->SetDiggingPower(0.8f);
 }

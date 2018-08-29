@@ -9,11 +9,11 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-template<typename T>
+template<class T>
 using UniquePtr = std::unique_ptr<T>;
-template<typename T>
+template<class T>
 using SharedPtr = std::shared_ptr<T>;
-template<typename T>
+template<class T>
 using WeakPtr = std::weak_ptr<T>;
 
 template<typename Key, typename Value>

@@ -89,7 +89,7 @@ void CGameManager::InitAfterCreation()
 
 void CGameManager::Shutdown()
 {
-
+	m_World->Shutdown();
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -23,11 +23,11 @@ CBuildingBrokerScene::CBuildingBrokerScene()
 {
 	m_SellAllButton->SetPosition({ 1028.0f, 477.0f });
 	m_SellAllButton->SetSize({ 405.0f, 63.0f });
-	m_SellAllButton->SetAction(boost::bind(&CBuildingBrokerScene::OnSellAllButtonPressed, this));
+	m_SellAllButton->SetAction(std::bind(&CBuildingBrokerScene::OnSellAllButtonPressed, this));
 
 	m_ExitButton->SetPosition({ 1028.0f, 669.0f });
 	m_ExitButton->SetSize({ 405.0f, 63.0f });
-	m_ExitButton->SetAction(boost::bind(&CBuildingBrokerScene::OnExitButtonPressed, this));
+	m_ExitButton->SetAction(std::bind(&CBuildingBrokerScene::OnExitButtonPressed, this));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -128,10 +128,10 @@ void CBuildingBrokerScene::UpdateInventory()
 	m_InventorySlotButtonList.clear();
 	for (const auto& itemStack : inventory.GetStackList())
 	{
-		auto& itemButton = m_InventorySlotButtonList.emplace_back(std::make_unique<CUIButton>(), itemStack->GetCurrentAmount());
+		auto& itemButton = m_InventorySlotButtonList.emplace_back(std::make_unique<CUIButton>(), itemStack.GetCurrentAmount());
 
 		// Update texture
-		const auto* item = itemStack->GetFirstItem();
+		const auto* item = itemStack.GetFirstItem();
 		ASSERT_OR_EXECUTE(item, continue); //< item stacks in the inventory must have items in their stack
 
 		itemButton.first->SetTextureForState(ButtonState::Default, item->GetTextureName());

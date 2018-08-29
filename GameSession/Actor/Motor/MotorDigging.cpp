@@ -7,6 +7,9 @@
 #include "GameSession/Manager/TimeManager.h"
 #include "GameSession/World/Tile.h"
 #include "GameSession/World/World.h"
+#include "../Equipment/Modules/EnumsModules.h"
+#include "../Equipment/Equipment.h"
+#include "../Equipment/Modules/ModuleFuelTank.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -19,20 +22,6 @@ CMotorDigging::CMotorDigging(const CMotorBase& other)
 	: CMotorBase(other)
 {
 
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CMotorDigging::CMotorDigging(const CMotorDigging& other)
-	: CMotorBase(other)
-	, m_TargetPos(other.m_TargetPos)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CMotorDigging::~CMotorDigging()
-{
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -62,17 +51,29 @@ void CMotorDigging::Tick()
 {
 	CMotorBase::Tick(); // Base call
 
+	
+	if (auto* moduleFuelTank = m_Actor.GetEquipment().GetModule<CModuleFuelTank>(); moduleFuelTank)
+	{
+		moduleFuelTank->SetFuelPenalty(FuelPenalty::Digging, true);
+	}
+
 	// Move towards target
-	WorldPos newPos = Vector2::MoveTowards(m_Actor->GetPosition(), m_TargetPos, m_DiggingPower * CTimeManager::Get().GetGameDeltaTime());
-	m_Actor->SetPosition(newPos);
+	WorldPos newPos = Vector2::MoveTowards(m_Actor.GetPosition(), m_TargetPos, m_DiggingPower * CTimeManager::Get().GetGameDeltaTime());
+	m_Actor.SetPosition(newPos);
 
 	// Check if close to target and end digging
 	if (Vector2::SqrMagnitude(newPos - m_TargetPos) < 0.025f * 0.025f) // 0.025f distance to target as threshold
 	{
-		ProcessTileDigging(); // Destorys tile and grants item
+		ProcessTileDigging(); // Destroys tile and grants item
+
+		// remove fuel penalty
+		if (auto* moduleFuelTank = m_Actor.GetEquipment().GetModule<CModuleFuelTank>(); moduleFuelTank)
+		{
+			moduleFuelTank->SetFuelPenalty(FuelPenalty::Digging, false);
+		}
 
 		// Stop digging motor
-		m_Actor->StopDigging();
+		m_Actor.StopDigging();
 		return;
 	}
 }
@@ -90,7 +91,7 @@ void CMotorDigging::ProcessTileDigging()
 	CWorld::GetMutable().SetTileAt(m_TargetPos, TileType::Air);
 
 	// Collect resource dropped
-	m_Actor->GetInventory().AddItem(std::make_unique<CItemBlock>(tileType));
+	m_Actor.GetInventory().AddItem(std::make_unique<CItemBlock>(tileType));
 
 	// Notify actor to stop digging
 }

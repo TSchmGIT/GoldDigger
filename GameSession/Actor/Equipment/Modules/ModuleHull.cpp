@@ -8,8 +8,8 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CModuleHull::CModuleHull(ModuleID moduleID, const hvda::CDataTemplateModuleHull& dataTemplate)
-	: CModuleBase(moduleID, dataTemplate)
+CModuleHull::CModuleHull(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleHull& dataTemplate)
+	: CModuleBase(moduleID, equipment, dataTemplate)
 	, m_HP(dataTemplate.GetMaxHP())
 {
 

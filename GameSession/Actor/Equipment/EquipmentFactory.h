@@ -3,12 +3,14 @@
 #include "GameSession/Manager/SingletonBase.h"
 
 #include "GameSession/Actor/Equipment/Modules/EnumsModules.h"
+#include "GameSession/Actor/Equipment/Modules/ModuleBase.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
 {
 class CModuleBase;
+class CEquipment;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -20,37 +22,39 @@ namespace hvgs
 
 class CEquipmentFactory : public CSingletonBase<CEquipmentFactory>
 {
-
 public:
 	CEquipmentFactory() = default;
 	virtual ~CEquipmentFactory() = default;
 
 public:
-	WeakPtr<CModuleBase> CreateDefaultModule(ModuleType moduleType);
-	WeakPtr<CModuleBase> CreateModule(ModuleType moduleType, ModuleGUID moduleGUID);
+	ModulePtr CreateDefaultModule(ModuleType moduleType, CEquipment& parentEquipment);
+	ModulePtr CreateModule(ModuleType moduleType, ModuleGUID moduleGUID, CEquipment& parentEquipment);
 
 protected:
+	void DestroyModule(CModuleBase* moduleInstance);
+
 	template<class ModuleClass, class ModuleTemplate>
-	WeakPtr<CModuleBase> CreateModule(ModuleGUID guid)
+	ModulePtr CreateModule(ModuleGUID guid, CEquipment& parentEquipment)
 	{
 		const auto*	moduleTemplate = hvda::CDataManager::Get().GetModuleTemplate<ModuleTemplate>(guid);
-		ASSERT_OR_EXECUTE(moduleTemplate, return hvgs::WeakPtr<hvgs::CModuleBase>());
+		ASSERT_OR_EXECUTE(moduleTemplate, return ModulePtr(nullptr, nullptr));
 
 		// Create new module of specific type
-		auto moduleInstance = std::make_shared<ModuleClass>(m_UniqueModuleID, *moduleTemplate);
+		auto boundDeleter = [this](CModuleBase* moduleBase) { DestroyModule(moduleBase); };
+		ModulePtr moduleInstance(new ModuleClass(m_UniqueModuleID, parentEquipment, *moduleTemplate), boundDeleter);
 
 		// Emplace it in the map
-		auto emplaceResult = m_ModuleInstanceMap.emplace(m_UniqueModuleID, moduleInstance);
-		ASSERT_OR_EXECUTE(emplaceResult.second, return hvgs::WeakPtr<hvgs::CModuleBase>());
+		auto emplaceResult = m_ModuleInstanceMap.emplace(m_UniqueModuleID, moduleInstance.get());
+		ASSERT_OR_EXECUTE(emplaceResult.second, return ModulePtr(nullptr, nullptr));
 
 		// Increase unique ID
 		m_UniqueModuleID += ModuleID(1);
 
 		// Return weak ptr
-		return hvgs::WeakPtr<CModuleBase>(std::move(moduleInstance));
+		return std::move(moduleInstance);
 	}
 
-	Map<ModuleID, SharedPtr<CModuleBase>> m_ModuleInstanceMap;
+	Map<ModuleID, CModuleBase*> m_ModuleInstanceMap;
 	ModuleID m_UniqueModuleID = ModuleID(0);
 };
 

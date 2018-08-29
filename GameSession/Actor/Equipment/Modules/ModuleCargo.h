@@ -13,7 +13,7 @@ class CModuleCargo : public CModuleBase
 {
 
 public:
-	CModuleCargo(ModuleID moduleID, hvda::CDataTemplateModuleCargo dataTemplate);
+	CModuleCargo(ModuleID moduleID, CEquipment& equipment, hvda::CDataTemplateModuleCargo dataTemplate);
 	virtual ~CModuleCargo() = default;
 
 };

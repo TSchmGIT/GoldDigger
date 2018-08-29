@@ -11,6 +11,8 @@
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/Tile.h"
 #include "GameSession/World/World.h"
+#include "../Equipment/Modules/ModuleFuelTank.h"
+#include "../Equipment/Equipment.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -23,33 +25,17 @@ const float ACCELERATION_FORCE_X = 10.0f;
 
 //////////////////////////////////////////////////////////////////////////
 
-CMotorDefault::CMotorDefault(CActor* actor)
+CMotorDefault::CMotorDefault(CActor& actor)
 	: CMotorBase(actor)
 {
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-
-CMotorDefault::CMotorDefault(const CMotorDefault& other)
-	: CMotorBase::CMotorBase(other)
-	, m_GravityVelocity(other.m_GravityVelocity)
-	, m_IsGrounded(other.m_IsGrounded)
-{
-
-}
 
 //////////////////////////////////////////////////////////////////////////
 
-CMotorDefault::CMotorDefault(const CMotorBase& other)
-	: CMotorBase(other)
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CMotorDefault::~CMotorDefault()
+CMotorDefault::CMotorDefault(const CMotorBase& motorBase)
+	: CMotorBase(motorBase)
 {
 
 }
@@ -73,12 +59,12 @@ void CMotorDefault::ProcessMovementTick()
 	// Reset velocity
 
 	// Update AABB
-	const hvmath::AABB& aabb = m_Actor->GetAABB();
+	const hvmath::AABB& aabb = m_Actor.GetAABB();
 
 	// Get Input
-	auto[hor, ver] = GetUserInput();
+	auto[hor, ver] = GetUserInputHorVer();
 
-	if (m_Actor->GetPosition().y > 5.0f)
+	if (m_Actor.GetPosition().y > 5.0f)
 	{
 		ver = hvmath::Min({ ver, 0.0f });
 	}
@@ -87,6 +73,14 @@ void CMotorDefault::ProcessMovementTick()
 
 								// Calculate delta movement
 	Vector2 acceleration = Vector2::Scale(Vector2(hor, ver).Normalize(), Vector2{ ACCELERATION_FORCE_X, ACCELERATION_FORCE_Y });
+
+	// Update fuel tank factor
+	if (auto* moduleFuelTank = m_Actor.GetEquipment().GetModule<CModuleFuelTank>(); moduleFuelTank)
+	{
+		bool hasUserInput = acceleration.x != 0.0f || acceleration.y != 0.0f;
+		moduleFuelTank->SetFuelPenalty(FuelPenalty::Moving, hasUserInput);
+	}
+
 	if (!m_IsGrounded)
 	{
 		m_Velocity += CPhysicsManager::Get().GetGravity() * CTimeManager::Get().GetGameDeltaTime();
@@ -149,9 +143,9 @@ void CMotorDefault::ProcessMovementTick()
 	}
 
 	// Update position
-	Vector2 newPos = sweepResult.newPos - m_Actor->GetAABBOriginOffset();
-	deltaMovement = newPos - m_Actor->GetPosition();
-	m_Actor->SetPosition(newPos);
+	Vector2 newPos = sweepResult.newPos - m_Actor.GetAABBOriginOffset();
+	deltaMovement = newPos - m_Actor.GetPosition();
+	m_Actor.SetPosition(newPos);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -217,7 +211,7 @@ hvgs::SweepResult CMotorDefault::PerformSingleSweep(const Vector2& pos, const Ve
 
 //////////////////////////////////////////////////////////////////////////
 
-std::pair<float, float> CMotorDefault::GetUserInput() const
+std::pair<float, float> CMotorDefault::GetUserInputHorVer() const
 {
 	// Do not process any user input when a fullscreen menu is visible
 	if (hvgs::ui::CSceneManager::Get().IsFullscreenMenuVisble())
@@ -271,14 +265,14 @@ void CMotorDefault::CheckDigging()
 		offset = Vector2(0.0f, -1.0f);
 	}
 
-	const auto& tile = CWorld::Get().GetTileAt(m_Actor->GetPosition() + offset);
+	const auto& tile = CWorld::Get().GetTileAt(m_Actor.GetPosition() + offset);
 	if (!tile || tile->GetTileType() == TileType::Air)
 	{
 		return;
 	}
 
 	SetVelocity({ 0.0f, 0.0f });
-	m_Actor->StartDigging(*tile);
+	m_Actor.StartDigging(*tile);
 }
 
 //////////////////////////////////////////////////////////////////////////

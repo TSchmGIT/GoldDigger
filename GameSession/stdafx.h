@@ -30,6 +30,7 @@
 #include <numeric>
 
 #include <array>
+#include <bitset>
 #include <memory>
 
 #include <optional>

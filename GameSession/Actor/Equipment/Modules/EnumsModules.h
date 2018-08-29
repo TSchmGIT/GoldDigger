@@ -26,6 +26,14 @@ enum class FuelType
 	Count
 };
 
+
+enum class FuelPenalty
+{
+	Moving,
+	Digging,
+	Count
+};
+
 //////////////////////////////////////////////////////////////////////////
 
 }

@@ -7,16 +7,22 @@ namespace hvgs::ui
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CUIElement
+class IUIWidget
 {
 
 public:
-	CUIElement();
-	virtual ~CUIElement();
+	IUIWidget() = default;
+	virtual ~IUIWidget() = default;
 
-public:
-	virtual void Tick() { };
-	virtual void Draw() = 0;
+//public:
+//	void SetPivotPos(const Vector2& pivotPos);
+//	const Vector2& GetPivotPos() const;
+//
+//protected:
+//	virtual void OnPivotUpdate() {};
+//
+//protected:
+//	Vector2 m_PivotPos = Vector2{ 0.0f, 0.0f };
 };
 
 /////////////////////////////////////////////////////////////////////////////

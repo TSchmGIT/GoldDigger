@@ -10,6 +10,7 @@ enum class Button : hvuint8
 	ToggleInventory,
 	Interaction,
 	Cancel,
+	GenericDebug,
 	Count
 };
 

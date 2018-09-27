@@ -15,11 +15,11 @@ namespace hvgs
 void CEquipment::InitAfterCreation()
 {
 	// Fill with default data
-	for (auto equipmentType = ModuleType(0); equipmentType < ModuleType::Count; equipmentType = ModuleType(int(equipmentType) + 1))
+	for (auto moduleType = ModuleType(0); moduleType < ModuleType::Count; moduleType = ModuleType(int(moduleType) + 1))
 	{
-		ModulePtr module = CEquipmentFactory::GetMutable().CreateDefaultModule(equipmentType, *this);
+		ModulePtr module = CEquipmentFactory::GetMutable().CreateDefaultModule(moduleType, *this);
 
-		m_ModuleMap.emplace(equipmentType, std::move(module));
+		m_ModuleMap.emplace(moduleType, std::move(module));
 	}
 }
 
@@ -55,6 +55,14 @@ hvgs::CModuleBase* CEquipment::GetModule(hvgs::ModuleType moduleType) const
 	{
 		return nullptr;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CEquipment::ReplaceModule(ModuleType moduleType, ModuleGUID moduleGUID)
+{
+	ModulePtr module = CEquipmentFactory::GetMutable().CreateModule(moduleType, moduleGUID, *this);
+	m_ModuleMap.emplace(moduleType, std::move(module));
 }
 
 //////////////////////////////////////////////////////////////////////////

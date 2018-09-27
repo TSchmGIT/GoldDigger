@@ -135,13 +135,7 @@
     <ClInclude Include="Actor\Motor\MotorDigging.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UI\UIElement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Manager\UIManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI\ISpriteHandler.h">
@@ -154,9 +148,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI\Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIEnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI\Scenes\InventoryScene.h">
@@ -202,9 +193,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actor\Health\ActorHealth.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Data\DataManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Data\DataDefines.h">
@@ -253,6 +241,42 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actor\Equipment\Modules\ModuleDrill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Buildings\BuildingFuelStation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Buildings\BuildingInteractiveBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Buildings\BuildingWorkshop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\DataModuleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\RenderDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIStructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Elements\UIButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Elements\UIWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\UIScope.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -341,13 +365,7 @@
     <ClCompile Include="Actor\Motor\MotorDigging.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UI\UIElement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Manager\UIManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UI\ISpriteHandler.cpp">
@@ -395,9 +413,6 @@
     <ClCompile Include="Actor\Health\ActorHealth.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Data\DataManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleCargo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -435,6 +450,33 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Actor\Equipment\Modules\ModuleCargo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Buildings\BuildingFuelStation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Buildings\BuildingInteractiveBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Buildings\BuildingWorkshop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\DataModuleManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Elements\UIButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Elements\UIWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

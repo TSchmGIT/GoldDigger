@@ -38,7 +38,7 @@ void CInputManager::PrepareTick()
 
 	for (int i = 0; i < int(JoystickID::Count); i++)
 	{
-		JoystickID joystickId = JoystickID(i);
+		auto joystickId = JoystickID(i);
 		auto& joystickButtonArrayDown = m_JoystickButtonArrayDown[size_t(joystickId)];
 		auto& joystickButtonArrayUp = m_JoystickButtonArrayUp[size_t(joystickId)];
 
@@ -348,6 +348,8 @@ std::tuple<hvgs::KeyCode, hvgs::JoystickButton> CInputManager::GetDataForButton(
 		return{ KeyCode::F,			JoystickButton::XBOX_X };
 	case hvgs::Button::Cancel:
 		return{ KeyCode::Escape,	JoystickButton::XBOX_Back };
+	case hvgs::Button::GenericDebug:
+		return { KeyCode::Tab,		JoystickButton::XBOX_Start };
 
 	default:
 		LOG_ERROR("Unknown button type! Have you forgotten to define inputs for this button?");

@@ -22,14 +22,16 @@ public:
 	CBuildingBrokerScene();
 	virtual ~CBuildingBrokerScene();
 
-	virtual SceneID GetSceneID() const override;
-	virtual bool IsFullscreenMenu() const override;
+	SceneID GetSceneID() const override;
+	bool IsFullscreenMenu() const override;
+
+	ScreenPos GetPivotPoint() const override;
 
 protected:
-	virtual void Enter() override;
+	void Enter() override;
 
 protected:
-	virtual void Draw() const override;
+	void Draw() const override;
 	void DrawInventory() const;
 	void DrawInteractionButtons() const;
 
@@ -44,8 +46,8 @@ protected:
 protected:
 	Vector<std::pair<UniquePtr<CUIButton>, int>> m_InventorySlotButtonList;
 
-	UniquePtr<CUIButton>	m_SellAllButton = std::make_unique<CUIButton>();
-	UniquePtr<CUIButton>	m_ExitButton = std::make_unique<CUIButton>();
+	UniquePtr<CUIButton>	m_SellAllButton = std::make_unique<CUIButton>(*this);
+	UniquePtr<CUIButton>	m_ExitButton = std::make_unique<CUIButton>(*this);
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -19,12 +19,12 @@ using WeakPtr = std::weak_ptr<T>;
 template<typename Key, typename Value>
 using Map = std::unordered_map<Key, Value>;
 
-template<typename Key>
-using Vector = std::vector<Key>;
-template<typename Key>
-using Queue = std::queue<Key>;
-template<typename Key>
-using Set = std::set<Key>;
+template<class Key, class Allocator = std::allocator<Key>>
+using Vector = std::vector<Key, Allocator>;
+template<typename Key, typename Container = std::deque<Key>>
+using Queue = std::queue<Key, Container>;
+template<typename Key, typename Pr = std::less<Key>, typename Allocator = std::allocator<Key>>
+using Set = std::set<Key, Pr, Allocator>;
 
 using String = std::string;
 

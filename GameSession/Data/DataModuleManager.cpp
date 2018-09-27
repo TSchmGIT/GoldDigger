@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "DataManager.h"
+#include "DataModuleManager.h"
 
 using json = nlohmann::json;
 
@@ -10,7 +10,7 @@ namespace hvda
 
 //////////////////////////////////////////////////////////////////////////
 
-void CDataManager::Init()
+void CDataModuleManager::Init()
 {
 	LoadModuleList<CDataTemplateModuleHull>("modules_hull.json", m_ModuleHullMap);
 	LoadModuleList<CDataTemplateModuleFuelTank>("modules_fueltank.json", m_ModuleFuelTankMap);

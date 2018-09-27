@@ -23,8 +23,10 @@ public:
 	CInventoryScene();
 	virtual ~CInventoryScene();
 
-	virtual SceneID GetSceneID() const override;
-	virtual bool IsFullscreenMenu() const override;
+	SceneID GetSceneID() const override;
+	bool IsFullscreenMenu() const override;
+
+	ScreenPos GetPivotPoint() const override;
 
 public:
 	virtual void Draw() const override;

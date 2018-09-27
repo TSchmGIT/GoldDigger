@@ -36,7 +36,7 @@ protected:
 	template<class ModuleClass, class ModuleTemplate>
 	ModulePtr CreateModule(ModuleGUID guid, CEquipment& parentEquipment)
 	{
-		const auto*	moduleTemplate = hvda::CDataManager::Get().GetModuleTemplate<ModuleTemplate>(guid);
+		const auto*	moduleTemplate = hvda::CDataModuleManager::Get().GetModuleTemplate<ModuleTemplate>(guid);
 		ASSERT_OR_EXECUTE(moduleTemplate, return ModulePtr(nullptr, nullptr));
 
 		// Create new module of specific type

@@ -3,8 +3,14 @@
 
 #include "GameSession/Manager/SingletonBase.h"
 #include "GameSession/Rendering/Fonts/EnumsFont.h"
+#include "GameSession/Rendering/RenderDefines.h"
 
 /////////////////////////////////////////////////////////////////////////////
+
+namespace sf
+{
+class Color;
+}
 
 namespace hvgs::ui
 {
@@ -14,6 +20,8 @@ class ISpriteHandler;
 namespace hvgs
 {
 class IRenderElement;
+
+class CUIScope;
 
 enum class TextureName;
 
@@ -48,6 +56,9 @@ public:
 	hvuint GetScreenHeight() const;
 	ScreenPos GetScreenCenter() const;
 
+	const CUIScope* GetCurrentUIScope() const;
+	void SetCurrentUIScope(const CUIScope* uiScope);
+
 public:
 	void RegisterRenderElement(const IRenderElement* renderElement);
 	void UnregisterRenderElement(const IRenderElement* renderElement);
@@ -55,15 +66,15 @@ public:
 	void RegisterSpriteHandler(const ui::ISpriteHandler* spriteHandler);
 	void UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHandler);
 public:
-	void DrawText(const ScreenPos& pos, const String& content, Alignment alignment = Alignment::TopLeft, const FontName& fontName = FontName::Arial, unsigned int charSize = 60, const sf::Color& textColor = sf::Color::White);
+	void DrawText(const ScreenPos& pos, const String& content, Alignment alignment = Alignment::TopLeft, const FontName& fontName = FontName::Arial, FontSize fontSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
 
-	void DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName = FontName::Arial, unsigned int charSize = 60, const sf::Color& textColor = sf::Color::White);
+	void DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName = FontName::Arial, FontSize charSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
 	/// Draws a sprite on the screen with given world coordinates (position may be out of viewport)
 	void DrawSpriteWorld(const WorldPos& pos, TextureName textureName, Alignment alignment = Alignment::Center);
 	void DrawSpriteWorld(const WorldPos& pos, TextureName textureName, float scaleFactor, Alignment alignment = Alignment::Center);
 	void DrawSpriteWorld(const WorldPos& pos, TextureName textureName, const ScreenPos& size, Alignment alignment = Alignment::Center);
-	void DrawSprite(const ScreenPos& screenPos, TextureName textureName, const ScreenPos& size, Alignment alignment = Alignment::Center);
-	void DrawSprite(const ScreenPos& screenPos, TextureName textureName, Alignment alignment = Alignment::Center);
+	void DrawSpriteUI(const ScreenPos& screenPos, TextureName textureName, const ScreenPos& size, Alignment alignment = Alignment::TopLeft);
+	void DrawSpriteUI(const ScreenPos& screenPos, TextureName textureName, Alignment alignment = Alignment::TopLeft);
 
 	void DrawChunk(const CChunk& chunk);
 
@@ -87,6 +98,8 @@ protected:
 	Set<const ui::ISpriteHandler*>	m_SpriteHandlerSet;
 
 	hvsdk::CObjectPool<sf::Sprite>	m_PoolSprites;
+
+	const CUIScope* m_currentUIScope;
 };
 
 /////////////////////////////////////////////////////////////////////////////

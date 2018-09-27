@@ -41,6 +41,20 @@ void CModuleFuelTank::SetCurrentFuelAmount(FuelAmount fuelAmount)
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::FuelType CModuleFuelTank::GetFuelType() const
+{
+	return GetTemplate().GetFuelType();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::FuelAmount CModuleFuelTank::GetMaximumFuelAmount() const
+{
+	return GetTemplate().GetCapacity();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 bool CModuleFuelTank::IsEmpty() const
 {
 	return m_FuelAmount == FuelAmount(0.0f);
@@ -58,6 +72,16 @@ float CModuleFuelTank::GetFuelPercentage() const
 void CModuleFuelTank::SetFuelPenalty(FuelPenalty fuelPenalty, bool isSet)
 {
 	m_PenaltyMask.set(int(fuelPenalty), isSet);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::FuelAmount CModuleFuelTank::Refuel()
+{
+	auto fuelDifference = GetMaximumFuelAmount() - GetCurrentFuelAmount();
+	SetCurrentFuelAmount(GetMaximumFuelAmount());
+
+	return fuelDifference;
 }
 
 //////////////////////////////////////////////////////////////////////////

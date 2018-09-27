@@ -4,7 +4,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "GameSession/Actor/Actor.h"
-#include "GameSession/Data/DataManager.h"
+#include "GameSession/Data/DataModuleManager.h"
 #include "GameSession/Manager/CameraManager.h"
 #include "GameSession/Manager/GameObjectManager.h"
 #include "GameSession/Manager/InputManager.h"
@@ -50,7 +50,7 @@ void CGameManager::Construct()
 
 void CGameManager::Init()
 {
-	hvda::CDataManager::GetMutable().Init();
+	hvda::CDataModuleManager::GetMutable().Init();
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -165,6 +165,13 @@ void CGameManager::PollEvents()
 		case sf::Event::EventType::JoystickButtonReleased:
 			CInputManager::GetMutable().RegisterJoystickButtonReleased(JoystickID(pollEvent.joystickButton.joystickId), JoystickButton(pollEvent.joystickButton.button));
 			break;
+		case sf::Event::EventType::Resized:
+		{
+			// update the view to the new size of the window
+			sf::FloatRect visibleArea(0.0f, 0.0f, float(pollEvent.size.width), float(pollEvent.size.height));
+			CRenderManager::GetMutable().GetWindow()->setView(sf::View(visibleArea));
+			break;
+		}
 		case sf::Event::EventType::Closed:
 			CRenderManager::GetMutable().GetWindow()->close();
 			break;

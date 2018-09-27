@@ -93,6 +93,12 @@ void CTextureManager::Init()
 		case TextureName::COAL:
 			fileName = "..\\Resources\\Textures\\TileAtlas\\Coal.png";
 			break;
+		case TextureName::FUELTANK:
+			fileName = "..\\Resources\\Textures\\UI\\FuelTank.png";
+			break;
+		case TextureName::BUILDING_WORKSHOP:
+			fileName = "..\\Resources\\Textures\\Scenes\\Building_Workshop.png";
+			break;
 
 		default:
 			break;

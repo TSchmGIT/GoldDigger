@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "World.h"
 
-#include <hvmath/Vector2/Vector2.h>
-
 #include "GameSession/Actor/Actor.h"
 #include "GameSession/Buildings/BuildingBase.h"
 #include "GameSession/Buildings/BuildingBroker.h"

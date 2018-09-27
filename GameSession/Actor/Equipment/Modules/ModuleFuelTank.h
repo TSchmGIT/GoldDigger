@@ -24,9 +24,15 @@ public:
 	FuelAmount GetCurrentFuelAmount() const;
 	void SetCurrentFuelAmount(FuelAmount fuelAmount);
 
+	FuelType GetFuelType() const;
+
+	FuelAmount GetMaximumFuelAmount() const;
+
 	void SetFuelPenalty(FuelPenalty fuelPenalty, bool isSet);
 
 public:
+	FuelAmount Refuel();
+
 	/// Indicates whether the fuel tank is empty
 	bool IsEmpty() const;
 

@@ -29,34 +29,6 @@ CBuildingBroker::CBuildingBroker()
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CBuildingBroker::IsInInteractionDistance(const WorldPos& position) const
-{
-	return Vector2::DistanceCheck(position, m_Position, m_InteractionDistance);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CBuildingBroker::StartInteraction()
-{
-	ui::CSceneManager::GetMutable().EnterState(ui::SceneID::BuildingBroker);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CBuildingBroker::StopInteraction()
-{
-	ui::CSceneManager::GetMutable().LeaveState(ui::SceneID::BuildingBroker);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-hvgs::WorldPos CBuildingBroker::GetInteractionButtonPosition() const 
-{
-	return m_Position + WorldPos(0.0f, GetAABBHalfs().y);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
 void CBuildingBroker::PerformTransactionBuy(CActor& actor) const
 {
 	auto& economy = actor.GetEconomy();
@@ -118,9 +90,9 @@ void CBuildingBroker::FillPriceChart()
 
 //////////////////////////////////////////////////////////////////////////
 
-const hvgs::WorldPos& CBuildingBroker::GetInteractionOriginPosition() const
+hvgs::ui::SceneID CBuildingBroker::GetUISceneID() const
 {
-	return m_Position;
+	return ui::SceneID::BuildingBroker;
 }
 
 //////////////////////////////////////////////////////////////////////////

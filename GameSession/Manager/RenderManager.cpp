@@ -10,6 +10,7 @@
 #include "GameSession/Manager/Rendering/TextureManager.h"
 #include "GameSession/Rendering/DebugRender.h"
 #include "GameSession/Rendering/IRenderElement.h"
+#include "GameSession/Rendering/UIScope.h"
 #include "GameSession/UI/ISpriteHandler.h"
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/Chunk.h"
@@ -134,6 +135,20 @@ hvgs::ScreenPos CRenderManager::GetScreenCenter() const
 
 //////////////////////////////////////////////////////////////////////////
 
+const hvgs::CUIScope* CRenderManager::GetCurrentUIScope() const
+{
+	return m_currentUIScope;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::SetCurrentUIScope(const CUIScope* uiScope)
+{
+	m_currentUIScope = uiScope;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CRenderManager::RegisterRenderElement(const IRenderElement* renderElement)
 {
 	ASSERT_OR_EXECUTE(renderElement, return);
@@ -174,12 +189,18 @@ void CRenderManager::UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHan
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::Arial*/, FontSize fontSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
-	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, charSize, textColor);
+	ScreenPos screenPosScoped = pos;
+	if (const auto* uiScope = GetCurrentUIScope(); uiScope)
+	{
+		screenPosScoped += uiScope->GetPivotPosition();
+	}
+
+	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, fontSize, textColor);
 
 	AdjustTextPivot(*text, alignment);
-	text->setPosition(pos);
+	text->setPosition(screenPosScoped);
 
 	auto globalBounds = text->getGlobalBounds();
 	if (globalBounds.left + globalBounds.width < 0.0f || globalBounds.left > GetScreenWidth() ||
@@ -191,7 +212,7 @@ void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Align
 
 #ifdef DEBUG_RENDER_TEXT
 	Vector2 rectSize(text->getGlobalBounds().width, text->getGlobalBounds().height);
-	DrawSprite(pos + ScreenPos(text->getLocalBounds().left, text->getLocalBounds().top), TextureName::WHITE, rectSize, alignment);
+	DrawSpriteUI(screenPosScoped + ScreenPos(text->getLocalBounds().left, text->getLocalBounds().top), TextureName::WHITE, rectSize, alignment);
 	text->setFillColor(sf::Color::Black);
 	m_Window->draw(*text);
 #else
@@ -203,7 +224,7 @@ void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Align
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, FontSize charSize /*= FontSize(60)*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
 	ScreenPos screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
@@ -261,11 +282,17 @@ void CRenderManager::DrawSpriteWorld(const WorldPos& pos, TextureName textureNam
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureName, const ScreenPos& size, Alignment alignment /*= Alignment::Center*/)
+void CRenderManager::DrawSpriteUI(const ScreenPos& screenPos, TextureName textureName, const ScreenPos& size, Alignment alignment /*= Alignment::TopLeft*/)
 {
+	ScreenPos screenPosScoped = screenPos;
+	if (const auto* uiScope = GetCurrentUIScope(); uiScope)
+	{
+		screenPosScoped += uiScope->GetPivotPosition();
+	}
+	
 	// Do not render objects outside the view
-	if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
-		screenPos.y < 0 || screenPos.y > GetScreenHeight())
+	if (screenPosScoped.x < 0 || screenPosScoped.x > GetScreenWidth() ||
+		screenPosScoped.y < 0 || screenPosScoped.y > GetScreenHeight())
 	{
 		return;
 	}
@@ -278,16 +305,22 @@ void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureN
 	ASSERT_OR_EXECUTE(textureSize.x > 0 && textureSize.y > 0, return);
 	Vector2 scale(size.x / textureSize.x, size.y / textureSize.y);
 
-	DrawSpriteInternal(screenPos, texture, scale, alignment);
+	DrawSpriteInternal(screenPosScoped, texture, scale, alignment);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureName, Alignment alignment /*= Alignment::Center*/)
+void CRenderManager::DrawSpriteUI(const ScreenPos& screenPos, TextureName textureName, Alignment alignment /*= Alignment::TopLeft*/)
 {
+	ScreenPos screenPosScoped = screenPos;
+	if (const auto* uiScope = GetCurrentUIScope(); uiScope)
+	{
+		screenPosScoped += uiScope->GetPivotPosition();
+	}
+
 	// Do not render objects outside the view
-	if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
-		screenPos.y < 0 || screenPos.y > GetScreenHeight())
+	if (screenPosScoped.x < 0 || screenPosScoped.x > GetScreenWidth() ||
+		screenPosScoped.y < 0 || screenPosScoped.y > GetScreenHeight())
 	{
 		return;
 	}
@@ -295,7 +328,7 @@ void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureN
 	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
 	ASSERT_OR_EXECUTE(texture, return);
 
-	DrawSpriteInternal(screenPos, texture, { 1.0f, 1.0f }, alignment);
+	DrawSpriteInternal(screenPosScoped, texture, { 1.0f, 1.0f }, alignment);
 }
 
 //////////////////////////////////////////////////////////////////////////

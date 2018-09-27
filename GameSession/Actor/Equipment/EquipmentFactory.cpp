@@ -11,7 +11,7 @@
 #include "GameSession/Actor/Equipment/Modules/ModuleFuelTank.h"
 #include "GameSession/Actor/Equipment/Modules/ModuleHull.h"
 #include "GameSession/Actor/Equipment/Modules/ModuleMotor.h"
-#include "GameSession/Data/DataManager.h"
+#include "GameSession/Data/DataModuleManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -84,8 +84,7 @@ ModulePtr CEquipmentFactory::CreateModule(ModuleType moduleType, ModuleGUID modu
 	}
 
 	ASSERT_TEXT(false, "Tried to create module with unknown module type");
-	//auto foo = [](ModuleID) {};
-	return ModulePtr(nullptr, nullptr);
+	return nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////

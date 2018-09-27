@@ -19,6 +19,8 @@ public:
 	virtual SceneID GetSceneID() const = 0;
 	virtual bool IsFullscreenMenu() const = 0;
 
+	virtual ScreenPos GetPivotPoint() const = 0;
+
 public:
 	void EnterBase();
 	void ExitBase();

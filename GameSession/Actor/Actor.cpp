@@ -216,11 +216,14 @@ void CActor::UpdateUI() const
 
 		if (!inputUsed)
 		{
-			if (CInputManager::Get().GetButtonDown(Button::ToggleInventory))
-			{
-				ui::CSceneManager::GetMutable().ToggleState(ui::SceneID::Inventory);
-			}
+			ui::CSceneManager::GetMutable().ToggleState(ui::SceneID::Inventory);
 		}
+	}
+
+	bool genericDebugPressed = CInputManager::Get().GetButtonDown(Button::GenericDebug);
+	if (genericDebugPressed)
+	{
+		ui::CSceneManager::GetMutable().ToggleState(ui::SceneID::BuildingWorkshop);
 	}
 }
 

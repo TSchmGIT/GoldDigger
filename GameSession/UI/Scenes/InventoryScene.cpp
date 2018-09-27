@@ -6,8 +6,9 @@
 #include "GameSession/Items/ItemBase.h"
 #include "GameSession/Items/ItemStack.h"
 #include "GameSession/Manager/RenderManager.h"
+#include "GameSession/Manager/Rendering/TextureManager.h"
 #include "GameSession/Rendering/Textures/EnumsTexture.h"
-#include "GameSession/UI/UIButton.h"
+#include "GameSession/UI/Elements/UIButton.h"
 #include "GameSession/World/World.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@ void CInventoryScene::Enter()
 	m_InventorySlotButtonList.clear();
 	for (const auto& itemStack : inventory.GetStackList())
 	{
-		auto& itemButton = m_InventorySlotButtonList.emplace_back(std::make_unique<CUIButton>(), itemStack.GetCurrentAmount());
+		auto& itemButton = m_InventorySlotButtonList.emplace_back(std::make_unique<CUIButton>(*this), itemStack.GetCurrentAmount());
 
 		// Update texture
 		const auto* item = itemStack.GetFirstItem();
@@ -51,13 +52,15 @@ void CInventoryScene::Enter()
 		itemButton.first->SetTextureForState(ButtonState::Default, item->GetTextureName());
 
 		// Update position
-		ScreenPos pos = ScreenPos(486.0f, 471.0f); // Top left of the inventory
-
 		int coloum = i % 16;
 		int row = i / 16;
 
-		pos.x += 60.0f * coloum; // Offset per inventory element
-		pos.y += 60.0f * row;
+		float x = 60.0f * coloum; // Offset per inventory element
+		float y = 60.0f * row;
+		ScreenPos pos{ x, y };
+		ScreenPos offset{ 70.0f, 195.0f };
+		pos += offset;
+
 		itemButton.first->SetPosition(pos);
 
 		// Update size
@@ -73,12 +76,25 @@ void CInventoryScene::Enter()
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::ScreenPos CInventoryScene::GetPivotPoint() const
+{
+	const auto& screenCenter = CRenderManager::Get().GetScreenCenter();
+	const auto* texture = CTextureManager::Get().GetTexture(TextureName::INVENTORYMAINSPRITE);
+	ASSERT_OR_EXECUTE(texture, return Vector2());
+
+	auto textureSize = texture->getSize();
+	hvmath::Vector2 textureSizeHalf{ textureSize.x * 0.5f, textureSize.y * 0.5f };
+
+	auto pivotPoint = screenCenter - textureSizeHalf;
+	return pivotPoint;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CInventoryScene::Draw() const
 {
-
 	// Draw inventory sprite
-	hvgs::ScreenPos spriteScreenPos = hvgs::CRenderManager::Get().GetScreenCenter();
-	hvgs::CRenderManager::GetMutable().DrawSprite(spriteScreenPos, hvgs::TextureName::INVENTORYMAINSPRITE);
+	hvgs::CRenderManager::GetMutable().DrawSpriteUI({ 0.0f, 0.0f }, hvgs::TextureName::INVENTORYMAINSPRITE, Alignment::TopLeft);
 
 	// Draw inventory slot buttons 
 	for (const auto& pair : m_InventorySlotButtonList)
@@ -91,7 +107,7 @@ void CInventoryScene::Draw() const
 
 		ScreenPos textPos = button->GetPosition() + button->GetSize() - ScreenPos(2.0f, 2.0f); // Bottom right of button tile
 
-		CRenderManager::GetMutable().DrawText(textPos, std::to_string(amount), Alignment::BottomRight, FontName::Courier_New, 40, sf::Color::White);
+		CRenderManager::GetMutable().DrawText(textPos, std::to_string(amount), Alignment::BottomRight, FontName::Courier_New, FontSize(40), sf::Color::White);
 	}
 }
 

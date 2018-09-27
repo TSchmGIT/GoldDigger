@@ -28,7 +28,7 @@ void CInventory::Draw() const
 
 		String text = item->GetDisplayName() + " (" + std::to_string(itemStack.GetCurrentAmount()) + ")";
 
-		CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, y), text, Alignment::TopLeft, FontName::Arial, 40U);
+		CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, y), text, Alignment::TopLeft, FontName::Arial, FontSize(40));
 		counter++;
 	}
 }

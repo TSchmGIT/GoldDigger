@@ -1,6 +1,9 @@
 #pragma once
-#include "GameSession/UI/IUIEventHandler.h"
+
 #include "GameSession/Rendering/Textures/EnumsTexture.h"
+#include "GameSession/UI/IUIEventHandler.h"
+#include "GameSession/UI/UIStructs.h"
+#include "Rendering/Fonts/EnumsFont.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -8,6 +11,13 @@ namespace hvgs
 {
 enum class TextureName;
 }
+
+namespace hvgs::ui
+{
+class CBaseScene;
+}
+
+//////////////////////////////////////////////////////////////////////////
 
 namespace hvgs::ui
 {
@@ -27,8 +37,10 @@ class CUIButton :
 {
 
 public:
-	CUIButton();
-	virtual ~CUIButton();
+	CUIButton() = delete;
+	CUIButton(const CBaseScene& baseScene);
+	CUIButton(const CUIButton& other);
+	virtual ~CUIButton() = default;
 
 	virtual void Draw() const;
 
@@ -41,6 +53,18 @@ public:
 
 	const ScreenPos& GetPosition() const;
 	void SetPosition(const ScreenPos& position);
+
+	const String& GetText() const;
+	void SetText(const String& text);
+
+	Alignment GetTextAlignment() const;
+	void SetTextAlignment(Alignment alignment);
+
+	FontName GetTextFont() const;
+	void SetTextFont(FontName fontName);
+
+	FontSize GetTextSize() const;
+	void SetTextSize(FontSize fontSize);
 
 	void SetAction(std::function<void()> action);
 
@@ -56,8 +80,12 @@ protected:
 	bool IsOverButton(const ScreenPos& pos) const;
 
 protected:
+	const CBaseScene& m_BaseScene;
+
 	ScreenPos m_Position = ScreenPos({ 0.0f, 0.0f });
 	ScreenPos m_Size = ScreenPos({ 0.0f, 0.0f });
+
+	TextUIInfo	m_TextInfo;
 
 	ButtonState m_State = ButtonState::Default;
 	bool		m_IsPressed = false;

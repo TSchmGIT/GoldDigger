@@ -9,9 +9,10 @@
 #include "GameSession/Manager/GameManager.h"
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/World/World.h"
-#include "GameSession/UI/UIButton.h"
+#include "GameSession/UI/Elements/UIButton.h"
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/UI/Scenes/Meta/SceneEnum.h"
+#include "Rendering/UIScope.h"
 
 using namespace hvgs;
 

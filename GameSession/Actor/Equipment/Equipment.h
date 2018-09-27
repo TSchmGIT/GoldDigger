@@ -36,17 +36,19 @@ public:
 	void Tick();
 
 public:
-	CModuleBase* GetModule(hvgs::ModuleType moduleType) const;
-	template<class ModuleClass>	ModuleClass* GetModule() const;
+	CModuleBase* GetModule(ModuleType moduleType) const;
+	template<class ModuleClass>	constexpr ModuleClass* GetModule() const;
+
+	void ReplaceModule(ModuleType moduleType, ModuleGUID moduleGUID);
 
 protected:
-	Map<hvgs::ModuleType, ModulePtr> m_ModuleMap;
+	Map<ModuleType, ModulePtr> m_ModuleMap;
 };
 
 //////////////////////////////////////////////////////////////////////////
 
 template<class ModuleClass>
-ModuleClass* hvgs::CEquipment::GetModule() const
+constexpr ModuleClass* hvgs::CEquipment::GetModule() const
 {
 	CModuleBase* moduleBase = nullptr;
 	if constexpr (std::is_same_v<ModuleClass, CModuleHull>)

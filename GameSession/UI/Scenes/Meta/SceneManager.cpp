@@ -3,6 +3,7 @@
 
 #include "GameSession/Manager/InputManager.h"
 #include "GameSession/UI/Scenes/BuildingBrokerScene.h"
+#include "GameSession/UI/Scenes/BuildingWorkshop/BuildingWorkshopScene.h"
 #include "GameSession/UI/Scenes/InventoryScene.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -72,6 +73,7 @@ void CSceneManager::Init()
 {
 	m_SceneDataList.push_back({ std::make_unique<CInventoryScene>(), false });
 	m_SceneDataList.push_back({ std::make_unique<CBuildingBrokerScene>(), false });
+	m_SceneDataList.push_back({ std::make_unique<CBuildingWorkshopScene>(), false });
 }
 
 //////////////////////////////////////////////////////////////////////////

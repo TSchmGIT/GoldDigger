@@ -1,0 +1,25 @@
+#pragma once
+#include "EnumsModules.h"
+
+/////////////////////////////////////////////////////////////////////////////
+
+namespace hvda
+{
+
+/////////////////////////////////////////////////////////////////////////////
+
+class CModuleHelper
+{
+
+public:
+	CModuleHelper() = delete;
+	virtual ~CModuleHelper() = delete;
+
+public:
+	static const hvgs::String& ConvertFuelTypeToString(hvgs::FuelType fuelType);
+	static hvgs::FuelType ConvertStringToFuelType(const hvgs::String& fuelTypeString);
+};
+
+/////////////////////////////////////////////////////////////////////////////
+
+} // hvda

@@ -4,6 +4,7 @@
 #include "GameSession/Manager/SingletonBase.h"
 #include "GameSession/Rendering/Fonts/EnumsFont.h"
 #include "GameSession/Rendering/RenderDefines.h"
+#include "GameSession/Rendering/Textures/EnumsTexture.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,8 +23,6 @@ namespace hvgs
 class IRenderElement;
 
 class CUIScope;
-
-enum class TextureName;
 
 class CChunk;
 }
@@ -60,15 +59,20 @@ public:
 	void SetCurrentUIScope(const CUIScope* uiScope);
 
 public:
+	static void AdjustPivot(ScreenPos& original, const Vector2& renderSize, Alignment alignment = Alignment::Center);
+	static void AdjustPivot(ScreenPos& original, const Vector2& renderSize, const Vector2& pivot);
+	static void AdjustTextPivot(sf::Text& text, Alignment alignment = Alignment::TopLeft);
+
+public:
 	void RegisterRenderElement(const IRenderElement* renderElement);
 	void UnregisterRenderElement(const IRenderElement* renderElement);
 
 	void RegisterSpriteHandler(const ui::ISpriteHandler* spriteHandler);
 	void UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHandler);
 public:
-	void DrawText(const ScreenPos& pos, const String& content, Alignment alignment = Alignment::TopLeft, const FontName& fontName = FontName::Arial, FontSize fontSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
+	void DrawText(const ScreenPos& pos, const String& content, Alignment alignment = Alignment::TopLeft, const FontName& fontName = FontName::FiraSans_Regular, FontSize fontSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
 
-	void DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName = FontName::Arial, FontSize charSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
+	void DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName = FontName::FiraSans_Regular, FontSize charSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
 	/// Draws a sprite on the screen with given world coordinates (position may be out of viewport)
 	void DrawSpriteWorld(const WorldPos& pos, TextureName textureName, Alignment alignment = Alignment::Center);
 	void DrawSpriteWorld(const WorldPos& pos, TextureName textureName, float scaleFactor, Alignment alignment = Alignment::Center);
@@ -80,10 +84,6 @@ public:
 
 protected:
 	void DrawSpriteInternal(const ScreenPos& pos, const sf::Texture* texture, const Vector2& scaleFactor = Vector2(1.0, 1.0f), Alignment alignment = Alignment::Center);
-
-	static void AdjustPivot(ScreenPos& original, const Vector2& renderSize, Alignment alignment = Alignment::Center);
-	static void AdjustPivot(ScreenPos& original, const Vector2& renderSize, const Vector2& pivot);
-	static void AdjustTextPivot(sf::Text& text, Alignment alignment = Alignment::TopLeft);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Debug

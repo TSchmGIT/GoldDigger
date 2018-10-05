@@ -15,6 +15,8 @@ public:
 	CDataTemplateModuleMotor(const JSON& json);
 	virtual ~CDataTemplateModuleMotor() = default;
 
+	hvgs::ModuleType GetType() const override;
+
 };
 
 /////////////////////////////////////////////////////////////////////////////

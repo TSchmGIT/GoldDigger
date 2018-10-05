@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "BuildingWorkshopSceneObject.h"
+#include "CategorySelectionList.h"
 
 //////////////////////////////////////////////////////////////////////////
 

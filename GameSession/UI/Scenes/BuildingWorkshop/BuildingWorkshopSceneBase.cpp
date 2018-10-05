@@ -3,12 +3,18 @@
 
 #include "GameSession/Manager/RenderManager.h"
 #include "GameSession/Manager/Rendering/TextureManager.h"
-#include "GameSession/Rendering/UIScope.h"
 
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs::ui
 {
+
+//////////////////////////////////////////////////////////////////////////
+
+CBuildingWorkshopSceneBase::CBuildingWorkshopSceneBase()
+{
+	m_ModuleList.SetMaximumElementsHorizontal(4);
+}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -34,11 +40,22 @@ BuildingWorkshop::CCategorySelectionList& CBuildingWorkshopSceneBase::GetCategor
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::ui::BuildingWorkshop::CModuleList& CBuildingWorkshopSceneBase::GetModuleList()
+{
+	return m_ModuleList;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CBuildingWorkshopSceneBase::Draw() const
 {
 	DrawBackground();
 
 	DrawCategorySelection();
+
+	DrawModuleList();
+
+	DrawModuleDetailView();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -60,16 +77,6 @@ bool CBuildingWorkshopSceneBase::IsFullscreenMenu() const
 void CBuildingWorkshopSceneBase::SyncTick()
 {
 	CBaseScene::SyncTick();
-
-	const auto& screenCenter = CRenderManager::Get().GetScreenCenter();
-	const auto* texture = CTextureManager::Get().GetTexture(TextureName::BUILDING_WORKSHOP);
-	ASSERT_OR_EXECUTE(texture, return);
-
-	auto textureSize = texture->getSize();
-	hvmath::Vector2 textureSizeHalf{ textureSize.x * 0.5f, textureSize.y * 0.5f };
-
-	auto pivotPoint = screenCenter - textureSizeHalf;
-	//m_CategoryButtonList.SetPivotPos(pivotPoint);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -90,7 +97,29 @@ void CBuildingWorkshopSceneBase::DrawCategorySelection() const
 
 void CBuildingWorkshopSceneBase::DrawModuleList() const
 {
+	m_ModuleList.Draw();
+}
 
+//////////////////////////////////////////////////////////////////////////
+
+void CBuildingWorkshopSceneBase::DrawModuleDetailView() const
+{
+	m_ModuleDetailPanel.Draw();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::ui::BuildingWorkshop::CModuleDetailPanel& CBuildingWorkshopSceneBase::GetModuleDetailPanel()
+{
+	return m_ModuleDetailPanel;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CBuildingWorkshopSceneBase::Init()
+{
+	auto& purchaseButton = m_ModuleDetailPanel.GetPurchaseButton();
+	purchaseButton.SetAction(boost::bind(&CBuildingWorkshopSceneBase::OnPurchaseButtonPressed, this));
 }
 
 //////////////////////////////////////////////////////////////////////////

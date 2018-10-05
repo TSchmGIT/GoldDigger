@@ -16,6 +16,13 @@ CDataTemplateModuleHull::CDataTemplateModuleHull(const JSON& json)
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::ModuleType CDataTemplateModuleHull::GetType() const
+{
+	return hvgs::ModuleType::Hull;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 hvgs::HullPoints CDataTemplateModuleHull::GetMaxHP() const
 {
 	return m_MaxHP;

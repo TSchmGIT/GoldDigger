@@ -99,6 +99,54 @@ void CTextureManager::Init()
 		case TextureName::BUILDING_WORKSHOP:
 			fileName = "..\\Resources\\Textures\\Scenes\\Building_Workshop.png";
 			break;
+		case TextureName::MODULE_TANK_1:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Tank 1.png";
+			break;
+		case TextureName::MODULE_TANK_2:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Tank 2.png";
+			break;
+		case TextureName::MODULE_TANK_3:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Tank 3.png";
+			break;
+		case TextureName::MODULE_TANK_4:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Tank 4.png";
+			break;
+		case TextureName::MODULE_TANK_5:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Tank 5.png";
+			break;
+		case TextureName::MODULE_TANK_6:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Tank 6.png";
+			break;
+		case TextureName::MODULE_TANK_7:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Tank 7.png";
+			break;
+		case TextureName::MODULE_TANK_8:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Tank 8.png";
+			break;
+		case TextureName::MODULE_MOTOR_1:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 1.png";
+			break;
+		case TextureName::MODULE_MOTOR_2:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 2.png";
+			break;
+		case TextureName::MODULE_MOTOR_3:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 3.png";
+			break;
+		case TextureName::MODULE_MOTOR_4:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 4.png";
+			break;
+		case TextureName::MODULE_MOTOR_5:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 5.png";
+			break;
+		case TextureName::MODULE_MOTOR_6:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 6.png";
+			break;
+		case TextureName::MODULE_MOTOR_7:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 7.png";
+			break;
+		case TextureName::MODULE_MOTOR_8:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 8.png";
+			break;
 
 		default:
 			break;

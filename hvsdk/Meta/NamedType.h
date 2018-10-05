@@ -17,24 +17,23 @@ class CNamedType
 public:
 	using value_type = T;
 
-	explicit CNamedType() : m_Value() {}
-	explicit CNamedType(const T& value) : m_Value(value) {}
+	constexpr explicit CNamedType() : m_Value() {}
+	constexpr explicit CNamedType(const T& value) : m_Value(value) {}
 	constexpr const T& get() const { return m_Value; }
 	constexpr T& get() { return m_Value; }
 
 
-	explicit operator T() { return m_Value; }
+	constexpr explicit operator T() { return m_Value; }
 
 	constexpr NamedType& operator +=(const NamedType& rhs) { m_Value += rhs.m_Value; return *this; }
 	constexpr NamedType& operator -=(const NamedType& rhs) { m_Value -= rhs.m_Value; return *this; }
 	constexpr NamedType& operator *=(const NamedType& rhs) { m_Value *= rhs.m_Value; return *this; }
 	constexpr NamedType& operator /=(const NamedType& rhs) { m_Value *= rhs.m_Value; return *this; }
 
-	size_t hash_code() const noexcept { return (m_Value.hash_code()); }
+	constexpr size_t hash_code() const noexcept { return (m_Value.hash_code()); }
 
 private:
 	T m_Value;
-
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -65,6 +64,7 @@ NamedTemplate struct hash<NamedType>
 		return std::hash<T>()(namedType.get());
 	}
 };
+
 }
 
 namespace boost

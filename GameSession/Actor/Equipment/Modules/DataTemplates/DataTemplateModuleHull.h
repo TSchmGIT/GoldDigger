@@ -16,6 +16,8 @@ public:
 	CDataTemplateModuleHull(const JSON& json);
 	virtual ~CDataTemplateModuleHull() = default;
 
+	hvgs::ModuleType GetType() const override;
+
 public:
 	hvgs::HullPoints GetMaxHP() const;
 

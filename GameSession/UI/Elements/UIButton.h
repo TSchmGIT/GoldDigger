@@ -1,16 +1,14 @@
 #pragma once
 
+#include "GameSession/UI/Elements/UIWidget.h"
+
+#include "GameSession/Rendering/Fonts/EnumsFont.h"
+#include "GameSession/Rendering/Textures/EnumsTexture.h"
 #include "GameSession/Rendering/Textures/EnumsTexture.h"
 #include "GameSession/UI/IUIEventHandler.h"
 #include "GameSession/UI/UIStructs.h"
-#include "Rendering/Fonts/EnumsFont.h"
 
 /////////////////////////////////////////////////////////////////////////////
-
-namespace hvgs
-{
-enum class TextureName;
-}
 
 namespace hvgs::ui
 {
@@ -29,17 +27,18 @@ enum class ButtonState
 	Default = 0,
 	Hover,
 	Pressed,
-	Deactivated
+	Deactivated,
+	Count
 };
 
-class CUIButton :
-	public IUIEventHandler
+class CUIButton
+	: public CUIWidget
+	, public IUIEventHandler
 {
 
 public:
 	CUIButton() = delete;
 	CUIButton(const CBaseScene& baseScene);
-	CUIButton(const CUIButton& other);
 	virtual ~CUIButton() = default;
 
 	virtual void Draw() const;
@@ -47,12 +46,19 @@ public:
 public:
 	TextureName GetTextureForState(ButtonState state) const;
 	void SetTextureForState(ButtonState state, TextureName textureName);
+	void SetTextureForAllStates(TextureName textureName);
 
-	const ScreenPos& GetSize() const;
-	void SetSize(const ScreenPos& size);
+	bool GetIsSelected() const;
+	void SetIsSelected(bool isSelected);
 
-	const ScreenPos& GetPosition() const;
-	void SetPosition(const ScreenPos& position);
+	bool GetIsDisabled() const;
+	void SetIsDisabled(bool isDisabled);
+
+	Alignment GetAlignment() const;
+	void SetAlignment(Alignment alignment);
+
+	int GetMetaData() const;
+	void SetMetaData(int metaData);
 
 	const String& GetText() const;
 	void SetText(const String& text);
@@ -82,13 +88,15 @@ protected:
 protected:
 	const CBaseScene& m_BaseScene;
 
-	ScreenPos m_Position = ScreenPos({ 0.0f, 0.0f });
-	ScreenPos m_Size = ScreenPos({ 0.0f, 0.0f });
-
 	TextUIInfo	m_TextInfo;
 
+	Alignment	m_Alignment = Alignment::TopLeft;
 	ButtonState m_State = ButtonState::Default;
+	bool		m_IsDisabled = false;
 	bool		m_IsPressed = false;
+	bool		m_IsSelected = false;
+
+	int			m_MetaData = 0;
 
 	Map<ButtonState, TextureName> m_ButtonTextures = { {ButtonState::Default, TextureName::BUTTON_DEFAULT},
 													{ButtonState::Hover, TextureName::BUTTON_HOVER},

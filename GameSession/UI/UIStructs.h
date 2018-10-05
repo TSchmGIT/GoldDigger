@@ -18,7 +18,7 @@ struct TextUIInfo
 {
 	String		Text = "";
 	Alignment	TextAlignment = Alignment::Center;
-	FontName	TextFont = FontName::Arial;
+	FontName	TextFont = FontName::FiraSans_Regular;
 	FontSize	TextSize = FontSize(60);
 	sf::Color	TextColor = sf::Color::Black;
 };

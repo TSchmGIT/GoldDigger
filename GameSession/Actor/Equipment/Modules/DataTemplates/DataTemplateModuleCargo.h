@@ -15,6 +15,8 @@ public:
 	CDataTemplateModuleCargo(const JSON& json);
 	virtual ~CDataTemplateModuleCargo() = default;
 
+	hvgs::ModuleType GetType() const override;
+
 };
 
 /////////////////////////////////////////////////////////////////////////////

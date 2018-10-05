@@ -186,6 +186,7 @@
     <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleMotor.h" />
     <ClInclude Include="Actor\Equipment\Modules\EnumsModules.h" />
     <ClInclude Include="Actor\Equipment\Modules\DefinesModules.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleHelper.h" />
     <ClInclude Include="Actor\Equipment\Modules\ModuleBase.h" />
     <ClInclude Include="Actor\Equipment\Modules\ModuleCargo.h" />
     <ClInclude Include="Actor\Equipment\Modules\ModuleDrill.h" />
@@ -240,15 +241,19 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Time\DefinesTime.h" />
+    <ClInclude Include="UI\Elements\UISpriteWithText.h" />
     <ClInclude Include="UI\Elements\UIWidget.h" />
     <ClInclude Include="UI\Event.h" />
     <ClInclude Include="UI\ISpriteHandler.h" />
     <ClInclude Include="UI\IUIEventHandler.h" />
     <ClInclude Include="UI\Scenes\BaseScene.h" />
     <ClInclude Include="UI\Scenes\BuildingBrokerScene.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleDetailPanel.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleElement.h" />
     <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopScene.h" />
     <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneBase.h" />
-    <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneObject.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\CategorySelectionList.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleList.h" />
     <ClInclude Include="UI\Scenes\InventoryScene.h" />
     <ClInclude Include="UI\Scenes\Meta\SceneEnum.h" />
     <ClInclude Include="UI\Scenes\Meta\SceneManager.h" />
@@ -275,6 +280,7 @@
     <ClCompile Include="Actor\Equipment\Modules\ModuleBase.cpp" />
     <ClCompile Include="Actor\Equipment\Modules\ModuleCargo.cpp" />
     <ClCompile Include="Actor\Equipment\Modules\ModuleDrill.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleHelper.cpp" />
     <ClCompile Include="Actor\Equipment\Modules\ModuleMotor.cpp" />
     <ClCompile Include="Actor\Equipment\Modules\ModuleFuelTank.cpp" />
     <ClCompile Include="Actor\Equipment\Modules\ModuleHull.cpp" />
@@ -317,15 +323,19 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UI\Elements\UISpriteWithText.cpp" />
     <ClCompile Include="UI\Elements\UIWidget.cpp" />
     <ClCompile Include="UI\Event.cpp" />
     <ClCompile Include="UI\ISpriteHandler.cpp" />
     <ClCompile Include="UI\IUIEventHandler.cpp" />
     <ClCompile Include="UI\Scenes\BaseScene.cpp" />
     <ClCompile Include="UI\Scenes\BuildingBrokerScene.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleDetailPanel.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleElement.cpp" />
     <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopScene.cpp" />
     <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneBase.cpp" />
-    <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneObject.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\CategorySelectionList.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleList.cpp" />
     <ClCompile Include="UI\Scenes\InventoryScene.cpp" />
     <ClCompile Include="UI\Scenes\Meta\SceneManager.cpp" />
     <ClCompile Include="UI\Elements\UIButton.cpp" />

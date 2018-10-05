@@ -9,6 +9,7 @@
 #include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleFuelTank.h"
 #include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleHull.h"
 #include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleMotor.h"
+#include "GameSession/Actor/Equipment/Modules/EnumsModules.h"
 #include "GameSession/Data/DataDefines.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -30,57 +31,29 @@ public:
 	void Init();
 
 public:
+	const CDataTemplateModuleBase* GetModuleTemplate(ModuleGUID moduleGUID, hvgs::ModuleType moduleType) const;
+
 	template<typename T>
 	constexpr const T* GetModuleTemplate(ModuleGUID moduleGUID) const;
 
+	const hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>& GetModuleMap(hvgs::ModuleType moduleType) const;
+
 protected:
 	template<class T>
-	void LoadModuleList(const hvgs::String& fileName, hvgs::Map<ModuleGUID, hvgs::UniquePtr<T>>& moduleMap);
-
-	//template<enum moduleType>
-	//constexpr const hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>& GetModuleList() const;
+	void LoadModuleList(const hvgs::String& fileName, hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>& moduleMap);
 
 protected:
-	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleHull>>			m_ModuleHullMap;
-	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleMotor>>		m_ModuleMotorMap;
-	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleDrill>>		m_ModuleDrillMap;
-	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleCargo>>		m_ModuleCargoMap;
-	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleFuelTank>>		m_ModuleFuelTankMap;
+	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>		m_ModuleHullMap;
+	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>		m_ModuleMotorMap;
+	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>		m_ModuleDrillMap;
+	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>		m_ModuleCargoMap;
+	hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>		m_ModuleFuelTankMap;
 };
 
 //////////////////////////////////////////////////////////////////////////
 
-//template<enum moduleType>
-//constexpr const hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>& hvda::CDataModuleManager::GetModuleList() const
-//{
-//	//if constexpr (moduleType == ModuleType::Hull)
-//	//{
-//	//	return m_ModuleHullMap;
-//	//}
-//	//else if constexpr (moduleType == ModuleType::Motor)
-//	//{
-//	//	return m_ModuleMotorMap;
-//	//}
-//	//else if constexpr (moduleType == ModuleType::Drill)
-//	//{
-//	//	return m_ModuleDrillMap;
-//	//}
-//	//else if constexpr (moduleType == ModuleType::Cargo)
-//	//{
-//	//	return m_ModuleCargoMap;
-//	//}
-//	//else if constexpr (moduleType == ModuleType::FuelTank)
-//	//{
-//	//	return m_ModuleFuelTankMap;
-//	//}
-//
-//	return m_ModuleCargoMap;
-//}
-
-//////////////////////////////////////////////////////////////////////////
-
 template<class T>
-void hvda::CDataModuleManager::LoadModuleList(const hvgs::String& fileName, hvgs::Map<ModuleGUID, hvgs::UniquePtr<T>>& moduleMap)
+void hvda::CDataModuleManager::LoadModuleList(const hvgs::String& fileName, hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>& moduleMap)
 {
 	moduleMap.clear();
 
@@ -118,7 +91,7 @@ constexpr const T* hvda::CDataModuleManager::GetModuleTemplate(ModuleGUID module
 			return nullptr;
 		}
 
-		return itFind->second.get();
+		return static_cast<const T*>(itFind->second.get());
 	};
 
 	if constexpr (std::is_same_v<T, CDataTemplateModuleHull>)

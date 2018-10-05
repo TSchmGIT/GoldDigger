@@ -46,6 +46,8 @@ void CFontManager::Init()
 		case hvgs::FontName::FiraSans_Regular:
 			fileName += "FiraSans-Regular.ttf";
 			break;
+		case hvgs::FontName::FiraSans_Bold:
+			fileName += "FiraSans-Bold.ttf";
 		default:
 			break;
 		}
@@ -63,7 +65,7 @@ void CFontManager::Init()
 
 //////////////////////////////////////////////////////////////////////////
 
-sf::Text* CFontManager::PopText(String content, const FontName& fontName /*= FontName::Arial*/, FontSize fontSize /*= FontSize(30)*/, const sf::Color& textColor /*= sf::Color::White*/)
+sf::Text* CFontManager::PopText(String content, const FontName& fontName /*= FontName::FiraSans_Regular*/, FontSize fontSize /*= FontSize(30)*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	auto itFont = m_FontTable.find(fontName);
 	ASSERT_OR_EXECUTE(itFont != m_FontTable.end(), return nullptr);

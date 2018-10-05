@@ -14,6 +14,8 @@ class CDataTemplateModuleDrill : public CDataTemplateModuleBase
 public:
 	CDataTemplateModuleDrill(const JSON& json);
 	virtual ~CDataTemplateModuleDrill() = default;
+
+	hvgs::ModuleType GetType() const override;
 };
 
 /////////////////////////////////////////////////////////////////////////////

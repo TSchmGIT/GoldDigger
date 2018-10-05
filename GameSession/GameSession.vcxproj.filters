@@ -264,19 +264,34 @@
     <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UI\UIStructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI\Elements\UIButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Rendering\UIScope.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\CategorySelectionList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Elements\UISpriteWithText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="UI\Elements\UIWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering\UIScope.h">
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleDetailPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Equipment\Modules\ModuleHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -470,13 +485,28 @@
     <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UI\Elements\UIButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\CategorySelectionList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Elements\UISpriteWithText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="UI\Elements\UIWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleDetailPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Equipment\Modules\ModuleHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

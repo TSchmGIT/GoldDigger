@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "DataTemplateModuleFuelTank.h"
 
+#include "GameSession/Actor/Equipment/Modules/ModuleHelper.h"
+
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvda
@@ -11,9 +13,17 @@ namespace hvda
 CDataTemplateModuleFuelTank::CDataTemplateModuleFuelTank(const JSON& json)
 	: CDataTemplateModuleBase(json)
 {
-	//m_FuelType = json["fueltype"].get<hvgs::FuelType>();
+	auto fuelTypeString = json["fueltype"].get<hvgs::String>();
+	m_FuelType = CModuleHelper::ConvertStringToFuelType(fuelTypeString);
 	m_Consumption = hvgs::FuelConsumption(json["consumption"].get<hvgs::FuelConsumption::value_type>());
 	m_Capacity = hvgs::FuelAmount(json["capacity"].get<hvgs::FuelAmount::value_type>());
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::ModuleType CDataTemplateModuleFuelTank::GetType() const
+{
+	return hvgs::ModuleType::FuelTank;
 }
 
 //////////////////////////////////////////////////////////////////////////

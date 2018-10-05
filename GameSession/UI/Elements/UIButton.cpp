@@ -23,47 +23,14 @@ CUIButton::CUIButton(const CBaseScene& baseScene)
 
 //////////////////////////////////////////////////////////////////////////
 
-CUIButton::CUIButton(const CUIButton& other)
-	:IUIEventHandler(other)
-	, m_BaseScene(other.m_BaseScene)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////
-
 void CUIButton::Draw() const
 {
-	CRenderManager::GetMutable().DrawSpriteUI(GetPosition(), GetTextureName(), m_Size, Alignment::TopLeft);
+	CRenderManager::GetMutable().DrawSpriteUI(GetPosition(), GetTextureName(), GetSize(), GetAlignment());
 
-	CRenderManager::GetMutable().DrawText(GetPosition() + GetSize() * 0.5f, m_TextInfo.Text, m_TextInfo.TextAlignment, m_TextInfo.TextFont, m_TextInfo.TextSize, m_TextInfo.TextColor);
-}
+	auto textPos = GetPosition();
+	CRenderManager::AdjustPivot(textPos, GetSize(), GetAlignment());
 
-//////////////////////////////////////////////////////////////////////////
-
-const hvgs::ScreenPos& CUIButton::GetSize() const
-{
-	return m_Size;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CUIButton::SetSize(const ScreenPos& size)
-{
-	m_Size = size;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-const hvgs::ScreenPos& CUIButton::GetPosition() const
-{
-	return m_Position;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CUIButton::SetPosition(const ScreenPos& position)
-{
-	m_Position = position;
+	CRenderManager::GetMutable().DrawText(textPos + GetSize() * 0.5f, m_TextInfo.Text, m_TextInfo.TextAlignment, m_TextInfo.TextFont, m_TextInfo.TextSize, m_TextInfo.TextColor);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -77,11 +44,17 @@ void CUIButton::OnMouseClicked(const ScreenPos& pos)
 		return;
 	}
 
+	if (GetIsDisabled())
+	{
+		return;
+	}
+
 	// execute action
 	if (!IsOverButton(pos))
 	{
 		return;
 	}
+
 
 	if (m_Action)
 	{
@@ -96,6 +69,11 @@ void CUIButton::OnMouseMove(const ScreenPos& delta, const ScreenPos& pos)
 	IUIEventHandler::OnMouseMove(delta, pos);
 
 	if (!m_BaseScene.IsShown())
+	{
+		return;
+	}
+
+	if (GetIsDisabled())
 	{
 		return;
 	}
@@ -121,6 +99,11 @@ void CUIButton::OnMouseDown(const ScreenPos& pos)
 		return;
 	}
 
+	if (GetIsDisabled())
+	{
+		return;
+	}
+
 	if (IsOverButton(pos))
 	{
 		m_IsPressed = true;
@@ -139,6 +122,11 @@ void CUIButton::OnMouseUp(const ScreenPos& pos)
 		return;
 	}
 
+	if (GetIsDisabled())
+	{
+		return;
+	}
+
 	m_IsPressed = false;
 	m_State = IsOverButton(pos) ? ButtonState::Hover : ButtonState::Default;
 }
@@ -147,17 +135,17 @@ void CUIButton::OnMouseUp(const ScreenPos& pos)
 
 hvgs::TextureName CUIButton::GetTextureName() const
 {
-	auto it = m_ButtonTextures.find(m_State);
-	ASSERT_OR_EXECUTE(it != m_ButtonTextures.end(), return TextureName::INVALID);
-
-	return it->second;
+	return GetTextureForState(m_State);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 bool CUIButton::IsOverButton(const ScreenPos& pos) const
 {
-	hvmath::AABB aabb(m_Position + m_BaseScene.GetPivotPoint() + m_Size * 0.5f, m_Size * 0.5f);
+	ScreenPos posOffset = GetPosition();
+	CRenderManager::AdjustPivot(posOffset, GetSize(), GetAlignment());
+
+	hvmath::AABB aabb(posOffset + m_BaseScene.GetPivotPoint() + GetSize() * 0.5f, GetSize() * 0.5f);
 
 	static hvmath::Hit hit;
 	return aabb.IntersectPoint(pos, hit);
@@ -175,6 +163,14 @@ void CUIButton::SetAction(std::function<void()> action)
 
 hvgs::TextureName CUIButton::GetTextureForState(ButtonState state) const
 {
+	if (GetIsSelected())
+	{
+		if (state == ButtonState::Default)
+		{
+			state = ButtonState::Pressed;
+		}
+	}
+
 	auto it = m_ButtonTextures.find(state);
 	ASSERT_OR_EXECUTE(it != m_ButtonTextures.end(), return TextureName::INVALID);
 
@@ -189,6 +185,17 @@ void CUIButton::SetTextureForState(ButtonState state, TextureName textureName)
 	ASSERT_OR_EXECUTE(it != m_ButtonTextures.end(), return);
 
 	it->second = textureName;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::SetTextureForAllStates(TextureName textureName)
+{
+	for (int i = 0; i < int(ButtonState::Count); ++i)
+	{
+		auto state = ButtonState(i);
+		SetTextureForState(state, textureName);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -245,6 +252,68 @@ hvgs::FontSize CUIButton::GetTextSize() const
 void CUIButton::SetTextSize(FontSize fontSize)
 {
 	m_TextInfo.TextSize = fontSize;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CUIButton::GetIsSelected() const
+{
+	return m_IsSelected;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::SetIsSelected(bool isSelected)
+{
+	m_IsSelected = isSelected;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+int CUIButton::GetMetaData() const
+{
+	return m_MetaData;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::SetMetaData(int metaData)
+{
+	m_MetaData = metaData;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CUIButton::GetIsDisabled() const
+{
+	return m_IsDisabled;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::SetIsDisabled(bool isDisabled)
+{
+	if (m_IsDisabled == isDisabled)
+	{
+		return;
+	}
+
+	m_IsDisabled = isDisabled;
+	m_State = isDisabled ? ButtonState::Deactivated : ButtonState::Default;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::Alignment CUIButton::GetAlignment() const
+{
+	return m_Alignment;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::SetAlignment(Alignment alignment)
+{
+	m_Alignment = alignment;
 }
 
 //////////////////////////////////////////////////////////////////////////

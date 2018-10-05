@@ -22,9 +22,6 @@
 namespace hvgs
 {
 
-static const int	SCREEN_WIDTH = 1920;
-static const int	SCREEN_HEIGHT = 1080;
-
 //////////////////////////////////////////////////////////////////////////
 
 CRenderManager::CRenderManager()
@@ -47,7 +44,11 @@ void CRenderManager::Init()
 	CFontManager::GetMutable().Init();
 	CTextureManager::GetMutable().Init();
 
-	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Gold Digger");
+	const auto& desktopMode = sf::VideoMode::getDesktopMode();
+	auto width = unsigned int(desktopMode.width * 0.8f);
+	auto height = unsigned int(desktopMode.height * 0.8f);
+
+	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Gold Digger");
 	m_Window->setJoystickThreshold(0.25f);
 	m_Window->setKeyRepeatEnabled(false);
 	m_Window->setVerticalSyncEnabled(true);
@@ -189,7 +190,7 @@ void CRenderManager::UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHan
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::Arial*/, FontSize fontSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::FiraSans_Regular*/, FontSize fontSize /*= FontSize(60)*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	ScreenPos screenPosScoped = pos;
 	if (const auto* uiScope = GetCurrentUIScope(); uiScope)
@@ -224,7 +225,7 @@ void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Align
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, FontSize charSize /*= FontSize(60)*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::FiraSans_Regular*/, FontSize charSize /*= FontSize(60)*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
 	ScreenPos screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);

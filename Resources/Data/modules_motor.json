@@ -1,6 +1,7 @@
 [
   {
     "guid": 200,
+    "texture": 34,
     "price": 0,
     "name": "Basic Motor"
   }

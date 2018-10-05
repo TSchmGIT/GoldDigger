@@ -17,6 +17,12 @@ public:
 		: m_PivotPosition(pivotPosition)
 	{
 		m_LastUIScope = CRenderManager::Get().GetCurrentUIScope();
+
+		if (m_LastUIScope)
+		{
+			m_PivotPosition += m_LastUIScope->m_PivotPosition;
+		}
+
 		CRenderManager::GetMutable().SetCurrentUIScope(this);
 	}
 

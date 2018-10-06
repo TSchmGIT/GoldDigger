@@ -78,14 +78,13 @@ void CInventoryScene::Enter()
 
 hvgs::ScreenPos CInventoryScene::GetPivotPoint() const
 {
-	const auto& screenCenter = CRenderManager::Get().GetScreenCenter();
 	const auto* texture = CTextureManager::Get().GetTexture(TextureName::INVENTORYMAINSPRITE);
 	ASSERT_OR_EXECUTE(texture, return Vector2());
 
 	auto textureSize = texture->getSize();
 	hvmath::Vector2 textureSizeHalf{ textureSize.x * 0.5f, textureSize.y * 0.5f };
 
-	auto pivotPoint = screenCenter - textureSizeHalf;
+	auto pivotPoint = CRenderManager::GetBaseScreenSize() * 0.5f - textureSizeHalf;
 	return pivotPoint;
 }
 
@@ -107,7 +106,7 @@ void CInventoryScene::Draw() const
 
 		ScreenPos textPos = button->GetPosition() + button->GetSize() - ScreenPos(2.0f, 2.0f); // Bottom right of button tile
 
-		CRenderManager::GetMutable().DrawText(textPos, std::to_string(amount), Alignment::BottomRight, FontName::Courier_New, FontSize(40), sf::Color::White);
+		CRenderManager::GetMutable().DrawTextUI(textPos, std::to_string(amount), Alignment::BottomRight, FontName::Courier_New, FontSize(40), sf::Color::White);
 	}
 }
 

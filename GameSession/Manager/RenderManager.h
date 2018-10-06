@@ -53,7 +53,16 @@ public:
 
 	hvuint GetScreenWidth() const;
 	hvuint GetScreenHeight() const;
+	Vector2 GetScreenSize() const;
 	ScreenPos GetScreenCenter() const;
+
+	constexpr static int GetBaseScreenWidth() { return 1920; }
+	constexpr static int GetBaseScreenHeight() { return 1080; }
+	constexpr static Vector2 GetBaseScreenSize() { return { float(GetBaseScreenWidth()), float(GetBaseScreenHeight()) }; }
+
+	void ScaleUIPos(ScreenPos& pos) const;
+	void ScaleUISize(ScreenPos& pos) const;
+	void ScaleUITextSize(FontSize& fontSize) const;
 
 	const CUIScope* GetCurrentUIScope() const;
 	void SetCurrentUIScope(const CUIScope* uiScope);
@@ -70,7 +79,7 @@ public:
 	void RegisterSpriteHandler(const ui::ISpriteHandler* spriteHandler);
 	void UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHandler);
 public:
-	void DrawText(const ScreenPos& pos, const String& content, Alignment alignment = Alignment::TopLeft, const FontName& fontName = FontName::FiraSans_Regular, FontSize fontSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
+	void DrawTextUI(const ScreenPos& pos, const String& content, Alignment alignment = Alignment::TopLeft, const FontName& fontName = FontName::FiraSans_Regular, FontSize fontSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
 
 	void DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName = FontName::FiraSans_Regular, FontSize charSize = FontSize(60), const sf::Color& textColor = sf::Color::White);
 	/// Draws a sprite on the screen with given world coordinates (position may be out of viewport)
@@ -85,8 +94,6 @@ public:
 protected:
 	void DrawSpriteInternal(const ScreenPos& pos, const sf::Texture* texture, const Vector2& scaleFactor = Vector2(1.0, 1.0f), Alignment alignment = Alignment::Center);
 
-	//////////////////////////////////////////////////////////////////////////
-	// Debug
 protected:
 	void DrawRenderManager();
 

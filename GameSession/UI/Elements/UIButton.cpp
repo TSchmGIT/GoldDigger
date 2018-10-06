@@ -30,7 +30,7 @@ void CUIButton::Draw() const
 	auto textPos = GetPosition();
 	CRenderManager::AdjustPivot(textPos, GetSize(), GetAlignment());
 
-	CRenderManager::GetMutable().DrawText(textPos + GetSize() * 0.5f, m_TextInfo.Text, m_TextInfo.TextAlignment, m_TextInfo.TextFont, m_TextInfo.TextSize, m_TextInfo.TextColor);
+	CRenderManager::GetMutable().DrawTextUI(textPos + GetSize() * 0.5f, m_TextInfo.Text, m_TextInfo.TextAlignment, m_TextInfo.TextFont, m_TextInfo.TextSize, m_TextInfo.TextColor);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -142,10 +142,21 @@ hvgs::TextureName CUIButton::GetTextureName() const
 
 bool CUIButton::IsOverButton(const ScreenPos& pos) const
 {
+	// Get local position and button size
 	ScreenPos posOffset = GetPosition();
-	CRenderManager::AdjustPivot(posOffset, GetSize(), GetAlignment());
+	Vector2 buttonSize = GetSize();
 
-	hvmath::AABB aabb(posOffset + m_BaseScene.GetPivotPoint() + GetSize() * 0.5f, GetSize() * 0.5f);
+	// adjust position for alignment (local space)
+	CRenderManager::AdjustPivot(posOffset, buttonSize, GetAlignment());
+
+	// Calculate the final local position
+	auto finalPos = posOffset + m_BaseScene.GetPivotPoint() + buttonSize * 0.5f;
+
+	// Scale position and button size to global coords
+	CRenderManager::Get().ScaleUIPos(finalPos);
+	CRenderManager::Get().ScaleUISize(buttonSize);
+
+	hvmath::AABB aabb(finalPos, buttonSize * 0.5f);
 
 	static hvmath::Hit hit;
 	return aabb.IntersectPoint(pos, hit);

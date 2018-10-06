@@ -20,14 +20,13 @@ CBuildingWorkshopSceneBase::CBuildingWorkshopSceneBase()
 
 hvgs::Vector2 CBuildingWorkshopSceneBase::GetPivotPoint() const
 {
-	const auto& screenCenter = CRenderManager::Get().GetScreenCenter();
 	const auto* texture = CTextureManager::Get().GetTexture(TextureName::BUILDING_WORKSHOP);
 	ASSERT_OR_EXECUTE(texture, return Vector2());
 
 	auto textureSize = texture->getSize();
 	hvmath::Vector2 textureSizeHalf{ textureSize.x * 0.5f, textureSize.y * 0.5f };
 
-	auto pivotPoint = screenCenter - textureSizeHalf;
+	auto pivotPoint = CRenderManager::GetBaseScreenSize() * 0.5f - textureSizeHalf;
 	return pivotPoint;
 }
 

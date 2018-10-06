@@ -80,7 +80,7 @@ void CModuleDetailPanel::DrawName() const
 	constexpr Vector2 textPos{ 1294.0f, 424.0f };
 
 	const auto& moduleName = moduleTemplate->GetName();
-	CRenderManager::GetMutable().DrawText(textPos, moduleName, Alignment::Center, FontName::FiraSans_Regular, FontSize(39), sf::Color::Black);
+	CRenderManager::GetMutable().DrawTextUI(textPos, moduleName, Alignment::Center, FontName::FiraSans_Regular, FontSize(39), sf::Color::Black);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -120,8 +120,8 @@ void CModuleDetailPanel::DrawCosts() const
 
 		constexpr Vector2 currentMoneyLabelPos{ 1109.0f, 656.0f };
 		constexpr Vector2 currentMoneyPos{ 1481.0f, 656.0f };
-		CRenderManager::GetMutable().DrawText(currentMoneyLabelPos, "Money:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
-		CRenderManager::GetMutable().DrawText(currentMoneyPos, currentMoneyString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(currentMoneyLabelPos, "Money:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(currentMoneyPos, currentMoneyString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -133,8 +133,8 @@ void CModuleDetailPanel::DrawCosts() const
 
 		constexpr Vector2 moduleCostsLabelPos{ 1109.0f, 693.0f };
 		constexpr Vector2 moduleCostsPos{ 1481.0f, 693.0f };
-		CRenderManager::GetMutable().DrawText(moduleCostsLabelPos, "Costs:", Alignment::TopLeft, FontName::FiraSans_Bold, FontSize(25), sf::Color::Black);
-		CRenderManager::GetMutable().DrawText(moduleCostsPos, moduleCostsString, Alignment::TopRight, FontName::FiraSans_Bold, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(moduleCostsLabelPos, "Costs:", Alignment::TopLeft, FontName::FiraSans_Bold, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(moduleCostsPos, moduleCostsString, Alignment::TopRight, FontName::FiraSans_Bold, FontSize(25), sf::Color::Black);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -146,8 +146,8 @@ void CModuleDetailPanel::DrawCosts() const
 
 		constexpr Vector2 moneyAfterPurchaseLabelPos{ 1109.0f, 730.0f };
 		constexpr Vector2 moneyAfterPurchasePos{ 1481.0f, 730.0f };
-		CRenderManager::GetMutable().DrawText(moneyAfterPurchaseLabelPos, "After purchase:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
-		CRenderManager::GetMutable().DrawText(moneyAfterPurchasePos, moneyAfterPurchaseString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(moneyAfterPurchaseLabelPos, "After purchase:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(moneyAfterPurchasePos, moneyAfterPurchaseString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
 	}
 }
 
@@ -232,8 +232,8 @@ void CModuleDetailPanel::DrawDetailsFuelTank() const
 
 		constexpr Vector2 fuelCapacityLabelPos{ 1109.0f, 477.0f };
 		constexpr Vector2 fuelCapacityPos{ 1481.0f, 477.0f };
-		CRenderManager::GetMutable().DrawText(fuelCapacityLabelPos, "Fuel Type:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
-		CRenderManager::GetMutable().DrawText(fuelCapacityPos, fuelTypeString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(fuelCapacityLabelPos, "Fuel Type:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(fuelCapacityPos, fuelTypeString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -247,8 +247,8 @@ void CModuleDetailPanel::DrawDetailsFuelTank() const
 
 		constexpr Vector2 fuelCapacityLabelPos{ 1109.0f, 514.0f };
 		constexpr Vector2 fuelCapacityPos{ 1481.0f, 514.0f };
-		CRenderManager::GetMutable().DrawText(fuelCapacityLabelPos, "Capacity:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
-		CRenderManager::GetMutable().DrawText(fuelCapacityPos, fuelCapacityString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(fuelCapacityLabelPos, "Capacity:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(fuelCapacityPos, fuelCapacityString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -262,8 +262,8 @@ void CModuleDetailPanel::DrawDetailsFuelTank() const
 
 		constexpr Vector2 fuelConsumptionLabelPos{ 1109.0f, 551.0f };
 		constexpr Vector2 fuelConsumptionPos{ 1481.0f, 551.0f };
-		CRenderManager::GetMutable().DrawText(fuelConsumptionLabelPos, "Consumption:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
-		CRenderManager::GetMutable().DrawText(fuelConsumptionPos, fuelConsumptionString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(fuelConsumptionLabelPos, "Consumption:", Alignment::TopLeft, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
+		CRenderManager::GetMutable().DrawTextUI(fuelConsumptionPos, fuelConsumptionString, Alignment::TopRight, FontName::FiraSans_Regular, FontSize(25), sf::Color::Black);
 	}
 }
 

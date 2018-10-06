@@ -72,4 +72,14 @@ bool CBaseScene::OnCustomEscHandling()
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::ScreenPos CBaseScene::GetPivotPointGlobal() const
+{
+	auto pivotPointGlobal = GetPivotPoint();
+	CRenderManager::Get().ScaleUIPos(pivotPointGlobal);
+
+	return pivotPointGlobal;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 } // hvgs::ui

@@ -20,7 +20,7 @@ CUISpriteWithText::CUISpriteWithText(TextureName spriteTexture, const TextUIInfo
 void CUISpriteWithText::Draw() const
 {
 	CRenderManager::GetMutable().DrawSpriteUI(GetPosition(), m_SpriteTexture, GetSize(), Alignment::TopLeft);
-	CRenderManager::GetMutable().DrawText(GetPosition() + GetSize() * 0.5f, m_TextInfo.Text, m_TextInfo.TextAlignment, m_TextInfo.TextFont, m_TextInfo.TextSize, m_TextInfo.TextColor);
+	CRenderManager::GetMutable().DrawTextUI(GetPosition() + GetSize() * 0.5f, m_TextInfo.Text, m_TextInfo.TextAlignment, m_TextInfo.TextFont, m_TextInfo.TextSize, m_TextInfo.TextColor);
 }
 
 //////////////////////////////////////////////////////////////////////////

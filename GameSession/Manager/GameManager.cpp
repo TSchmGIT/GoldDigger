@@ -220,7 +220,7 @@ void CGameManager::Draw() const
 	std::ostringstream ss;
 	ss.precision(3);
 	ss << "FPS: " << lastFPS;
-	CRenderManager::GetMutable().DrawText(ScreenPos(0.0f, 0.0f), ss.str(), Alignment::TopLeft, FontName::Courier_New);
+	CRenderManager::GetMutable().DrawTextUI(ScreenPos(0.0f, 0.0f), ss.str(), Alignment::TopLeft, FontName::Courier_New);
 }
 
 //////////////////////////////////////////////////////////////////////////

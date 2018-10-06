@@ -16,7 +16,7 @@ namespace hvgs
 
 void CInventory::Draw() const
 {
-	CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, 100.0f), "Inventory", Alignment::TopLeft, FontName::Arial);
+	CRenderManager::GetMutable().DrawTextUI(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, 100.0f), "Inventory", Alignment::TopLeft, FontName::Arial);
 
 	int counter = 0;
 	for (const auto& itemStack : m_ItemStackList)
@@ -28,7 +28,7 @@ void CInventory::Draw() const
 
 		String text = item->GetDisplayName() + " (" + std::to_string(itemStack.GetCurrentAmount()) + ")";
 
-		CRenderManager::GetMutable().DrawText(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, y), text, Alignment::TopLeft, FontName::Arial, FontSize(40));
+		CRenderManager::GetMutable().DrawTextUI(ScreenPos(float(CRenderManager::Get().GetScreenWidth()) - 400.0f, y), text, Alignment::TopLeft, FontName::Arial, FontSize(40));
 		counter++;
 	}
 }

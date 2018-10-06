@@ -129,6 +129,13 @@ hvuint CRenderManager::GetScreenHeight() const
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::Vector2 CRenderManager::GetScreenSize() const
+{
+	return { float(GetScreenWidth()), float(GetScreenHeight()) };
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 hvgs::ScreenPos CRenderManager::GetScreenCenter() const
 {
 	return ScreenPos(m_Window->getSize()) * 0.5f;
@@ -190,13 +197,16 @@ void CRenderManager::UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHan
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::FiraSans_Regular*/, FontSize fontSize /*= FontSize(60)*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawTextUI(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::FiraSans_Regular*/, FontSize fontSize /*= FontSize(60)*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	ScreenPos screenPosScoped = pos;
 	if (const auto* uiScope = GetCurrentUIScope(); uiScope)
 	{
 		screenPosScoped += uiScope->GetPivotPosition();
 	}
+
+	ScaleUIPos(screenPosScoped);
+	ScaleUITextSize(fontSize);
 
 	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, fontSize, textColor);
 
@@ -230,7 +240,7 @@ void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, c
 	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
 	ScreenPos screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
 
-	DrawText(screenPos, content, Alignment::TopLeft, fontName, charSize, textColor);
+	DrawTextUI(screenPos, content, Alignment::TopLeft, fontName, charSize, textColor);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -290,7 +300,9 @@ void CRenderManager::DrawSpriteUI(const ScreenPos& screenPos, TextureName textur
 	{
 		screenPosScoped += uiScope->GetPivotPosition();
 	}
-	
+
+	ScaleUIPos(screenPosScoped);
+
 	// Do not render objects outside the view
 	if (screenPosScoped.x < 0 || screenPosScoped.x > GetScreenWidth() ||
 		screenPosScoped.y < 0 || screenPosScoped.y > GetScreenHeight())
@@ -304,7 +316,11 @@ void CRenderManager::DrawSpriteUI(const ScreenPos& screenPos, TextureName textur
 	// Calculate scale that should be applied to the texture (min scale of x and y dimension)
 	Vector2 textureSize = texture->getSize();
 	ASSERT_OR_EXECUTE(textureSize.x > 0 && textureSize.y > 0, return);
-	Vector2 scale(size.x / textureSize.x, size.y / textureSize.y);
+
+	auto adjustedSize = size;
+	ScaleUISize(adjustedSize);
+
+	Vector2 scale(adjustedSize.x / textureSize.x, adjustedSize.y / textureSize.y);
 
 	DrawSpriteInternal(screenPosScoped, texture, scale, alignment);
 }
@@ -319,6 +335,8 @@ void CRenderManager::DrawSpriteUI(const ScreenPos& screenPos, TextureName textur
 		screenPosScoped += uiScope->GetPivotPosition();
 	}
 
+	ScaleUIPos(screenPosScoped);
+
 	// Do not render objects outside the view
 	if (screenPosScoped.x < 0 || screenPosScoped.x > GetScreenWidth() ||
 		screenPosScoped.y < 0 || screenPosScoped.y > GetScreenHeight())
@@ -329,7 +347,11 @@ void CRenderManager::DrawSpriteUI(const ScreenPos& screenPos, TextureName textur
 	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
 	ASSERT_OR_EXECUTE(texture, return);
 
-	DrawSpriteInternal(screenPosScoped, texture, { 1.0f, 1.0f }, alignment);
+	Vector2 screenScaleVector = Vector2::ScaleInverse(GetScreenSize(), GetBaseScreenSize());
+	float minScaleFactor = hvmath::Min({ screenScaleVector.x, screenScaleVector.y });
+	Vector2 scaleVector{ minScaleFactor, minScaleFactor };
+
+	DrawSpriteInternal(screenPosScoped, texture, scaleVector, alignment);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -436,6 +458,49 @@ void CRenderManager::DrawSpriteInternal(const ScreenPos& pos, const sf::Texture*
 
 	m_PoolSprites.Delete(sprite);
 
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::ScaleUIPos(ScreenPos& pos) const
+{
+	// Calculate current scale factor in reference to base screen size
+	Vector2 currentScreenSize = GetScreenSize();
+	Vector2 screenScaleVector = ScreenPos::ScaleInverse(currentScreenSize, GetBaseScreenSize());
+	float minScaleFactor = hvmath::Min({ screenScaleVector.x, screenScaleVector.y });
+
+	// Adjust given position relative to the base screen center
+	ScreenPos scaledUIPosition = pos - (GetBaseScreenSize() * 0.5f);
+
+	// Scale the position
+	scaledUIPosition *= minScaleFactor;
+
+	// (Re-)add current center to bring it back to proper UI coords
+	scaledUIPosition += GetScreenCenter();
+
+	pos = scaledUIPosition;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::ScaleUISize(ScreenPos& pos) const
+{
+	Vector2 currentScreenSize = GetScreenSize();
+	Vector2 screenScaleVector = ScreenPos::ScaleInverse(currentScreenSize, GetBaseScreenSize());
+	float minScaleFactor = hvmath::Min({ screenScaleVector.x, screenScaleVector.y });
+
+	pos *= minScaleFactor;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::ScaleUITextSize(FontSize& fontSize) const
+{
+	Vector2 currentScreenSize = GetScreenSize();
+	Vector2 screenScaleVector = ScreenPos::ScaleInverse(currentScreenSize, GetBaseScreenSize());
+	float minScaleFactor = hvmath::Min({ screenScaleVector.x, screenScaleVector.y });
+
+	fontSize = FontSize(hvuint(fontSize.get() * minScaleFactor));
 }
 
 //////////////////////////////////////////////////////////////////////////

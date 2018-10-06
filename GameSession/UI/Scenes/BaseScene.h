@@ -20,6 +20,7 @@ public:
 	virtual bool IsFullscreenMenu() const = 0;
 
 	virtual ScreenPos GetPivotPoint() const = 0;
+	ScreenPos GetPivotPointGlobal() const;
 
 
 public:

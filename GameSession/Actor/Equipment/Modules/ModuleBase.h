@@ -32,6 +32,7 @@ public:
 	virtual ~CModuleBase() = default;
 
 	ModuleID GetID() const;
+	ModuleGUID GetGUID() const;
 
 public:
 	virtual void Tick();

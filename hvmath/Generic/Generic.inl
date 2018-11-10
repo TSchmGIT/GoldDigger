@@ -56,13 +56,13 @@ constexpr T PingPong(T time, T length)
 	}
 }
 
-template<typename T, typename TOutput>
+template<typename TOutput, typename T>
 constexpr TOutput Floor(T value)
 {
 	return TOutput(std::floor(value));
 }
 
-template<typename T, typename TOutput>
+template<typename TOutput, typename T>
 constexpr TOutput Ceil(T value)
 {
 	return TOutput(std::ceil(value));

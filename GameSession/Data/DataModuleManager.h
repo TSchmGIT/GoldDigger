@@ -34,7 +34,7 @@ public:
 	const CDataTemplateModuleBase* GetModuleTemplate(ModuleGUID moduleGUID, hvgs::ModuleType moduleType) const;
 
 	template<typename T>
-	constexpr const T* GetModuleTemplate(ModuleGUID moduleGUID) const;
+	const T* GetModuleTemplate(ModuleGUID moduleGUID) const;
 
 	const hvgs::Map<ModuleGUID, hvgs::UniquePtr<CDataTemplateModuleBase>>& GetModuleMap(hvgs::ModuleType moduleType) const;
 
@@ -80,7 +80,7 @@ void hvda::CDataModuleManager::LoadModuleList(const hvgs::String& fileName, hvgs
 /////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-constexpr const T* hvda::CDataModuleManager::GetModuleTemplate(ModuleGUID moduleGUID) const
+const T* hvda::CDataModuleManager::GetModuleTemplate(ModuleGUID moduleGUID) const
 {
 	auto findLambda = [moduleGUID](const auto& moduleMap) -> const T*
 	{

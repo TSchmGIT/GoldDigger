@@ -37,7 +37,7 @@ public:
 
 public:
 	CModuleBase* GetModule(ModuleType moduleType) const;
-	template<class ModuleClass>	constexpr ModuleClass* GetModule() const;
+	template<class ModuleClass>	ModuleClass* GetModule() const;
 
 	void ReplaceModule(ModuleType moduleType, ModuleGUID moduleGUID);
 
@@ -48,7 +48,7 @@ protected:
 //////////////////////////////////////////////////////////////////////////
 
 template<class ModuleClass>
-constexpr ModuleClass* hvgs::CEquipment::GetModule() const
+ModuleClass* hvgs::CEquipment::GetModule() const
 {
 	CModuleBase* moduleBase = nullptr;
 	if constexpr (std::is_same_v<ModuleClass, CModuleHull>)

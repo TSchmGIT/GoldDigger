@@ -33,11 +33,12 @@
 #include <bitset>
 #include <memory>
 
-#include <optional>
 
 #include <vector>
 #include <queue>
 #include <set>
+
+#include <boost/optional.hpp>
 
 #include <boost/unordered_map.hpp>
 #include <boost/pointer_cast.hpp>

@@ -18,10 +18,8 @@ class CChunkSlice
 {
 
 public:
-	//CChunkSlice(const CChunkSlice& other);
-	//CChunkSlice(CChunkSlice&& other);
-	CChunkSlice(const CChunk* parent, ChunkSliceInterval height);
-	virtual ~CChunkSlice();
+	CChunkSlice(const CChunk& parent, ChunkSliceInterval height);
+	virtual ~CChunkSlice() = default;
 
 public:
 	const CTile& GetTileAt(hvuint8 x, hvuint8 y) const;
@@ -37,8 +35,8 @@ protected:
 
 protected:
 	std::array<CTile, CHUNKSLICE_SIZE_X * CHUNKSLICE_SIZE_Y>	m_Tiles;
-	const CChunk*		m_Parent = nullptr;
-	ChunkSliceInterval	m_YLevel = ChunkSliceInterval(0);
+	const CChunk&												m_Parent;
+	ChunkSliceInterval											m_YLevel = ChunkSliceInterval(0);
 };
 
 /////////////////////////////////////////////////////////////////////////////

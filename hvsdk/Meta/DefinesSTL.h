@@ -4,6 +4,8 @@
 #include <queue>
 #include <set>
 
+#include <boost/optional.hpp>
+
 namespace hvgs
 {
 
@@ -15,6 +17,9 @@ template<class T>
 using SharedPtr = std::shared_ptr<T>;
 template<class T>
 using WeakPtr = std::weak_ptr<T>;
+
+template<class T>
+using Optional = boost::optional<T>;
 
 template<typename Key, typename Value>
 using Map = std::unordered_map<Key, Value>;

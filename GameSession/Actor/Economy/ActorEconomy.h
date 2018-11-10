@@ -22,7 +22,7 @@ public:
 	MoneyAmount RemoveMoney(MoneyAmount amount);
 
 protected:
-	MoneyAmount m_Money = MoneyAmount(0); ///< The money of the actor
+	MoneyAmount m_Money = MoneyAmount(1000); ///< The money of the actor
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -62,7 +62,7 @@ hvgs::CModuleBase* CEquipment::GetModule(hvgs::ModuleType moduleType) const
 void CEquipment::ReplaceModule(ModuleType moduleType, ModuleGUID moduleGUID)
 {
 	ModulePtr module = CEquipmentFactory::GetMutable().CreateModule(moduleType, moduleGUID, *this);
-	m_ModuleMap.emplace(moduleType, std::move(module));
+	m_ModuleMap[moduleType] = std::move(module);
 }
 
 //////////////////////////////////////////////////////////////////////////

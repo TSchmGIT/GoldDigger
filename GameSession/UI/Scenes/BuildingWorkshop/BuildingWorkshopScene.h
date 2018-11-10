@@ -40,6 +40,7 @@ protected:
 	void OnModuleElementPressed(const BuildingWorkshop::CModuleElement& moduleElement);
 
 	void OnPurchaseButtonPressed() override;
+	void OnCloseButtonPressed() override;
 
 protected:
 	ModuleType		m_SelectedModuleType = ModuleType::Invalid;

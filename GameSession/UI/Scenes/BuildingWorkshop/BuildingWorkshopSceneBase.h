@@ -41,20 +41,27 @@ protected:
 	BuildingWorkshop::CCategorySelectionList&	GetCategoryButtonList();
 	BuildingWorkshop::CModuleList&				GetModuleList();
 	BuildingWorkshop::CModuleDetailPanel&		GetModuleDetailPanel();
+	CUIButton&									GetCloseButton();
 
 protected:
+	void InitPurchaseButton();
+	void InitCloseButton();
+
 	void DrawBackground() const;
+	void DrawCloseButton() const;
 	void DrawCategorySelection() const;
 	void DrawModuleList() const;
 	void DrawModuleDetailView() const;
 
 protected:
 	virtual void OnPurchaseButtonPressed() = 0;
+	virtual void OnCloseButtonPressed() = 0;
 
 private:
 	BuildingWorkshop::CCategorySelectionList	m_CategoryButtonList = BuildingWorkshop::CCategorySelectionList(*this);
 	BuildingWorkshop::CModuleList				m_ModuleList = BuildingWorkshop::CModuleList(*this);
 	BuildingWorkshop::CModuleDetailPanel		m_ModuleDetailPanel = BuildingWorkshop::CModuleDetailPanel(*this);
+	CUIButton									m_CloseButton = CUIButton(*this);
 };
 
 /////////////////////////////////////////////////////////////////////////////

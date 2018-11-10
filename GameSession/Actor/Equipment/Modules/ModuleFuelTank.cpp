@@ -99,7 +99,6 @@ void CModuleFuelTank::TickFuelConsumption()
 
 	FuelConsumption consumption = templateFuelConsumption.GetConsumption();
 
-
 	// Calculate penalties
 	float penaltyFactor = GetPenaltyConsumptionFactor();
 	consumption *= FuelConsumption(penaltyFactor);

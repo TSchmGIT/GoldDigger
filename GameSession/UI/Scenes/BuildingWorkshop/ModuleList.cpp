@@ -133,6 +133,12 @@ void CModuleList::UpdateSingleElement(CModuleElement& moduleElement, size_t modu
 
 	ScreenPos pos{ xOffset, yOffset };
 	moduleElement.SetPosition(pos);
+
+	auto& buttonIcon = moduleElement.GetIconButton();
+	buttonIcon.SetSelectionOverlayTexture(ButtonState::Default, TextureName::BUILDING_WORKSHOP_UI_SELECTION_FRAME);
+	buttonIcon.SetSelectionOverlayTexture(ButtonState::Hover, TextureName::BUILDING_WORKSHOP_UI_SELECTION_FRAME_HOVER);
+	buttonIcon.SetSelectionOverlayTexture(ButtonState::Pressed, TextureName::BUILDING_WORKSHOP_UI_SELECTION_FRAME_PRESSED);
+
 }
 
 //////////////////////////////////////////////////////////////////////////

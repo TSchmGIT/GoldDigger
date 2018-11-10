@@ -217,6 +217,7 @@ void CGameManager::Draw() const
 		lastFPS = CTimeManager::Get().GetFPSAverage();
 		timestamp = CTimeManager::Get().GetAppTime();
 	}
+
 	std::ostringstream ss;
 	ss.precision(3);
 	ss << "FPS: " << lastFPS;

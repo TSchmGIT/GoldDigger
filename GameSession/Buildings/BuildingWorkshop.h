@@ -26,11 +26,7 @@ public:
 	virtual ~CBuildingWorkshop() = default;
 
 public:
-	void PurchaseModule(CActorEconomy& economy, CEquipment& equipment, ModuleType moduleType, ModuleGUID moduleGUID);
-
-	protected:
-	void ReplaceModule(CEquipment& equipment, ModuleType moduleType, ModuleGUID moduleGUID);
-
+	void PurchaseModule(CActorEconomy& economy, CEquipment& equipment, ModuleType moduleType, ModuleGUID moduleGUID) const;
 
 protected:
 	virtual ui::SceneID GetUISceneID() const override;

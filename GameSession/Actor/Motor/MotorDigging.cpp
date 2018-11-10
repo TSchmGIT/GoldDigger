@@ -83,7 +83,7 @@ void CMotorDigging::Tick()
 void CMotorDigging::ProcessTileDigging()
 {
 	// Get tile that should be mined
-	const CTile* tile = CWorld::Get().GetTileAt(m_TargetPos);
+	Optional<const CTile&> tile = CWorld::Get().GetTileAt(m_TargetPos);
 	ASSERT_OR_EXECUTE_TEXT(tile, "Tried to mine tile that is not available", return);
 	TileType tileType = tile->GetTileType();
 

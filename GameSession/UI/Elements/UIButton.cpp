@@ -31,6 +31,23 @@ void CUIButton::Draw() const
 	CRenderManager::AdjustPivot(textPos, GetSize(), GetAlignment());
 
 	CRenderManager::GetMutable().DrawTextUI(textPos + GetSize() * 0.5f, m_TextInfo.Text, m_TextInfo.TextAlignment, m_TextInfo.TextFont, m_TextInfo.TextSize, m_TextInfo.TextColor);
+
+	// Draw selection overlay when hovered or pressed OR when pressed (design decision)
+	if (ButtonState state = m_State;
+		GetIsSelected() || state == ButtonState::Hover || state == ButtonState::Pressed)
+	{
+		// When a selected button should always just display its default selected overlay
+		if (state == ButtonState::Hover && GetIsSelected())
+		{
+			state = ButtonState::Default;
+		}
+
+		if (TextureName overlayTexture = GetSelectionOverlayTexture(state);
+			overlayTexture != TextureName::INVALID)
+		{
+			CRenderManager::GetMutable().DrawSpriteUI(GetPosition(), overlayTexture, GetSize(), GetAlignment());
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -325,6 +342,27 @@ hvgs::Alignment CUIButton::GetAlignment() const
 void CUIButton::SetAlignment(Alignment alignment)
 {
 	m_Alignment = alignment;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::TextureName CUIButton::GetSelectionOverlayTexture(ButtonState state) const
+{
+	auto itFind = m_SelectionOverlayTextures.find(state);
+	if (itFind == m_SelectionOverlayTextures.end())
+	{
+		ASSERT_TEXT(false, "Tried to get selection overlay texture for invalid state");
+		return TextureName::INVALID;
+	}
+
+	return itFind->second;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CUIButton::SetSelectionOverlayTexture(ButtonState buttonState, TextureName texture)
+{
+	m_SelectionOverlayTextures[buttonState] = texture;
 }
 
 //////////////////////////////////////////////////////////////////////////

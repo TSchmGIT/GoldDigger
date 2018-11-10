@@ -147,6 +147,18 @@ void CTextureManager::Init()
 		case TextureName::MODULE_MOTOR_8:
 			fileName = "..\\Resources\\UI\\AdobeXD\\Motor 8.png";
 			break;
+		case TextureName::BUILDING_WORKSHOP_UI_SELECTION_FRAME:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Selectionframe.png";
+			break;
+		case TextureName::BUILDING_WORKSHOP_UI_SELECTION_FRAME_HOVER:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Selectionframe_hover.png";
+			break;
+		case TextureName::BUILDING_WORKSHOP_UI_SELECTION_FRAME_PRESSED:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Selectionframe_pressed.png";
+			break;
+		case TextureName::BUILDING_WORKSHOP_UI_CLOSE_BUTTON:
+			fileName = "..\\Resources\\UI\\AdobeXD\\Button_Close.png";
+			break;
 
 		default:
 			break;

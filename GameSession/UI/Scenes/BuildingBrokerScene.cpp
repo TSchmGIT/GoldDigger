@@ -100,7 +100,7 @@ void CBuildingBrokerScene::Enter()
 
 void CBuildingBrokerScene::OnSellAllButtonPressed()
 {
-	const auto* buildingBroker = CWorld::Get().GetBuilding<CBuildingBroker>();
+	auto buildingBroker = CWorld::Get().GetBuilding<CBuildingBroker>();
 	ASSERT_OR_EXECUTE(buildingBroker, return);
 
 	buildingBroker->PerformTransactionBuy(CWorld::GetMutable().GetActor());

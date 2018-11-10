@@ -8,6 +8,7 @@
 #include "GameSession/World/Chunk.h"
 #include "GameSession/World/ChunkSlice.h"
 #include "GameSession/World/Tile.h"
+#include "Buildings/BuildingWorkshop.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -18,10 +19,11 @@ namespace hvgs
 
 CWorld::CWorld()
 {
-	m_ChunkMap.reserve(64);
+	constexpr int amountChunks = 8;
+	m_ChunkMap.reserve(amountChunks * amountChunks * 2);
 
 	TT_BEGIN("Chunk Calculation");
-	for (int i = -2; i < 2; i++)
+	for (int i = -amountChunks; i < amountChunks; i++)
 	{
 		ChunkInterval posX(i * CHUNKSLICE_SIZE_X);
 
@@ -104,7 +106,7 @@ void CWorld::Shutdown()
 
 //////////////////////////////////////////////////////////////////////////
 
-const hvgs::Map<ChunkInterval, UniquePtr<hvgs::CChunk>>& CWorld::GetChunks() const
+const hvgs::Map<ChunkInterval, CChunk>& CWorld::GetChunks() const
 {
 	return m_ChunkMap;
 }
@@ -120,7 +122,7 @@ hvgs::CActor& CWorld::GetActor() const
 
 std::tuple<hvgs::ChunkInterval, hvgs::ChunkSlicePos> CWorld::WorldToChunkPos(const WorldPos& worldPos) const
 {
-	ChunkInterval outWorldX = FindNextChunkPos(hvmath::Floor<float, int>(worldPos.x));
+	ChunkInterval outWorldX = FindNextChunkPos(hvmath::Floor<int>(worldPos.x));
 
 
 	ChunkSlicePos outChunkPos;
@@ -154,7 +156,7 @@ hvgs::WorldPos CWorld::GetTilePos(const WorldPos& worldPos) const
 
 //////////////////////////////////////////////////////////////////////////
 
-const hvgs::CTile* CWorld::GetTileAt(const WorldPos& worldPos) const
+hvgs::Optional<const CTile&> CWorld::GetTileAt(const WorldPos& worldPos) const
 {
 	auto[worldX, chunkPos] = WorldToChunkPos(worldPos);
 
@@ -162,11 +164,11 @@ const hvgs::CTile* CWorld::GetTileAt(const WorldPos& worldPos) const
 	auto it = m_ChunkMap.find(worldX);
 	if (it == m_ChunkMap.end())
 	{
-		return nullptr;
+		return boost::none;
 	}
 
 	// Find Tile
-	return it->second->GetTileAt(hvmath::Floor<float, int>(worldPos.y), chunkPos);
+	return it->second.GetTileAt(hvmath::Floor<int>(worldPos.y), chunkPos);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -176,7 +178,7 @@ void CWorld::SetTileAt(const WorldPos& worldPos, TileType tileType, bool allowCr
 	auto[worldX, chunkPos] = WorldToChunkPos(worldPos);
 
 	// Find or create Chunk
-	CChunk* chunk = GetChunk(worldX);
+	Optional<CChunk&> chunk = GetChunk(worldX);
 	if (!chunk)
 	{
 		if (!allowCreation)
@@ -184,10 +186,10 @@ void CWorld::SetTileAt(const WorldPos& worldPos, TileType tileType, bool allowCr
 			return;
 		}
 
-		chunk = &CreateChunk(worldX);
+		chunk = CreateChunk(worldX);
 	}
 
-	chunk->SetTileAt(hvmath::Floor<float, int>(worldPos.y), chunkPos, tileType, allowCreation);
+	chunk->SetTileAt(hvmath::Floor<int>(worldPos.y), chunkPos, tileType, allowCreation);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -203,9 +205,12 @@ void CWorld::ConstructActor()
 void CWorld::ConstructBulidings()
 {
 	// Broker
-	m_Buildings.reserve(1);
+	m_Buildings.reserve(2);
 	auto& buildingBroker = m_Buildings.emplace_back(std::make_unique<CBuildingBroker>());
 	buildingBroker->SetPosition({ 3.0f, 0.0f });
+
+	auto& buildingWorkshop = m_Buildings.emplace_back(std::make_unique<CBuildingWorkshop>());
+	buildingWorkshop->SetPosition({ 6.0, 0.0f });
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -213,16 +218,13 @@ void CWorld::ConstructBulidings()
 hvgs::CChunk& CWorld::CreateChunk(ChunkInterval worldX)
 {
 	// Create chunk
-	auto chunk = std::make_unique<CChunk>(worldX);
+	auto emplaceResult = m_ChunkMap.emplace(worldX, worldX); //< key = worldX, value = implicit ctor of CChunk
+	auto& chunk = emplaceResult.first->second;
 
 	// Update terrain
-	chunk->UpdateSlicesAt(-32, 40);
+	chunk.UpdateSlicesAt(-32, 40);
 
-	// Add to chunk map
-	auto&& pair = m_ChunkMap.emplace(worldX, std::move(chunk));
-
-	auto it = pair.first;
-	return *it->second;
+	return chunk;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -241,16 +243,30 @@ void CWorld::RemoveChunk(ChunkInterval worldX)
 
 //////////////////////////////////////////////////////////////////////////
 
-hvgs::CChunk* CWorld::GetChunk(ChunkInterval worldX) const
+hvgs::Optional<CChunk&> CWorld::GetChunk(ChunkInterval worldX)
 {
 	// Try to find chunk interval in map
 	auto it = m_ChunkMap.find(worldX);
 	if (it == m_ChunkMap.end())
 	{
-		return nullptr;
+		return boost::none;
 	}
 
-	return it->second.get();
+	return it->second;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::Optional<const CChunk&> CWorld::GetChunk(ChunkInterval worldX) const
+{
+	// Try to find chunk interval in map
+	auto it = m_ChunkMap.find(worldX);
+	if (it == m_ChunkMap.end())
+	{
+		return boost::none;
+	}
+
+	return it->second;
 }
 
 //////////////////////////////////////////////////////////////////////////

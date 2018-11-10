@@ -14,6 +14,8 @@ namespace hvgs::ui
 CBuildingWorkshopSceneBase::CBuildingWorkshopSceneBase()
 {
 	m_ModuleList.SetMaximumElementsHorizontal(4);
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -55,6 +57,8 @@ void CBuildingWorkshopSceneBase::Draw() const
 	DrawModuleList();
 
 	DrawModuleDetailView();
+
+	DrawCloseButton();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -117,8 +121,43 @@ hvgs::ui::BuildingWorkshop::CModuleDetailPanel& CBuildingWorkshopSceneBase::GetM
 
 void CBuildingWorkshopSceneBase::Init()
 {
+	InitPurchaseButton();
+	InitCloseButton();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CBuildingWorkshopSceneBase::DrawCloseButton() const
+{
+	m_CloseButton.Draw();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CBuildingWorkshopSceneBase::InitPurchaseButton()
+{
 	auto& purchaseButton = m_ModuleDetailPanel.GetPurchaseButton();
 	purchaseButton.SetAction(boost::bind(&CBuildingWorkshopSceneBase::OnPurchaseButtonPressed, this));
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CBuildingWorkshopSceneBase::InitCloseButton()
+{
+	constexpr ScreenPos		buttonPos{ 1529.0f, 17.0f };
+	constexpr Vector2		buttonSize{ 51.0f, 52.0f };
+
+	m_CloseButton.SetPosition(buttonPos);
+	m_CloseButton.SetSize(buttonSize);
+	m_CloseButton.SetTextureForAllStates(TextureName::BUILDING_WORKSHOP_UI_CLOSE_BUTTON);
+	m_CloseButton.SetAction(boost::bind(&CBuildingWorkshopSceneBase::OnCloseButtonPressed, this));
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::ui::CUIButton& CBuildingWorkshopSceneBase::GetCloseButton()
+{
+	return m_CloseButton;
 }
 
 //////////////////////////////////////////////////////////////////////////

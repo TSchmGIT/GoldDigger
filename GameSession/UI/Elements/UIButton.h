@@ -48,6 +48,9 @@ public:
 	void SetTextureForState(ButtonState state, TextureName textureName);
 	void SetTextureForAllStates(TextureName textureName);
 
+	TextureName GetSelectionOverlayTexture(ButtonState state) const;
+	void SetSelectionOverlayTexture(ButtonState buttonState, TextureName texture);
+
 	bool GetIsSelected() const;
 	void SetIsSelected(bool isSelected);
 
@@ -98,10 +101,15 @@ protected:
 
 	int			m_MetaData = 0;
 
-	Map<ButtonState, TextureName> m_ButtonTextures = { {ButtonState::Default, TextureName::BUTTON_DEFAULT},
-													{ButtonState::Hover, TextureName::BUTTON_HOVER},
-													{ButtonState::Pressed, TextureName::BUTTON_PRESSED },
-													{ButtonState::Deactivated, TextureName::BUTTON_DEACTIVATED } };
+	Map<ButtonState, TextureName>	m_SelectionOverlayTextures = { {ButtonState::Default, TextureName::INVALID},
+																	{ButtonState::Hover, TextureName::INVALID},
+																	{ButtonState::Pressed, TextureName::INVALID},
+																	{ButtonState::Deactivated, TextureName::INVALID } };
+
+	Map<ButtonState, TextureName>	m_ButtonTextures = { {ButtonState::Default, TextureName::BUTTON_DEFAULT},
+															{ButtonState::Hover, TextureName::BUTTON_HOVER},
+															{ButtonState::Pressed, TextureName::BUTTON_PRESSED },
+															{ButtonState::Deactivated, TextureName::BUTTON_DEACTIVATED } };
 
 	std::function<void()> m_Action;
 };

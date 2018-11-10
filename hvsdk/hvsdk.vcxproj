@@ -168,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="JSON\json.hpp" />
     <ClInclude Include="Meta\Assert.h" />
+    <ClInclude Include="Meta\AssertManager.h" />
     <ClInclude Include="Meta\DefinesSTL.h" />
     <ClInclude Include="Meta\Log.h" />
     <ClInclude Include="Meta\NamedType.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Meta\AssertManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

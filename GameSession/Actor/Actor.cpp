@@ -83,7 +83,7 @@ void CActor::Draw() const
 	const auto* module = m_Equipment->GetModule(ModuleType::FuelTank);
 	const auto* moduleFuelTank = static_cast<const CModuleFuelTank*>(module);
 	ASSERT_OR_EXECUTE(moduleFuelTank, return);
-	renderManager.DrawTextUI(ScreenPos(CRenderManager::Get().GetScreenWidth() - 400.0f, 0.0f), "Fuel: " + std::to_string(int(moduleFuelTank->GetFuelPercentage() * 100)) + " %");
+	renderManager.DrawTextUI(ScreenPos(CRenderManager::Get().GetBaseScreenWidth() - 400.0f, 0.0f), "Fuel: " + std::to_string(int(moduleFuelTank->GetFuelPercentage() * 100)) + " %");
 
 	// Thruster sprite
 	if (m_Motor->IsThrusterInUse())

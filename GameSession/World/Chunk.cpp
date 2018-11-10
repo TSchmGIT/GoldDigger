@@ -15,36 +15,34 @@ namespace hvgs
 CChunk::CChunk(ChunkInterval positionX)
 	: m_PositionX(positionX)
 {
+	//LOG_INFO("CHUNK CREATED");
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 CChunk::~CChunk()
 {
-
+	//LOG_INFO("CHUNK DESTROYED");
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const Map<hvgs::ChunkSliceInterval, UniquePtr<hvgs::CChunkSlice>>& CChunk::GetChunkSlices() const
+const Map<hvgs::ChunkSliceInterval, hvgs::CChunkSlice>& CChunk::GetChunkSlices() const
 {
 	return m_ChunkSliceMap;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const hvgs::CChunkSlice* CChunk::GetChunkSliceAt(int yLevel) const
+hvgs::Optional<const CChunkSlice&> CChunk::GetChunkSliceAt(int yLevel) const
 {
 	auto it = m_ChunkSliceMap.find(FindNextChunkSlicePos(yLevel));
-
 	if (it == m_ChunkSliceMap.end())
 	{
-		return nullptr;
+		return boost::none;
 	}
-	else
-	{
-		return it->second.get();
-	}
+
+	return it->second;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -56,17 +54,17 @@ hvgs::ChunkInterval CChunk::GetPosX() const
 
 //////////////////////////////////////////////////////////////////////////
 
-const hvgs::CTile* CChunk::GetTileAt(int yLevel, const ChunkSlicePos& chunkPos) const
+hvgs::Optional<const CTile&> CChunk::GetTileAt(int yLevel, const ChunkSlicePos& chunkPos) const
 {
 	ChunkSliceInterval yChunkInterval = FindNextChunkSlicePos(yLevel);
 
 	auto it = m_ChunkSliceMap.find(yChunkInterval);
 	if (it == m_ChunkSliceMap.end())
 	{
-		return nullptr;
+		return boost::none;
 	}
 
-	return &it->second->GetTileAt(chunkPos.x, chunkPos.y);
+	return it->second.GetTileAt(chunkPos.x, chunkPos.y);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -75,8 +73,8 @@ void CChunk::SetTileAt(int yLevel, const ChunkSlicePos& chunkPos, TileType tileT
 {
 	ChunkSliceInterval yChunkInterval = FindNextChunkSlicePos(yLevel);
 
-	auto it = m_ChunkSliceMap.find(yChunkInterval);
 	CChunkSlice* chunkSlice = nullptr;
+	auto it = m_ChunkSliceMap.find(yChunkInterval);
 	if (it == m_ChunkSliceMap.end())
 	{
 		if (!allowCreation)
@@ -86,15 +84,14 @@ void CChunk::SetTileAt(int yLevel, const ChunkSlicePos& chunkPos, TileType tileT
 		else
 		{
 			// Create chunk slice
-			UniquePtr<CChunkSlice> slice = std::make_unique<CChunkSlice>(this, yChunkInterval);
+			CChunkSlice slice{ *this, yChunkInterval };
 			auto emplaceResult = m_ChunkSliceMap.emplace(yChunkInterval, std::move(slice));
-			chunkSlice = emplaceResult.first->second.get();
-			return;
+			chunkSlice = &emplaceResult.first->second;
 		}
 	}
 	else
 	{
-		chunkSlice = it->second.get();
+		chunkSlice = &it->second;
 	}
 
 	ASSERT_OR_EXECUTE(chunkSlice, return);
@@ -121,8 +118,8 @@ void CChunk::UpdateSlicesAt(int yLevel, int yRange)
 			continue;
 		}
 
-		UniquePtr<CChunkSlice> slice = std::make_unique<CChunkSlice>(this, height);
-		slice->CalculateTiles();
+		CChunkSlice slice{ *this, height };
+		slice.CalculateTiles();
 
 		m_ChunkSliceMap.emplace(height, std::move(slice));
 	}
@@ -131,7 +128,7 @@ void CChunk::UpdateSlicesAt(int yLevel, int yRange)
 
 //////////////////////////////////////////////////////////////////////////
 
-inline ChunkSliceInterval CChunk::FindNextChunkSlicePos(int yLevel) const
+constexpr hvgs::ChunkSliceInterval CChunk::FindNextChunkSlicePos(int yLevel) const
 {
 	if (yLevel >= 0)
 	{

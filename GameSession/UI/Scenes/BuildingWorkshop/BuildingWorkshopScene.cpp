@@ -1,14 +1,17 @@
 #include "stdafx.h"
 #include "BuildingWorkshopScene.h"
 
+#include "GameSession/Actor/Actor.h"
+#include "GameSession/Actor/Economy/ActorEconomy.h"
+#include "GameSession/Actor/Equipment/Equipment.h"
+#include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleBase.h"
+#include "GameSession/Actor/Equipment/Modules/DefinesModules.h"
 #include "GameSession/Actor/Equipment/Modules/EnumsModules.h"
-#include "Data/DataModuleManager.h"
-#include "ModuleElement.h"
-#include "Actor/Equipment/Modules/DataTemplates/DataTemplateModuleBase.h"
-#include "Actor/Equipment/Modules/DefinesModules.h"
-#include "World/World.h"
-#include "Actor/Actor.h"
-#include "Actor/Economy/ActorEconomy.h"
+#include "GameSession/Data/DataModuleManager.h"
+#include "GameSession/UI/Scenes/BuildingWorkshop/ModuleElement.h"
+#include "GameSession/UI/Scenes/Meta/SceneManager.h"
+#include "GameSession/World/World.h"
+#include "Buildings/BuildingWorkshop.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +39,7 @@ void CBuildingWorkshopScene::Enter()
 
 void CBuildingWorkshopScene::SyncTickVisible()
 {
-	CBaseScene::SyncTickVisible();
+	CBuildingWorkshopSceneBase::SyncTickVisible();
 
 	// Disable purchase button
 	auto& moduleDetailPanel = GetModuleDetailPanel();
@@ -68,6 +71,7 @@ void CBuildingWorkshopScene::UpdateCategoryList()
 		{
 		case hvgs::ModuleType::Hull:
 			moduleTypeText = "Hull";
+			button.SetIsDisabled(true);
 			break;
 		case hvgs::ModuleType::Motor:
 			moduleTypeText = "Motor";
@@ -105,6 +109,10 @@ void CBuildingWorkshopScene::UpdateModuleList()
 	const auto& moduleMap = hvda::CDataModuleManager::Get().GetModuleMap(m_SelectedModuleType);
 	moduleList.Resize(moduleMap.size());
 
+	const auto& equipment = CWorld::Get().GetActor().GetEquipment();
+	const auto* currentModule = equipment.GetModule(m_SelectedModuleType);
+	ASSERT_OR_EXECUTE(currentModule, return);
+
 	size_t index = 0;
 	for (const auto& kvPair : moduleMap)
 	{
@@ -113,7 +121,11 @@ void CBuildingWorkshopScene::UpdateModuleList()
 
 		const hvda::CDataTemplateModuleBase& dataModule = *kvPair.second;
 
-		if (auto modulePrice = dataModule.GetPrice(); modulePrice == MoneyAmount(0))
+		if (dataModule.GetGUID() == currentModule->GetGUID())
+		{
+			moduleElement.SetModuleState(BuildingWorkshop::CModuleElement::ModulePurchaseState::Owned);
+		}
+		else if (auto modulePrice = dataModule.GetPrice(); modulePrice == MoneyAmount(0))
 		{
 			moduleElement.SetModuleState(BuildingWorkshop::CModuleElement::ModulePurchaseState::Free);
 		}
@@ -127,7 +139,10 @@ void CBuildingWorkshopScene::UpdateModuleList()
 		moduleElement.SetModuleTexture(texture);
 
 		auto& buttonIcon = moduleElement.GetIconButton();
-		buttonIcon.SetMetaData(int(dataModule.GetGUID()));
+
+		auto moduleGUID = dataModule.GetGUID();
+		buttonIcon.SetMetaData(int(moduleGUID));
+		buttonIcon.SetIsSelected(moduleGUID == m_SelectedModuleGUID);
 		buttonIcon.SetAction(boost::bind(&CBuildingWorkshopScene::OnModuleElementPressed, this, boost::cref(moduleElement)));
 	}
 }
@@ -188,6 +203,7 @@ void CBuildingWorkshopScene::SetSelectedModuleGUID(ModuleGUID moduleGUID)
 	}
 
 	m_SelectedModuleGUID = moduleGUID;
+	UpdateModuleList();
 	UpdateModuleDetailPanel();
 }
 
@@ -209,7 +225,23 @@ hvgs::ModuleType CBuildingWorkshopScene::GetSelectedModuleType() const
 
 void CBuildingWorkshopScene::OnPurchaseButtonPressed()
 {
+	auto buildingWorkshop = CWorld::Get().GetBuilding<hvgs::CBuildingWorkshop>();
+	ASSERT_OR_EXECUTE(buildingWorkshop, return);
 
+	auto& actor = CWorld::Get().GetActor();
+	auto& economy = actor.GetEconomy();
+	auto& equipment = actor.GetEquipment();
+
+	buildingWorkshop->PurchaseModule(economy, equipment, m_SelectedModuleType, m_SelectedModuleGUID);
+
+	UpdateModuleList();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CBuildingWorkshopScene::OnCloseButtonPressed()
+{
+	CSceneManager::GetMutable().LeaveState(GetSceneID());
 }
 
 //////////////////////////////////////////////////////////////////////////

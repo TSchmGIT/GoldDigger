@@ -11,17 +11,16 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-void CBuildingWorkshop::PurchaseModule(CActorEconomy&, CEquipment& equipment, ModuleType moduleType, ModuleGUID moduleGUID)
+void CBuildingWorkshop::PurchaseModule(CActorEconomy& economy, CEquipment& equipment, ModuleType moduleType, ModuleGUID moduleGUID) const
 {
-	ReplaceModule(equipment, moduleType, moduleGUID);
+	const auto* moduleTemplate = hvda::CDataModuleManager::Get().GetModuleTemplate(moduleGUID, moduleType);
+	ASSERT_OR_EXECUTE(moduleTemplate, return);
 
-	//hvda::CDataModuleManager::Get().GetModuleTemplate()
-}
+	// Pay price
+	auto moduleCosts = moduleTemplate->GetPrice();
+	economy.RemoveMoney(moduleCosts);
 
-//////////////////////////////////////////////////////////////////////////
-
-void CBuildingWorkshop::ReplaceModule(CEquipment& equipment, ModuleType moduleType, ModuleGUID moduleGUID)
-{
+	// Replace module in equipment
 	equipment.ReplaceModule(moduleType, moduleGUID);
 }
 

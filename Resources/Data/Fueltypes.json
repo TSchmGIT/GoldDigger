@@ -1,0 +1,10 @@
+[
+    {
+        "fueltype": "oil",
+        "costsPerMillion": 100
+    },
+    {
+        "fueltype": "gas",
+        "costsPerMillion": 500
+    }
+]

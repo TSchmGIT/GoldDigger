@@ -4,6 +4,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "GameSession/Actor/Actor.h"
+#include "GameSession/Data/DataModuleManager.h"
 #include "GameSession/Manager/CameraManager.h"
 #include "GameSession/Manager/GameObjectManager.h"
 #include "GameSession/Manager/InputManager.h"
@@ -49,6 +50,10 @@ void CGameManager::Construct()
 
 void CGameManager::Init()
 {
+	hvda::CDataModuleManager::GetMutable().Init();
+
+	//////////////////////////////////////////////////////////////////////////
+
 	CTimeManager::GetMutable().Init();
 
 	//////////////////////////////////////////////////////////////////////////
@@ -84,7 +89,7 @@ void CGameManager::InitAfterCreation()
 
 void CGameManager::Shutdown()
 {
-
+	m_World->Shutdown();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -102,6 +107,13 @@ void CGameManager::Run()
 		Render();
 	}
 	std::cout << "Time passed upon end from game clock: " << CTimeManager::Get().GetAppTime() << " seconds";
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::CWorld& CGameManager::GetWorld() const
+{
+	return *m_World;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -162,6 +174,13 @@ void CGameManager::PollEvents()
 		case sf::Event::EventType::JoystickButtonReleased:
 			CInputManager::GetMutable().RegisterJoystickButtonReleased(JoystickID(pollEvent.joystickButton.joystickId), JoystickButton(pollEvent.joystickButton.button));
 			break;
+		case sf::Event::EventType::Resized:
+		{
+			// update the view to the new size of the window
+			sf::FloatRect visibleArea(0.0f, 0.0f, float(pollEvent.size.width), float(pollEvent.size.height));
+			CRenderManager::GetMutable().GetWindow()->setView(sf::View(visibleArea));
+			break;
+		}
 		case sf::Event::EventType::Closed:
 			CRenderManager::GetMutable().GetWindow()->close();
 			break;
@@ -175,6 +194,8 @@ void CGameManager::PollEvents()
 
 void CGameManager::Tick()
 {
+	m_World->Tick();
+
 	CCameraManager::GetMutable().Tick();
 	CGameObjectManager::GetMutable().Tick();
 	CInteractionManager::GetMutable().Tick();
@@ -205,10 +226,11 @@ void CGameManager::Draw() const
 		lastFPS = CTimeManager::Get().GetFPSAverage();
 		timestamp = CTimeManager::Get().GetAppTime();
 	}
+
 	std::ostringstream ss;
 	ss.precision(3);
 	ss << "FPS: " << lastFPS;
-	CRenderManager::GetMutable().DrawText(ScreenPos(0.0f, 0.0f), ss.str(), Alignment::TopLeft, FontName::Courier_New);
+	CRenderManager::GetMutable().DrawTextUI(ScreenPos(0.0f, 0.0f), ss.str(), Alignment::TopLeft, FontName::Courier_New);
 }
 
 //////////////////////////////////////////////////////////////////////////

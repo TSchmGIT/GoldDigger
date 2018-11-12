@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "SceneManager.h"
-#include "GameSession/UI/Scenes/InventoryScene.h"
+
+#include "GameSession/Manager/InputManager.h"
 #include "GameSession/UI/Scenes/BuildingBrokerScene.h"
-#include "Manager/InputManager.h"
+#include "GameSession/UI/Scenes/BuildingWorkshop/BuildingWorkshopScene.h"
+#include "GameSession/UI/Scenes/InventoryScene.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -31,6 +33,11 @@ void CSceneManager::SyncTick()
 	{
 		ASSERT_OR_EXECUTE(sceneData.Scene, continue);
 		sceneData.Scene->SyncTick();
+
+		if (sceneData.IsShown)
+		{
+			sceneData.Scene->SyncTickVisible();
+		}
 	}
 
 	// Esc handling
@@ -71,6 +78,12 @@ void CSceneManager::Init()
 {
 	m_SceneDataList.push_back({ std::make_unique<CInventoryScene>(), false });
 	m_SceneDataList.push_back({ std::make_unique<CBuildingBrokerScene>(), false });
+	m_SceneDataList.push_back({ std::make_unique<CBuildingWorkshopScene>(), false });
+
+	for (auto& sceneData : m_SceneDataList)
+	{
+		sceneData.Scene->Init();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

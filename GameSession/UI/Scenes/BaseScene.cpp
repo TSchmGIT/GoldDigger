@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "BaseScene.h"
+
+#include "GameSession/Rendering/UIScope.h"
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -48,6 +50,7 @@ void CBaseScene::DrawBase()
 		return;
 	}
 
+	CUIScope uiScope(GetPivotPoint());
 	Draw();
 }
 
@@ -65,6 +68,16 @@ bool CBaseScene::OnCustomEscHandling()
 	CSceneManager::GetMutable().LeaveState(GetSceneID());
 
 	return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::ScreenPos CBaseScene::GetPivotPointGlobal() const
+{
+	auto pivotPointGlobal = GetPivotPoint();
+	CRenderManager::Get().ScaleUIPos(pivotPointGlobal);
+
+	return pivotPointGlobal;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -16,8 +16,7 @@ class CMotorBase
 {
 public:
 	CMotorBase() = default;
-	CMotorBase(const CMotorBase& other);
-	CMotorBase(CActor* actor);
+	CMotorBase(CActor& actor);
 	virtual ~CMotorBase();
 
 	virtual void Tick();
@@ -29,7 +28,7 @@ public:
 	bool IsThrusterInUse() const;
 
 protected:
-	CActor*	m_Actor = nullptr;
+	CActor&	m_Actor;
 	Vector2 m_Velocity = Vector2(0.0f, 0.0f);
 	bool	m_IsThrusting = false;
 };

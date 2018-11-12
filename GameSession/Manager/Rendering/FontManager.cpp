@@ -8,7 +8,7 @@
 namespace hvgs
 {
 
-static const String RESOURCES_PATH_FONTS("..\\Resources\\Fonts\\");
+static const String RESOURCES_PATH_FONTS(R"(..\Resources\Fonts\)");
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,7 @@ void CFontManager::Init()
 {
 	for (size_t i = 0; i < size_t(FontName::Count); i++)
 	{
-		FontName fontName = FontName(i);
+		auto fontName = FontName(i);
 
 		std::string fileName = RESOURCES_PATH_FONTS;
 
@@ -43,6 +43,11 @@ void CFontManager::Init()
 		case hvgs::FontName::Courier_New:
 			fileName += "cour.ttf";
 			break;
+		case hvgs::FontName::FiraSans_Regular:
+			fileName += "FiraSans-Regular.ttf";
+			break;
+		case hvgs::FontName::FiraSans_Bold:
+			fileName += "FiraSans-Bold.ttf";
 		default:
 			break;
 		}
@@ -60,14 +65,14 @@ void CFontManager::Init()
 
 //////////////////////////////////////////////////////////////////////////
 
-sf::Text* CFontManager::PopText(String content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 30*/, const sf::Color& textColor /*= sf::Color::White*/)
+sf::Text* CFontManager::PopText(String content, const FontName& fontName /*= FontName::FiraSans_Regular*/, FontSize fontSize /*= FontSize(30)*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	auto itFont = m_FontTable.find(fontName);
 	ASSERT_OR_EXECUTE(itFont != m_FontTable.end(), return nullptr);
 
 	sf::Text* text = m_PoolText.New();
 	text->setFont(itFont->second);
-	text->setCharacterSize(charSize);
+	text->setCharacterSize(fontSize.get());
 	text->setFillColor(textColor);
 	text->setStyle(sf::Text::Style::Regular);
 	text->setString(content);

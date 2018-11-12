@@ -2,23 +2,21 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-namespace hvgs::ui
+namespace hvsdk
 {
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CUIElement
+class CAssertManager
 {
-
 public:
-	CUIElement();
-	virtual ~CUIElement();
+	static void CreateErrorAssert(const std::string& errorMessage);
 
-public:
-	virtual void Tick() { };
-	virtual void Draw() = 0;
+private:
+	CAssertManager() = delete;
+	~CAssertManager() = delete;
 };
 
 /////////////////////////////////////////////////////////////////////////////
 
-} // hvgs::ui
+} // hvsdk

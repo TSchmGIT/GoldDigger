@@ -39,9 +39,18 @@
     <ClInclude Include="Meta\NamedType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JSON\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meta\AssertManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Meta\AssertManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

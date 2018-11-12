@@ -10,6 +10,7 @@
 #include "GameSession/Manager/Rendering/TextureManager.h"
 #include "GameSession/Rendering/DebugRender.h"
 #include "GameSession/Rendering/IRenderElement.h"
+#include "GameSession/Rendering/UIScope.h"
 #include "GameSession/UI/ISpriteHandler.h"
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/Chunk.h"
@@ -21,23 +22,12 @@
 namespace hvgs
 {
 
-static const int	SCREEN_WIDTH = 1920;
-static const int	SCREEN_HEIGHT = 1080;
-
 //////////////////////////////////////////////////////////////////////////
 
 CRenderManager::CRenderManager()
 	: CSingletonBase()
 	, m_PoolSprites(32, 1000)
 {
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CRenderManager::~CRenderManager()
-{
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -54,7 +44,11 @@ void CRenderManager::Init()
 	CFontManager::GetMutable().Init();
 	CTextureManager::GetMutable().Init();
 
-	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Gold Digger");
+	const auto& desktopMode = sf::VideoMode::getDesktopMode();
+	auto width = unsigned int(desktopMode.width * 0.8f);
+	auto height = unsigned int(desktopMode.height * 0.8f);
+
+	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Gold Digger");
 	m_Window->setJoystickThreshold(0.25f);
 	m_Window->setKeyRepeatEnabled(false);
 	m_Window->setVerticalSyncEnabled(true);
@@ -76,10 +70,9 @@ void CRenderManager::Render()
 	// Background
 	DrawBackground();
 
-	CWorld* world = CWorld::GetMutable();
-	for (const auto& kvPair : world->GetChunks())
+	for (const auto& kvPair : CWorld::Get().GetChunks())
 	{
-		DrawChunk(*kvPair.second);
+		DrawChunk(kvPair.second);
 	}
 
 	for (const IRenderElement* renderElement : m_RenderElementSet)
@@ -124,7 +117,6 @@ sf::RenderWindow* CRenderManager::GetWindow()
 
 hvuint CRenderManager::GetScreenWidth() const
 {
-	ASSERT_OR_EXECUTE(m_Window, return 0);
 	return m_Window->getSize().x;
 }
 
@@ -132,16 +124,35 @@ hvuint CRenderManager::GetScreenWidth() const
 
 hvuint CRenderManager::GetScreenHeight() const
 {
-	ASSERT_OR_EXECUTE(m_Window, return 0);
 	return m_Window->getSize().y;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::Vector2 CRenderManager::GetScreenSize() const
+{
+	return { float(GetScreenWidth()), float(GetScreenHeight()) };
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 hvgs::ScreenPos CRenderManager::GetScreenCenter() const
 {
-	ASSERT_OR_EXECUTE(m_Window, return ScreenPos());
 	return ScreenPos(m_Window->getSize()) * 0.5f;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+const hvgs::CUIScope* CRenderManager::GetCurrentUIScope() const
+{
+	return m_currentUIScope;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::SetCurrentUIScope(const CUIScope* uiScope)
+{
+	m_currentUIScope = uiScope;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -186,12 +197,21 @@ void CRenderManager::UnregisterSpriteHandler(const ui::ISpriteHandler* spriteHan
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawTextUI(const ScreenPos& pos, const String& content, Alignment alignment /*= Alignment::TopLeft*/, const FontName& fontName /*= FontName::FiraSans_Regular*/, FontSize fontSize /*= FontSize(60)*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
-	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, charSize, textColor);
+	ScreenPos screenPosScoped = pos;
+	if (const auto* uiScope = GetCurrentUIScope(); uiScope)
+	{
+		screenPosScoped += uiScope->GetPivotPosition();
+	}
+
+	ScaleUIPos(screenPosScoped);
+	ScaleUITextSize(fontSize);
+
+	sf::Text* text = CFontManager::GetMutable().PopText(content, fontName, fontSize, textColor);
 
 	AdjustTextPivot(*text, alignment);
-	text->setPosition(pos);
+	text->setPosition(screenPosScoped);
 
 	auto globalBounds = text->getGlobalBounds();
 	if (globalBounds.left + globalBounds.width < 0.0f || globalBounds.left > GetScreenWidth() ||
@@ -203,7 +223,7 @@ void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Align
 
 #ifdef DEBUG_RENDER_TEXT
 	Vector2 rectSize(text->getGlobalBounds().width, text->getGlobalBounds().height);
-	DrawSprite(pos + ScreenPos(text->getLocalBounds().left, text->getLocalBounds().top), TextureName::WHITE, rectSize, alignment);
+	DrawSpriteUI(screenPosScoped + ScreenPos(text->getLocalBounds().left, text->getLocalBounds().top), TextureName::WHITE, rectSize, alignment);
 	text->setFillColor(sf::Color::Black);
 	m_Window->draw(*text);
 #else
@@ -215,12 +235,12 @@ void CRenderManager::DrawText(const ScreenPos& pos, const String& content, Align
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::Arial*/, unsigned int charSize /*= 60*/, const sf::Color& textColor /*= sf::Color::White*/)
+void CRenderManager::DrawTextWorld(const WorldPos& pos, const String& content, const FontName& fontName /*= FontName::FiraSans_Regular*/, FontSize charSize /*= FontSize(60)*/, const sf::Color& textColor /*= sf::Color::White*/)
 {
 	ASSERT_OR_EXECUTE(CCameraManager::GetMutable().GetActive(), return);
 	ScreenPos screenPos = CCameraManager::GetMutable().GetActive()->WorldToScreenPoint(pos);
 
-	DrawText(screenPos, content, Alignment::TopLeft, fontName, charSize, textColor);
+	DrawTextUI(screenPos, content, Alignment::TopLeft, fontName, charSize, textColor);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -273,11 +293,19 @@ void CRenderManager::DrawSpriteWorld(const WorldPos& pos, TextureName textureNam
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureName, const ScreenPos& size, Alignment alignment /*= Alignment::Center*/)
+void CRenderManager::DrawSpriteUI(const ScreenPos& screenPos, TextureName textureName, const ScreenPos& size, Alignment alignment /*= Alignment::TopLeft*/)
 {
+	ScreenPos screenPosScoped = screenPos;
+	if (const auto* uiScope = GetCurrentUIScope(); uiScope)
+	{
+		screenPosScoped += uiScope->GetPivotPosition();
+	}
+
+	ScaleUIPos(screenPosScoped);
+
 	// Do not render objects outside the view
-	if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
-		screenPos.y < 0 || screenPos.y > GetScreenHeight())
+	if (screenPosScoped.x < 0 || screenPosScoped.x > GetScreenWidth() ||
+		screenPosScoped.y < 0 || screenPosScoped.y > GetScreenHeight())
 	{
 		return;
 	}
@@ -288,18 +316,30 @@ void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureN
 	// Calculate scale that should be applied to the texture (min scale of x and y dimension)
 	Vector2 textureSize = texture->getSize();
 	ASSERT_OR_EXECUTE(textureSize.x > 0 && textureSize.y > 0, return);
-	Vector2 scale(size.x / textureSize.x, size.y / textureSize.y);
 
-	DrawSpriteInternal(screenPos, texture, scale, alignment);
+	auto adjustedSize = size;
+	ScaleUISize(adjustedSize);
+
+	Vector2 scale(adjustedSize.x / textureSize.x, adjustedSize.y / textureSize.y);
+
+	DrawSpriteInternal(screenPosScoped, texture, scale, alignment);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureName, Alignment alignment /*= Alignment::Center*/)
+void CRenderManager::DrawSpriteUI(const ScreenPos& screenPos, TextureName textureName, Alignment alignment /*= Alignment::TopLeft*/)
 {
+	ScreenPos screenPosScoped = screenPos;
+	if (const auto* uiScope = GetCurrentUIScope(); uiScope)
+	{
+		screenPosScoped += uiScope->GetPivotPosition();
+	}
+
+	ScaleUIPos(screenPosScoped);
+
 	// Do not render objects outside the view
-	if (screenPos.x < 0 || screenPos.x > GetScreenWidth() ||
-		screenPos.y < 0 || screenPos.y > GetScreenHeight())
+	if (screenPosScoped.x < 0 || screenPosScoped.x > GetScreenWidth() ||
+		screenPosScoped.y < 0 || screenPosScoped.y > GetScreenHeight())
 	{
 		return;
 	}
@@ -307,7 +347,11 @@ void CRenderManager::DrawSprite(const ScreenPos& screenPos, TextureName textureN
 	const sf::Texture* texture = CTextureManager::Get().GetTexture(textureName);
 	ASSERT_OR_EXECUTE(texture, return);
 
-	DrawSpriteInternal(screenPos, texture, { 1.0f, 1.0f }, alignment);
+	Vector2 screenScaleVector = Vector2::ScaleInverse(GetScreenSize(), GetBaseScreenSize());
+	float minScaleFactor = hvmath::Min({ screenScaleVector.x, screenScaleVector.y });
+	Vector2 scaleVector{ minScaleFactor, minScaleFactor };
+
+	DrawSpriteInternal(screenPosScoped, texture, scaleVector, alignment);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -319,9 +363,9 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 
 	for (auto&& kvPair : chunkSliceMap)
 	{
-		auto&& chunkSlice = kvPair.second;
+		const auto& chunkSlice = kvPair.second;
 
-		Vector2i csWorldPos = chunkSlice->GetWorldPos();
+		Vector2i csWorldPos = chunkSlice.GetWorldPos();
 		sf::FloatRect chunkSliceRect(float(csWorldPos.x), float(csWorldPos.y), CHUNKSLICE_SIZE_X, CHUNKSLICE_SIZE_Y);
 
 		if (!CCameraManager::Get().GetActive()->IsInView(chunkSliceRect))
@@ -335,7 +379,7 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 		{
 			for (hvuint8 y = 0; y < CHUNKSLICE_SIZE_Y; y++)
 			{
-				const CTile& tile = chunkSlice->GetTileAt(x, y);
+				const CTile& tile = chunkSlice.GetTileAt(x, y);
 
 				TileType tileType = tile.GetTileType();
 				if (tileType == TileType::Air)
@@ -343,7 +387,7 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 					continue;
 				}
 
-				WorldPos worldPos = Vector2(float(x), float(y)) + chunkSlice->GetWorldPos();
+				WorldPos worldPos = Vector2(float(x), float(y)) + chunkSlice.GetWorldPos();
 
 				int index = 4 * (y + x * CHUNKSLICE_SIZE_Y);
 
@@ -414,6 +458,49 @@ void CRenderManager::DrawSpriteInternal(const ScreenPos& pos, const sf::Texture*
 
 	m_PoolSprites.Delete(sprite);
 
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::ScaleUIPos(ScreenPos& pos) const
+{
+	// Calculate current scale factor in reference to base screen size
+	Vector2 currentScreenSize = GetScreenSize();
+	Vector2 screenScaleVector = ScreenPos::ScaleInverse(currentScreenSize, GetBaseScreenSize());
+	float minScaleFactor = hvmath::Min({ screenScaleVector.x, screenScaleVector.y });
+
+	// Adjust given position relative to the base screen center
+	ScreenPos scaledUIPosition = pos - (GetBaseScreenSize() * 0.5f);
+
+	// Scale the position
+	scaledUIPosition *= minScaleFactor;
+
+	// (Re-)add current center to bring it back to proper UI coords
+	scaledUIPosition += GetScreenCenter();
+
+	pos = scaledUIPosition;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::ScaleUISize(ScreenPos& pos) const
+{
+	Vector2 currentScreenSize = GetScreenSize();
+	Vector2 screenScaleVector = ScreenPos::ScaleInverse(currentScreenSize, GetBaseScreenSize());
+	float minScaleFactor = hvmath::Min({ screenScaleVector.x, screenScaleVector.y });
+
+	pos *= minScaleFactor;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::ScaleUITextSize(FontSize& fontSize) const
+{
+	Vector2 currentScreenSize = GetScreenSize();
+	Vector2 screenScaleVector = ScreenPos::ScaleInverse(currentScreenSize, GetBaseScreenSize());
+	float minScaleFactor = hvmath::Min({ screenScaleVector.x, screenScaleVector.y });
+
+	fontSize = FontSize(hvuint(fontSize.get() * minScaleFactor));
 }
 
 //////////////////////////////////////////////////////////////////////////

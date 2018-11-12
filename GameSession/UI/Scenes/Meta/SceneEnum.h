@@ -8,7 +8,10 @@ namespace hvgs::ui
 enum class SceneID
 {
 	Inventory,
-	BuildingBroker
+
+	BuildingBroker,
+	BuildingFuelStation,
+	BuildingWorkshop
 };
 
 //////////////////////////////////////////////////////////////////////////

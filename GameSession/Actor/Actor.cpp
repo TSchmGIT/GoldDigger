@@ -26,6 +26,7 @@
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/Tile.h"
 #include "GameSession/World/World.h"
+#include "Equipment/Modules/ModuleFuelTank.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -36,35 +37,12 @@ namespace hvgs
 ////////////////////////////////////////////////////////////////////////////
 
 CActor::CActor()
+	: m_Health(std::make_unique<CActorHealth>())
+	, m_Economy(std::make_unique<CActorEconomy>())
+	, m_Inventory(std::make_unique<CInventory>())
+	, m_Equipment(std::make_unique<CEquipment>())
+	, m_Motor(std::make_unique<CMotorDefault>(*this))
 {
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CActor::CActor(const CActor& other)
-{
-	if (other.m_Inventory)
-	{
-		m_Inventory = std::make_unique<CInventory>(*other.m_Inventory);
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CActor::CActor(CActor&& other)
-	: m_Position(other.m_Position)
-	, m_Inventory(std::move(other.m_Inventory))
-	, m_Equipment(std::move(other.m_Equipment))
-	, m_Motor(std::move(other.m_Motor))
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CActor::~CActor()
-{
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -78,21 +56,12 @@ void CActor::InitAfterCreation()
 
 void CActor::Tick()
 {
-	if (CInputManager::Get().IsMouseButtonDown(MouseButton::Middle)
-		|| std::abs(m_Position.x) > 200.0f
-		|| m_Position.y > 20.0f
-		|| m_Position.y <= -100.0f
-		|| m_Position.x <= CHUNKSLICE_SIZE_X * -4
-		|| m_Position.x >= CHUNKSLICE_SIZE_X * 4)
-	{
-		UpdateCamera(-m_Position);
-		SetPosition(Vector2(0.0f, 0.0f));
-		m_Motor->SetVelocity({ 0.0f, 0.0f });
-	}
+	//CheckActorReset();
 
 	Vector2 oldPos = m_Position;
 
-	// Update motor
+	// Update member
+	m_Equipment->Tick();
 	m_Motor->Tick();
 
 	// Make camera focus the player
@@ -109,19 +78,18 @@ void CActor::Draw() const
 	renderManager.DrawSpriteWorld(m_Position, TextureName::ACTOR, Alignment::CenterBottom);
 
 	// Money
-	renderManager.DrawText(ScreenPos(CRenderManager::Get().GetScreenWidth() - 400.0f, 0.0f), "Money: " + std::to_string(m_Economy->GetMoney().get()));
+	//renderManager.DrawText(ScreenPos(CRenderManager::Get().GetScreenWidth() - 400.0f, 0.0f), "Money: " + std::to_string(m_Economy->GetMoney().get()));
+
+	const auto* module = m_Equipment->GetModule(ModuleType::FuelTank);
+	const auto* moduleFuelTank = static_cast<const CModuleFuelTank*>(module);
+	ASSERT_OR_EXECUTE(moduleFuelTank, return);
+	renderManager.DrawTextUI(ScreenPos(CRenderManager::Get().GetBaseScreenWidth() - 400.0f, 0.0f), "Fuel: " + std::to_string(int(moduleFuelTank->GetFuelPercentage() * 100)) + " %");
 
 	// Thruster sprite
 	if (m_Motor->IsThrusterInUse())
 	{
 		renderManager.DrawSpriteWorld(m_Position, TextureName::ACTOR_THRUSTER, Alignment::CenterTop);
 	}
-
-	// Debug
-	//std::ostringstream ss;
-	//ss << "(" << m_Position.x << ", " << m_Position.y << ")\n" <<
-	//	m_Motor->GetVelocity().x << ", " << m_Motor->GetVelocity().y << ")";
-	//CRenderManager::GetMutable().DrawTextWorld(m_Position, ss.str(), FontName::Courier_New, 30);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -204,7 +172,7 @@ hvgs::CEquipment& CActor::GetEquipment()
 void CActor::StartDigging(const CTile& tile)
 {
 	m_Motor = std::make_unique<CMotorDigging>(*m_Motor);
-	CMotorDigging* motorDigging = boost::dynamic_pointer_cast<CMotorDigging>(m_Motor.get());
+	auto motorDigging = static_cast<CMotorDigging*>(m_Motor.get());
 	motorDigging->SetTargetPosition(tile.GetCenter() - WorldPos{ 0.0f, 0.5f });
 	motorDigging->SetDiggingPower(0.8f);
 }
@@ -248,11 +216,31 @@ void CActor::UpdateUI() const
 
 		if (!inputUsed)
 		{
-			if (CInputManager::Get().GetButtonDown(Button::ToggleInventory))
-			{
-				ui::CSceneManager::GetMutable().ToggleState(ui::SceneID::Inventory);
-			}
+			ui::CSceneManager::GetMutable().ToggleState(ui::SceneID::Inventory);
 		}
+	}
+
+	bool genericDebugPressed = CInputManager::Get().GetButtonDown(Button::GenericDebug);
+	if (genericDebugPressed)
+	{
+		ui::CSceneManager::GetMutable().ToggleState(ui::SceneID::BuildingWorkshop);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CActor::CheckActorReset()
+{
+	if (CInputManager::Get().IsMouseButtonDown(MouseButton::Middle)
+		|| std::abs(m_Position.x) > 200.0f
+		|| m_Position.y > 20.0f
+		|| m_Position.y <= -100.0f
+		|| m_Position.x <= CHUNKSLICE_SIZE_X * -4
+		|| m_Position.x >= CHUNKSLICE_SIZE_X * 4)
+	{
+		UpdateCamera(-m_Position);
+		SetPosition(Vector2(0.0f, 0.0f));
+		m_Motor->SetVelocity({ 0.0f, 0.0f });
 	}
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "GameSession/Manager/SingletonBase.h"
 #include "GameSession/Rendering/Fonts/EnumsFont.h"
+#include "GameSession/Rendering/RenderDefines.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +20,7 @@ public:
 	void Init();
 
 public:
-	sf::Text* PopText(String content, const FontName& fontName = FontName::Arial, unsigned int charSize = 30, const sf::Color& textColor = sf::Color::White);
+	sf::Text* PopText(String content, const FontName& fontName = FontName::FiraSans_Regular, FontSize fontSize = FontSize(30), const sf::Color& textColor = sf::Color::White);
 	void PushText(sf::Text* text);
 
 protected:

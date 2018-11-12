@@ -1,5 +1,5 @@
 #pragma once
-#include "GameSession/Buildings/BuildingBase.h"
+#include "GameSession/Buildings/BuildingInteractiveBase.h"
 
 #include "GameSession/Actor/Economy/EconomyTypes.h"
 #include "GameSession/Actor/Interaction/IInteractionObject.h"
@@ -20,31 +20,23 @@ namespace hvgs
 /////////////////////////////////////////////////////////////////////////////
 
 class CBuildingBroker
-	: public CBuildingBase
-	, public IInteractionObject
+	: public CBuildingInteractiveBase
 {
 
 public:
 	CBuildingBroker();
 	virtual ~CBuildingBroker() = default;
 
-	// IInteractionObject
-public:
-	virtual bool IsInInteractionDistance(const WorldPos& position) const override;
-	virtual void StartInteraction() override;
-	virtual void StopInteraction() override;
-	virtual WorldPos GetInteractionButtonPosition() const override;
-
-protected:
-	virtual const WorldPos& GetInteractionOriginPosition() const override;
-
 public:
 	void PerformTransactionBuy(CActor& actor) const;
 
 	MoneyAmount GetPrice(TileType tileType) const;
+
+protected:
+	virtual ui::SceneID GetUISceneID() const override;
+
 protected:
 	void FillPriceChart();
-
 
 protected:
 	Map<TileType, MoneyAmount> m_PriceChart;

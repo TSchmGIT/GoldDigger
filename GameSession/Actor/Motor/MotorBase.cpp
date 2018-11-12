@@ -8,17 +8,8 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CMotorBase::CMotorBase(CActor* actor)
+CMotorBase::CMotorBase(CActor& actor)
 	: m_Actor(actor)
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CMotorBase::CMotorBase(const CMotorBase& other)
-	: m_Actor(other.m_Actor)
-	, m_Velocity(other.m_Velocity)
 {
 
 }

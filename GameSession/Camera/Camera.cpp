@@ -70,8 +70,8 @@ WorldPos CCamera::ScreenToWorldPoint(const ScreenPos& screenPos) const
 	float pixelPerTile = BASE_TILE_SIZE_PX * m_ZoomFactor;
 	WorldPos screenToWorldPos = screenPosNew / pixelPerTile;
 
-	float tilesOnScreenX = hvmath::Ceil<float, float>(CRenderManager::Get().GetScreenWidth() / pixelPerTile);
-	float tilesOnScreenY = hvmath::Ceil<float, float>(CRenderManager::Get().GetScreenHeight() / pixelPerTile);
+	auto tilesOnScreenX = hvmath::Ceil<float, float>(CRenderManager::Get().GetScreenWidth() / pixelPerTile);
+	auto tilesOnScreenY = hvmath::Ceil<float, float>(CRenderManager::Get().GetScreenHeight() / pixelPerTile);
 	Vector2 worldOffset{ m_Position.x - tilesOnScreenX * 0.5f, m_Position.y - tilesOnScreenY * 0.5f };
 
 	return worldOffset + screenToWorldPos;
@@ -82,8 +82,8 @@ WorldPos CCamera::ScreenToWorldPoint(const ScreenPos& screenPos) const
 bool CCamera::IsInView(const sf::FloatRect& worldRect) const
 {
 	float pixelPerTile = BASE_TILE_SIZE_PX * m_ZoomFactor;
-	float tilesOnScreenX = hvmath::Ceil<float, float>(CRenderManager::Get().GetScreenWidth() / pixelPerTile);
-	float tilesOnScreenY = hvmath::Ceil<float, float>(CRenderManager::Get().GetScreenHeight() / pixelPerTile);
+	auto tilesOnScreenX = hvmath::Ceil<float, float>(CRenderManager::Get().GetScreenWidth() / pixelPerTile);
+	auto tilesOnScreenY = hvmath::Ceil<float, float>(CRenderManager::Get().GetScreenHeight() / pixelPerTile);
 
 	sf::FloatRect rect(
 		m_Position.x - tilesOnScreenX * 0.5f, // left

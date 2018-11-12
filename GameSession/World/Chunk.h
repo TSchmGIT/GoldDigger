@@ -25,21 +25,21 @@ public:
 	void UpdateSlicesAt(int yLevel, int yRange);
 
 public:
-	const Map<ChunkSliceInterval, UniquePtr<CChunkSlice>>& GetChunkSlices() const;
-	const CChunkSlice* GetChunkSliceAt(int yLevel) const;
+	const Map<ChunkSliceInterval, CChunkSlice>& GetChunkSlices() const;
+	Optional<const CChunkSlice&> GetChunkSliceAt(int yLevel) const;
 
 public:
 	ChunkInterval GetPosX() const;
 
 public:
-	const CTile* GetTileAt(int yLevel, const ChunkSlicePos& chunkPos) const;
+	Optional<const CTile&> GetTileAt(int yLevel, const ChunkSlicePos& chunkPos) const;
 	void SetTileAt(int yLevel, const ChunkSlicePos& chunkPos, TileType tileType, bool allowCreation = false);
 
 protected:
-	inline ChunkSliceInterval FindNextChunkSlicePos(int yLevel) const; ///< Returns the next valid chunk slice y-pos to the given input
+	constexpr ChunkSliceInterval FindNextChunkSlicePos(int yLevel) const; ///< Returns the next valid chunk slice y-pos to the given input
 
 private:
-	Map<ChunkSliceInterval, UniquePtr<CChunkSlice>> m_ChunkSliceMap;
+	Map<ChunkSliceInterval, CChunkSlice> m_ChunkSliceMap;
 
 	ChunkInterval m_PositionX;
 };

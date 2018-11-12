@@ -18,7 +18,7 @@ public:
 
 public:
 	virtual String GetDisplayName() const;
-	virtual TextureName GetTextureName() const = 0;
+	virtual TextureName GetTextureName() const { return TextureName::ACTOR; }
 };
 
 /////////////////////////////////////////////////////////////////////////////

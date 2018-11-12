@@ -29,7 +29,7 @@ inline T Sqrt(const T& value)
 }
 
 template<typename T>
-inline T Mod(T value, T operand)
+constexpr T Mod(T value, T operand)
 {
 	return value % operand;
 }
@@ -41,7 +41,7 @@ inline float Mod<float>(float value, float operand)
 }
 
 template<typename T>
-T PingPong(T time, T length)
+constexpr T PingPong(T time, T length)
 {
 	T lengthDoubled = length * 2;
 	T modulo = Mod(time, lengthDoubled); // Clamp between 0 and lengthDoubled
@@ -56,50 +56,50 @@ T PingPong(T time, T length)
 	}
 }
 
-template<typename T, typename TOutput>
-inline TOutput Floor(T value)
+template<typename TOutput, typename T>
+constexpr TOutput Floor(T value)
 {
 	return TOutput(std::floor(value));
 }
 
-template<typename T, typename TOutput>
-inline TOutput Ceil(T value)
+template<typename TOutput, typename T>
+constexpr TOutput Ceil(T value)
 {
 	return TOutput(std::ceil(value));
 }
 
 template<typename T>
-inline T Max(std::initializer_list<T> iList)
+constexpr T Max(std::initializer_list<T> iList)
 {
 	return std::max(iList);
 }
 
 template<typename T>
-inline T Min(std::initializer_list<T> iList)
+constexpr T Min(std::initializer_list<T> iList)
 {
 	return std::min(iList);
 }
 
 template<typename T>
-inline T Clamp(const T& value, const T& lowerLimit, const T& upperLimit)
+constexpr T Clamp(const T& value, const T& lowerLimit, const T& upperLimit)
 {
 	return std::min(std::max(value, lowerLimit), upperLimit);
 }
 
 template<typename T>
-inline T Abs(const T& value)
+constexpr T Abs(const T& value)
 {
 	return std::abs(value);
 }
 
 template<>
-inline hvmath::Vector2<float> Abs<hvmath::Vector2<float>>(const hvmath::Vector2<float>& value)
+constexpr hvmath::Vector2<float> Abs<hvmath::Vector2<float>>(const hvmath::Vector2<float>& value)
 {
 	return hvmath::Vector2<float>(std::abs(value.x), std::abs(value.y));
 }
 
 template<typename T>
-inline T Sign(const T& value)
+constexpr T Sign(const T& value)
 {
 	if (value > 0)
 	{
@@ -116,7 +116,7 @@ inline T Sign(const T& value)
 }
 
 template<typename T>
-inline T Deadzone(const T& value, const T& deadzone)
+constexpr T Deadzone(const T& value, const T& deadzone)
 {
 	return std::abs(value) < deadzone ? 0.0f : value;
 }

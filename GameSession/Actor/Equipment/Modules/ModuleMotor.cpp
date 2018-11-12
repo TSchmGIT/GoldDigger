@@ -8,7 +8,11 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
+CModuleMotor::CModuleMotor(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleMotor& dataTemplate)
+	: CModuleBase(moduleID, equipment, dataTemplate)
+{
 
+}
 
 //////////////////////////////////////////////////////////////////////////
 

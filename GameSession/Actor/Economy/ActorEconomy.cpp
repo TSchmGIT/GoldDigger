@@ -48,6 +48,7 @@ hvgs::MoneyAmount CActorEconomy::RemoveMoney(MoneyAmount amount)
 	MoneyAmount reducedAmount = amount;
 	if (reducedAmount >= m_Money)
 	{
+		LOG_ERROR("TRIED TO REMOVE MORE MONEY THAN AVAILABLE");
 		reducedAmount = m_Money;
 	}
 

@@ -30,6 +30,7 @@ public:
 	void Run();
 
 public:
+	CWorld& GetWorld() const;
 	static String GetWorkingDir();
 
 protected:

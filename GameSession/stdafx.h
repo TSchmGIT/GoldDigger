@@ -30,11 +30,15 @@
 #include <numeric>
 
 #include <array>
+#include <bitset>
 #include <memory>
+
 
 #include <vector>
 #include <queue>
 #include <set>
+
+#include <boost/optional.hpp>
 
 #include <boost/unordered_map.hpp>
 #include <boost/pointer_cast.hpp>
@@ -66,6 +70,8 @@
 
 //////////////////////////////////////////////////////////////////////////
 // Haven GameSession
+#include "GameSession/Data/DataDefines.h"
+
 #include "GameSession/Meta/Defines.h"
 #include "GameSession/Meta/Events.h"
 #include "GameSession/Meta/TrackTime.h"

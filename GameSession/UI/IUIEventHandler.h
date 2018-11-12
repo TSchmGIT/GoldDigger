@@ -12,6 +12,7 @@ class IUIEventHandler
 
 public:
 	IUIEventHandler();
+	IUIEventHandler(const IUIEventHandler& other);
 	virtual ~IUIEventHandler();
 
 protected:
@@ -19,6 +20,9 @@ protected:
 	virtual void OnMouseClicked(const ScreenPos&) { }
 	virtual void OnMouseDown(const ScreenPos&) { }
 	virtual void OnMouseUp(const ScreenPos&) { }
+
+private:
+	void SetupConnections();
 
 private:
 	SignalConnection m_MouseMoveConnection;

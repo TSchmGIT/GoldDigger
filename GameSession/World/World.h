@@ -22,50 +22,52 @@ class CWorld
 
 public:
 	CWorld();
-	virtual ~CWorld();
+	virtual ~CWorld() = default;
 
-	static CWorld* GetMutable();
-	static const CWorld* Get();
+	static CWorld& GetMutable();
+	static const CWorld& Get();
 
 public:
 	void Init();
 
+	void Tick();
+
+	void Shutdown();
+
 public:
-	const Map<ChunkInterval, UniquePtr<CChunk>>& GetChunks() const;
-	const CActor& GetActor() const;
-	CActor& GetActor();
+	const Map<ChunkInterval, CChunk>& GetChunks() const;
+	CActor& GetActor() const;
 
 	template<class T>
-	const T* GetBuilding() const;
+	Optional<const T&> GetBuilding() const;
 
 public:
-	void WorldToChunkPos(const WorldPos& worldPos, ChunkInterval& outWorldX, ChunkSlicePos& outChunkPos) const;
+	std::tuple<ChunkInterval, ChunkSlicePos> WorldToChunkPos(const WorldPos& worldPos) const;
 
 	WorldPos GetTilePos(const WorldPos& worldPos) const;
 
 public:
-	const CTile* GetTileAt(const WorldPos& worldPos) const;
+	Optional<const CTile&> GetTileAt(const WorldPos& worldPos) const;
 	void SetTileAt(const WorldPos& worldPos, TileType tileType, bool allowCreation = false);
 
 protected:
 	void ConstructActor();
 	void ConstructBulidings();
 
-	CChunk* CreateChunk(ChunkInterval worldX);
+	CChunk& CreateChunk(ChunkInterval worldX);
+	void RemoveChunk(ChunkInterval worldX);
+
+	Optional<CChunk&> GetChunk(ChunkInterval worldX);
+	Optional<const CChunk&> GetChunk(ChunkInterval worldX) const;
 
 	inline ChunkInterval FindNextChunkPos(int x) const;
 
 protected:
-	Map<ChunkInterval, UniquePtr<CChunk>> m_ChunkMap;
-
-	hvsdk::CObjectPool<CChunk>	m_ChunkPool;
+	Map<ChunkInterval, CChunk> m_ChunkMap;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Buildings
 	Vector<UniquePtr<CBuildingBase>>	m_Buildings;
-
-private:
-	static CWorld* s_instance;
 
 	UniquePtr<CActor> m_Actor = nullptr;
 };
@@ -73,7 +75,7 @@ private:
 //////////////////////////////////////////////////////////////////////////
 
 template<class T>
-const T* hvgs::CWorld::GetBuilding() const
+Optional<const T&> hvgs::CWorld::GetBuilding() const
 {
 	for (const auto& building : m_Buildings)
 	{
@@ -83,10 +85,10 @@ const T* hvgs::CWorld::GetBuilding() const
 			continue;
 		}
 
-		return result;
+		return *result;
 	}
 
-	return nullptr;
+	return boost::none;
 }
 
 /////////////////////////////////////////////////////////////////////////////

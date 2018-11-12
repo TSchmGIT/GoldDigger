@@ -13,8 +13,8 @@ class CMotorDigging : public CMotorBase
 
 public:
 	CMotorDigging(const CMotorBase& other);
-	CMotorDigging(const CMotorDigging& other);
-	virtual ~CMotorDigging();
+	CMotorDigging(const CMotorDigging& other) = default;
+	virtual ~CMotorDigging() = default;
 
 	const WorldPos& GetTargetPosition() const;
 	void SetTargetPosition(const WorldPos& worldPos);

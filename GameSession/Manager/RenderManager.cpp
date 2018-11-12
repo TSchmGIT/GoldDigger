@@ -60,7 +60,7 @@ void CRenderManager::Init()
 	m_Window->setVerticalSyncEnabled(true);
 
 	sf::Image icon;
-	bool loadFromFile = icon.loadFromFile("D:\\Users\\Thorsten\\Documents\\Programming\\C++\\Projects\\GoldDigger\\Resources\\Textures\\Actor.png");
+	bool loadFromFile = icon.loadFromFile("..\\Resources\\Textures\\Actor.png");
 	ASSERT_OR_EXECUTE(loadFromFile, return);
 
 	if (loadFromFile)

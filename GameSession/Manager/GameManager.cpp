@@ -106,6 +106,15 @@ void CGameManager::Run()
 
 //////////////////////////////////////////////////////////////////////////
 
+String CGameManager::GetWorkingDir()
+{
+	static std::array<char, 256> buffer;
+	GetCurrentDirectoryA(buffer.size(), buffer.data());
+	return String(buffer.data());
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CGameManager::PrepareTick()
 {
 	CRenderManager::GetMutable().PrepareTick();

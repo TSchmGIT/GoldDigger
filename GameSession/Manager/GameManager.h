@@ -29,6 +29,9 @@ public:
 
 	void Run();
 
+public:
+	static String GetWorkingDir();
+
 protected:
 	void Init();
 	void InitAfterCreation();

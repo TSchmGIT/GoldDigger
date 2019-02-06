@@ -34,7 +34,7 @@ CRenderManager::CRenderManager()
 
 void CRenderManager::PrepareTick()
 {
-	m_Window->clear();
+	m_Window.clear();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -48,18 +48,18 @@ void CRenderManager::Init()
 	auto width = unsigned int(desktopMode.width * 0.8f);
 	auto height = unsigned int(desktopMode.height * 0.8f);
 
-	m_Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Gold Digger");
-	m_Window->setJoystickThreshold(0.25f);
-	m_Window->setKeyRepeatEnabled(false);
-	m_Window->setVerticalSyncEnabled(true);
+	m_Window.create(sf::VideoMode(width, height), "Gold Digger");
+	m_Window.setJoystickThreshold(0.25f);
+	m_Window.setKeyRepeatEnabled(false);
+	m_Window.setVerticalSyncEnabled(true);
 
 	sf::Image icon;
-	bool loadFromFile = icon.loadFromFile(R"(D:\Users\Thorsten\Documents\Programming\C++\Projects\GoldDigger\Resources\Textures\Actor.png)");
+	bool loadFromFile = icon.loadFromFile("..\\Resources\\Textures\\Actor.png");
 	ASSERT_OR_EXECUTE(loadFromFile, return);
 
 	if (loadFromFile)
 	{
-		m_Window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+		m_Window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	}
 }
 
@@ -96,35 +96,49 @@ void CRenderManager::Render()
 
 void CRenderManager::Display()
 {
-	m_Window->display();
+	m_Window.display();
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const sf::RenderWindow* CRenderManager::GetWindow() const
+const sf::RenderWindow& CRenderManager::GetWindow() const
 {
-	return m_Window.get();
+	return m_Window;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-sf::RenderWindow* CRenderManager::GetWindow()
+void CRenderManager::SetView(const sf::View& view)
 {
-	return m_Window.get();
+	m_Window.setView(view);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderManager::CloseWindow()
+{
+	m_Window.close();
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CRenderManager::PollEvent(sf::Event& e)
+{
+	return m_Window.pollEvent(e);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 hvuint CRenderManager::GetScreenWidth() const
 {
-	return m_Window->getSize().x;
+	return m_Window.getSize().x;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 hvuint CRenderManager::GetScreenHeight() const
 {
-	return m_Window->getSize().y;
+	return m_Window.getSize().y;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -138,7 +152,7 @@ hvgs::Vector2 CRenderManager::GetScreenSize() const
 
 hvgs::ScreenPos CRenderManager::GetScreenCenter() const
 {
-	return ScreenPos(m_Window->getSize()) * 0.5f;
+	return ScreenPos(m_Window.getSize()) * 0.5f;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -225,9 +239,9 @@ void CRenderManager::DrawTextUI(const ScreenPos& pos, const String& content, Ali
 	Vector2 rectSize(text->getGlobalBounds().width, text->getGlobalBounds().height);
 	DrawSpriteUI(screenPosScoped + ScreenPos(text->getLocalBounds().left, text->getLocalBounds().top), TextureName::WHITE, rectSize, alignment);
 	text->setFillColor(sf::Color::Black);
-	m_Window->draw(*text);
+	m_Window.draw(*text);
 #else
-	m_Window->draw(*text);
+	m_Window.draw(*text);
 #endif
 
 	CFontManager::GetMutable().PushText(text);
@@ -426,7 +440,7 @@ void CRenderManager::DrawChunk(const CChunk& chunk)
 			}
 		}
 
-		m_Window->draw(va, CTextureManager::Get().GetTexture(TextureName::TILEATLAS));
+		m_Window.draw(va, CTextureManager::Get().GetTexture(TextureName::TILEATLAS));
 	}
 }
 
@@ -454,7 +468,7 @@ void CRenderManager::DrawSpriteInternal(const ScreenPos& pos, const sf::Texture*
 
 	sprite->setPosition(screenPosAdjusted.x, screenPosAdjusted.y);
 
-	m_Window->draw(*sprite);
+	m_Window.draw(*sprite);
 
 	m_PoolSprites.Delete(sprite);
 

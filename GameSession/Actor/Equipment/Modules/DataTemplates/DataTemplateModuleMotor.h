@@ -17,6 +17,9 @@ public:
 
 	hvgs::ModuleType GetType() const override;
 
+protected:
+	hvgs::FuelConsumption m_Consumption = hvgs::FuelConsumption(0);
+
 };
 
 /////////////////////////////////////////////////////////////////////////////

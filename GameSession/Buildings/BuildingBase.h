@@ -27,21 +27,16 @@ public:
 	const WorldPos& GetPosition() const;
 	void SetPosition(const WorldPos& position);
 
-	TextureName GetTexture() const;
-	void SetTexture(TextureName value);
-
 	const Vector2& GetSize() const;
 	void SetSize(const Vector2& value);
 
 protected:
+	virtual TextureName GetBuildingTexture() const = 0;
+
 	virtual WorldPos GetAABBOrigin() const override;
 	virtual WorldPos GetAABBHalfs() const override;
 
-protected:
-	//////////////////////////////////////////////////////////////////////////
-	// Visuals
-	TextureName	m_Texture = TextureName::INVALID;
-
+private:
 	//////////////////////////////////////////////////////////////////////////
 	// Logic
 	WorldPos m_Position = WorldPos(0.0f, 0.0f);

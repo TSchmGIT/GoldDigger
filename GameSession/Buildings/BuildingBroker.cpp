@@ -21,8 +21,7 @@ namespace hvgs
 CBuildingBroker::CBuildingBroker()
 {
 	m_InteractionDistance = 2.5f;
-	m_Texture = TextureName::BUILDING_BROKER;
-	m_Size = { 3.0f, 3.0f };
+	SetSize({ 3.0f, 3.0f });
 
 	FillPriceChart();
 }
@@ -93,6 +92,13 @@ void CBuildingBroker::FillPriceChart()
 hvgs::ui::SceneID CBuildingBroker::GetUISceneID() const
 {
 	return ui::SceneID::BuildingBroker;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::TextureName CBuildingBroker::GetBuildingTexture() const
+{
+	return TextureName::BUILDING_BROKER;
 }
 
 //////////////////////////////////////////////////////////////////////////

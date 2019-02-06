@@ -15,7 +15,7 @@ class CModuleFuelTank : public CModuleBase
 {
 
 public:
-	CModuleFuelTank(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleFuelTank& dataTemplate);
+	CModuleFuelTank(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleFuelTank& dataTemplate, Optional<const CModuleFuelTank&> inheritedTank);
 	virtual ~CModuleFuelTank() = default;
 
 	void Tick() override;
@@ -23,6 +23,9 @@ public:
 public:
 	FuelAmount GetCurrentFuelAmount() const;
 	void SetCurrentFuelAmount(FuelAmount fuelAmount);
+
+	FuelConsumption GetCurrentBaseConsumption() const;
+	void SetCurrentBaseConsumption(FuelConsumption consumption);
 
 	FuelType GetFuelType() const;
 
@@ -50,6 +53,10 @@ protected:
 
 protected:
 	FuelAmount								m_FuelAmount = FuelAmount(0);
+
+protected:
+	FuelConsumption							m_CurrentBaseConsumption = FuelConsumption(0);
+	
 	std::bitset<int(FuelPenalty::Count)>	m_PenaltyMask;
 };
 

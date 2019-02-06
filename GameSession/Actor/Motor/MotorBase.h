@@ -15,7 +15,7 @@ namespace hvgs
 class CMotorBase
 {
 public:
-	CMotorBase() = default;
+	CMotorBase() = delete;
 	CMotorBase(CActor& actor);
 	virtual ~CMotorBase();
 

@@ -24,6 +24,8 @@ using Optional = boost::optional<T>;
 template<typename Key, typename Value>
 using Map = std::unordered_map<Key, Value>;
 
+template<typename T, size_t size>
+using Array = std::array<T, size>;
 template<class Key, class Allocator = std::allocator<Key>>
 using Vector = std::vector<Key, Allocator>;
 template<typename Key, typename Container = std::deque<Key>>

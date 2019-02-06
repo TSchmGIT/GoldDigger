@@ -8,8 +8,7 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CModuleDrill::CModuleDrill(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleDrill& dataTemplate)
-	: CModuleBase(moduleID, equipment, dataTemplate)
+CModuleDrill::CModuleDrill(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleDrill& dataTemplate, Optional<const CModuleDrill&>) : CModuleBase(moduleID, equipment, dataTemplate)
 {
 }
 

@@ -9,6 +9,8 @@
 
 namespace hvgs
 {
+class CActor;
+
 class CModuleHull;
 class CModuleMotor;
 class CModuleDrill;
@@ -27,7 +29,7 @@ class CEquipment
 {
 
 public:
-	CEquipment() = default;
+	CEquipment(CActor& parentActor);
 	virtual ~CEquipment() = default;
 
 	void InitAfterCreation();
@@ -42,6 +44,8 @@ public:
 	void ReplaceModule(ModuleType moduleType, ModuleGUID moduleGUID);
 
 protected:
+	CActor& m_Actor;
+
 	Map<ModuleType, ModulePtr> m_ModuleMap;
 };
 

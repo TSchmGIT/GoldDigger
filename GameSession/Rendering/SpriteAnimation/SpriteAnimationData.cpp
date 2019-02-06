@@ -1,9 +1,6 @@
 #include "stdafx.h"
-#include "MotorBase.h"
-#include "../Actor.h"
+#include "SpriteAnimationData.h"
 
-#include "../Equipment/Equipment.h"
-#include "../Equipment/Modules/ModuleFuelTank.h"
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
@@ -11,44 +8,44 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CMotorBase::CMotorBase(CActor& actor)
-	: m_Actor(actor)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CMotorBase::~CMotorBase()
+CSpriteAnimationData::CSpriteAnimationData()
 {
 
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CMotorBase::Tick()
+CSpriteAnimationData::~CSpriteAnimationData()
 {
 
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-const hvgs::Vector2& CMotorBase::GetVelocity() const
+float CSpriteAnimationData::GetSpeedFactor() const
 {
-	return m_Velocity;
+	return m_SpeedFactor;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CMotorBase::SetVelocity(const Vector2& velocity)
+void CSpriteAnimationData::SetSpeedFactor(float speedFactor)
 {
-	m_Velocity = velocity;
+	m_SpeedFactor = speedFactor;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CMotorBase::IsThrusterInUse() const
+hvgs::TextureName CSpriteAnimationData::GetSpriteAtlas() const
 {
-	return m_IsThrusting;
+	return m_SpriteAtlas;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CSpriteAnimationData::SetSpriteAtlas(TextureName textureName)
+{
+	m_SpriteAtlas = textureName;
 }
 
 //////////////////////////////////////////////////////////////////////////

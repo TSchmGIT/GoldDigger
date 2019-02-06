@@ -31,6 +31,7 @@ public:
 
 public:
 	CWorld& GetWorld() const;
+	static String GetWorkingDir();
 
 protected:
 	void Init();

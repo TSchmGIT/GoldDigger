@@ -40,7 +40,7 @@ CActor::CActor()
 	: m_Health(std::make_unique<CActorHealth>())
 	, m_Economy(std::make_unique<CActorEconomy>())
 	, m_Inventory(std::make_unique<CInventory>())
-	, m_Equipment(std::make_unique<CEquipment>())
+	, m_Equipment(std::make_unique<CEquipment>(*this))
 	, m_Motor(std::make_unique<CMotorDefault>(*this))
 {
 }
@@ -50,6 +50,13 @@ CActor::CActor()
 void CActor::InitAfterCreation()
 {
 	m_Equipment->InitAfterCreation();
+
+	// Update consumption
+	const auto& equipment = GetEquipment();
+	auto* moduleFuelTank = equipment.GetModule<CModuleFuelTank>();
+	ASSERT_OR_EXECUTE(moduleFuelTank, return);
+
+	moduleFuelTank->SetCurrentBaseConsumption(FuelConsumption(20));
 }
 
 //////////////////////////////////////////////////////////////////////////

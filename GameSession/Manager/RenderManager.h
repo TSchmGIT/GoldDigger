@@ -48,8 +48,11 @@ public:
 	void Display();
 
 public:
-	const sf::RenderWindow* GetWindow() const;
-	sf::RenderWindow* GetWindow();
+	const sf::RenderWindow& GetWindow() const;
+
+	void SetView(const sf::View& view);
+	void CloseWindow();
+	bool PollEvent(sf::Event& e);
 
 	hvuint GetScreenWidth() const;
 	hvuint GetScreenHeight() const;
@@ -100,7 +103,7 @@ protected:
 	void DrawBackground();
 
 protected:
-	UniquePtr<sf::RenderWindow>		m_Window;
+	sf::RenderWindow				m_Window;
 	Set<const IRenderElement*>		m_RenderElementSet;
 	Set<const ui::ISpriteHandler*>	m_SpriteHandlerSet;
 

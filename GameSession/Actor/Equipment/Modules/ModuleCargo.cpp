@@ -8,7 +8,7 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CModuleCargo::CModuleCargo(ModuleID moduleID, CEquipment& equipment, hvda::CDataTemplateModuleCargo dataTemplate)
+CModuleCargo::CModuleCargo(ModuleID moduleID, CEquipment& equipment, hvda::CDataTemplateModuleCargo dataTemplate, Optional<const CModuleCargo&>)
 	: CModuleBase(moduleID, equipment, dataTemplate)
 {
 

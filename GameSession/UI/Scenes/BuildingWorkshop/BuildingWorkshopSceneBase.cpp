@@ -14,8 +14,6 @@ namespace hvgs::ui
 CBuildingWorkshopSceneBase::CBuildingWorkshopSceneBase()
 {
 	m_ModuleList.SetMaximumElementsHorizontal(4);
-
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -26,7 +24,7 @@ hvgs::Vector2 CBuildingWorkshopSceneBase::GetPivotPoint() const
 	ASSERT_OR_EXECUTE(texture, return Vector2());
 
 	auto textureSize = texture->getSize();
-	hvmath::Vector2 textureSizeHalf{ textureSize.x * 0.5f, textureSize.y * 0.5f };
+	Vector2 textureSizeHalf{ textureSize.x * 0.5f, textureSize.y * 0.5f };
 
 	auto pivotPoint = CRenderManager::GetBaseScreenSize() * 0.5f - textureSizeHalf;
 	return pivotPoint;

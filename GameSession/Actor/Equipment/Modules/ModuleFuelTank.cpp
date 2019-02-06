@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ModuleFuelTank.h"
-#include "Manager/TimeManager.h"
+
+#include "GameSession/Manager/TimeManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -9,11 +10,14 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
-CModuleFuelTank::CModuleFuelTank(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleFuelTank& dataTemplate)
+CModuleFuelTank::CModuleFuelTank(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleFuelTank& dataTemplate, Optional<const CModuleFuelTank&> inheritedTank)
 	: CModuleBase(moduleID, equipment, dataTemplate)
 	, m_FuelAmount(dataTemplate.GetCapacity())
 {
-
+	if (inheritedTank)
+	{
+		m_CurrentBaseConsumption = inheritedTank->m_CurrentBaseConsumption;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -37,6 +41,20 @@ hvgs::FuelAmount CModuleFuelTank::GetCurrentFuelAmount() const
 void CModuleFuelTank::SetCurrentFuelAmount(FuelAmount fuelAmount)
 {
 	m_FuelAmount = fuelAmount;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::FuelConsumption CModuleFuelTank::GetCurrentBaseConsumption() const
+{
+	return m_CurrentBaseConsumption;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CModuleFuelTank::SetCurrentBaseConsumption(FuelConsumption consumption)
+{
+	m_CurrentBaseConsumption = consumption;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -95,9 +113,7 @@ const hvda::CDataTemplateModuleFuelTank& CModuleFuelTank::GetTemplate() const
 
 void CModuleFuelTank::TickFuelConsumption()
 {
-	const auto& templateFuelConsumption = GetTemplate();
-
-	FuelConsumption consumption = templateFuelConsumption.GetConsumption();
+	FuelConsumption consumption = GetCurrentBaseConsumption();
 
 	// Calculate penalties
 	float penaltyFactor = GetPenaltyConsumptionFactor();

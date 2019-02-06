@@ -64,7 +64,8 @@ void CWorld::Tick()
 	}
 
 	const WorldPos& actorPos = m_Actor->GetPosition();
-	auto[actorInterval, actorChunkSlice] = WorldToChunkPos(actorPos);
+	auto tuple = WorldToChunkPos(actorPos);
+	auto actorInterval = std::get<0>(tuple);
 
 	ChunkInterval lowerBound = actorInterval - ChunkInterval(CHUNKSLICE_SIZE_X * 4);
 	ChunkInterval upperBound = actorInterval + ChunkInterval(CHUNKSLICE_SIZE_X * 4);

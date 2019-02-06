@@ -294,6 +294,9 @@
     <ClInclude Include="Actor\Equipment\Modules\ModuleHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Rendering\SpriteAnimation\SpriteAnimationData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -507,6 +510,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Actor\Equipment\Modules\ModuleHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\SpriteAnimation\SpriteAnimationData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

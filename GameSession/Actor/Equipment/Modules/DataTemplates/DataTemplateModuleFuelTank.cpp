@@ -15,7 +15,6 @@ CDataTemplateModuleFuelTank::CDataTemplateModuleFuelTank(const JSON& json)
 {
 	auto fuelTypeString = json["fueltype"].get<hvgs::String>();
 	m_FuelType = CModuleHelper::ConvertStringToFuelType(fuelTypeString);
-	m_Consumption = hvgs::FuelConsumption(json["consumption"].get<hvgs::FuelConsumption::value_type>());
 	m_Capacity = hvgs::FuelAmount(json["capacity"].get<hvgs::FuelAmount::value_type>());
 }
 
@@ -31,13 +30,6 @@ hvgs::ModuleType CDataTemplateModuleFuelTank::GetType() const
 hvgs::FuelType CDataTemplateModuleFuelTank::GetFuelType() const
 {
 	return m_FuelType;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-hvgs::FuelConsumption CDataTemplateModuleFuelTank::GetConsumption() const
-{
-	return m_Consumption;
 }
 
 //////////////////////////////////////////////////////////////////////////

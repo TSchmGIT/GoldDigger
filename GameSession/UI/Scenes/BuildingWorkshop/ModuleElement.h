@@ -24,6 +24,7 @@ public:
 	enum class ModulePurchaseState
 	{
 		Free,
+		Equipped,
 		Owned,
 		ForSale
 	};

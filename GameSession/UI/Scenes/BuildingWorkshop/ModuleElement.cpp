@@ -116,6 +116,9 @@ void CModuleElement::UpdateStateWidget()
 	case hvgs::ui::BuildingWorkshop::CModuleElement::ModulePurchaseState::Owned:
 		m_StateWidget.SetText("OWNED");
 		break;
+	case hvgs::ui::BuildingWorkshop::CModuleElement::ModulePurchaseState::Equipped:
+		m_StateWidget.SetText("EQUIPPED");
+		break;
 	case hvgs::ui::BuildingWorkshop::CModuleElement::ModulePurchaseState::ForSale:
 		auto moduleCostsString = std::to_string(m_ModuleCosts.get());
 		m_StateWidget.SetText(moduleCostsString);

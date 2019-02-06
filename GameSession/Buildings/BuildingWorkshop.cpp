@@ -11,6 +11,13 @@ namespace hvgs
 
 //////////////////////////////////////////////////////////////////////////
 
+CBuildingWorkshop::CBuildingWorkshop()
+{
+	SetSize({ 2.0f, 2.0f });
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 void CBuildingWorkshop::PurchaseModule(CActorEconomy& economy, CEquipment& equipment, ModuleType moduleType, ModuleGUID moduleGUID) const
 {
 	const auto* moduleTemplate = hvda::CDataModuleManager::Get().GetModuleTemplate(moduleGUID, moduleType);
@@ -19,6 +26,9 @@ void CBuildingWorkshop::PurchaseModule(CActorEconomy& economy, CEquipment& equip
 	// Pay price
 	auto moduleCosts = moduleTemplate->GetPrice();
 	economy.RemoveMoney(moduleCosts);
+
+	// Add ownership
+	economy.AddOwnedModule(moduleGUID, moduleType);
 
 	// Replace module in equipment
 	equipment.ReplaceModule(moduleType, moduleGUID);
@@ -29,6 +39,13 @@ void CBuildingWorkshop::PurchaseModule(CActorEconomy& economy, CEquipment& equip
 hvgs::ui::SceneID CBuildingWorkshop::GetUISceneID() const
 {
 	return ui::SceneID::BuildingWorkshop;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+hvgs::TextureName CBuildingWorkshop::GetBuildingTexture() const
+{
+	return TextureName::BUILDING_BROKER;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -22,14 +22,15 @@ class CBuildingWorkshop
 	: public CBuildingInteractiveBase
 {
 public:
-	CBuildingWorkshop() = default;
+	CBuildingWorkshop();
 	virtual ~CBuildingWorkshop() = default;
 
 public:
 	void PurchaseModule(CActorEconomy& economy, CEquipment& equipment, ModuleType moduleType, ModuleGUID moduleGUID) const;
 
 protected:
-	virtual ui::SceneID GetUISceneID() const override;
+	ui::SceneID GetUISceneID() const override;
+	TextureName GetBuildingTexture() const override;
 
 };
 

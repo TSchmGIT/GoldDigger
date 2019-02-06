@@ -7,11 +7,11 @@
 #include "GameSession/Actor/Equipment/Modules/DataTemplates/DataTemplateModuleBase.h"
 #include "GameSession/Actor/Equipment/Modules/DefinesModules.h"
 #include "GameSession/Actor/Equipment/Modules/EnumsModules.h"
+#include "GameSession/Buildings/BuildingWorkshop.h"
 #include "GameSession/Data/DataModuleManager.h"
 #include "GameSession/UI/Scenes/BuildingWorkshop/ModuleElement.h"
 #include "GameSession/UI/Scenes/Meta/SceneManager.h"
 #include "GameSession/World/World.h"
-#include "Buildings/BuildingWorkshop.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -43,14 +43,22 @@ void CBuildingWorkshopScene::SyncTickVisible()
 
 	// Disable purchase button
 	auto& moduleDetailPanel = GetModuleDetailPanel();
+
 	auto& purchaseButton = moduleDetailPanel.GetPurchaseButton();
+	if (auto& economy = CWorld::Get().GetActor().GetEconomy();
+		economy.HasOwnership(m_SelectedModuleGUID, m_SelectedModuleType))
+	{
+		purchaseButton.SetIsDisabled(true);
+	}
+	else
+	{
+		const auto* selectedModule = hvda::CDataModuleManager::Get().GetModuleTemplate(GetSelectedModuleGUID(), GetSelectedModuleType());
+		ASSERT_OR_EXECUTE(selectedModule, return);
+		MoneyAmount selectedModulePrice = selectedModule->GetPrice();
+		MoneyAmount currentMoney = CWorld::Get().GetActor().GetEconomy().GetMoney();
 
-	const auto* selectedModule = hvda::CDataModuleManager::Get().GetModuleTemplate(GetSelectedModuleGUID(), GetSelectedModuleType());
-	ASSERT_OR_EXECUTE(selectedModule, return);
-	MoneyAmount selectedModulePrice = selectedModule->GetPrice();
-	MoneyAmount currentMoney = CWorld::Get().GetActor().GetEconomy().GetMoney();
-
-	purchaseButton.SetIsDisabled(currentMoney < selectedModulePrice);
+		purchaseButton.SetIsDisabled(currentMoney < selectedModulePrice);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -109,9 +117,13 @@ void CBuildingWorkshopScene::UpdateModuleList()
 	const auto& moduleMap = hvda::CDataModuleManager::Get().GetModuleMap(m_SelectedModuleType);
 	moduleList.Resize(moduleMap.size());
 
-	const auto& equipment = CWorld::Get().GetActor().GetEquipment();
+
+	const auto& actor = CWorld::Get().GetActor();
+	const auto& economy = actor.GetEconomy();
+	const auto& equipment = actor.GetEquipment();
 	const auto* currentModule = equipment.GetModule(m_SelectedModuleType);
 	ASSERT_OR_EXECUTE(currentModule, return);
+	auto currentModuleGUID = currentModule->GetGUID();
 
 	size_t index = 0;
 	for (const auto& kvPair : moduleMap)
@@ -120,8 +132,13 @@ void CBuildingWorkshopScene::UpdateModuleList()
 		index++;
 
 		const hvda::CDataTemplateModuleBase& dataModule = *kvPair.second;
+		auto moduleGUID = dataModule.GetGUID();
 
-		if (dataModule.GetGUID() == currentModule->GetGUID())
+		if (moduleGUID == currentModuleGUID)
+		{
+			moduleElement.SetModuleState(BuildingWorkshop::CModuleElement::ModulePurchaseState::Equipped);
+		}
+		else if (economy.HasOwnership(moduleGUID, m_SelectedModuleType))
 		{
 			moduleElement.SetModuleState(BuildingWorkshop::CModuleElement::ModulePurchaseState::Owned);
 		}
@@ -140,7 +157,6 @@ void CBuildingWorkshopScene::UpdateModuleList()
 
 		auto& buttonIcon = moduleElement.GetIconButton();
 
-		auto moduleGUID = dataModule.GetGUID();
 		buttonIcon.SetMetaData(int(moduleGUID));
 		buttonIcon.SetIsSelected(moduleGUID == m_SelectedModuleGUID);
 		buttonIcon.SetAction(boost::bind(&CBuildingWorkshopScene::OnModuleElementPressed, this, boost::cref(moduleElement)));

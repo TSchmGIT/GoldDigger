@@ -31,6 +31,7 @@ public:
 	void Init();
 
 public:
+	hvgs::ModuleType GetModuleType(ModuleGUID moduleGUID) const;
 	const CDataTemplateModuleBase* GetModuleTemplate(ModuleGUID moduleGUID, hvgs::ModuleType moduleType) const;
 
 	template<typename T>

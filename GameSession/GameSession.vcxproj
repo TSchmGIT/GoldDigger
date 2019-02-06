@@ -241,6 +241,7 @@
     <ClInclude Include="Rendering\Fonts\EnumsFont.h" />
     <ClInclude Include="Rendering\IRenderElement.h" />
     <ClInclude Include="Rendering\RenderEnums.h" />
+    <ClInclude Include="Rendering\SpriteAnimation\SpriteAnimationData.h" />
     <ClInclude Include="Rendering\Textures\EnumsTexture.h" />
     <ClInclude Include="Rendering\UIScope.h" />
     <ClInclude Include="stdafx.h" />
@@ -322,6 +323,7 @@
     <ClCompile Include="Manager\PhysicsManager.cpp" />
     <ClCompile Include="Rendering\DebugRender.cpp" />
     <ClCompile Include="Rendering\IRenderElement.cpp" />
+    <ClCompile Include="Rendering\SpriteAnimation\SpriteAnimationData.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

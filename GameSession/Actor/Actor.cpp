@@ -80,8 +80,8 @@ void CActor::Draw() const
 	// Money
 	//renderManager.DrawText(ScreenPos(CRenderManager::Get().GetScreenWidth() - 400.0f, 0.0f), "Money: " + std::to_string(m_Economy->GetMoney().get()));
 
-	const auto* module = m_Equipment->GetModule(ModuleType::FuelTank);
-	const auto* moduleFuelTank = static_cast<const CModuleFuelTank*>(module);
+	const auto* moduleInstance = m_Equipment->GetModule(ModuleType::FuelTank);
+	const auto* moduleFuelTank = static_cast<const CModuleFuelTank*>(moduleInstance);
 	ASSERT_OR_EXECUTE(moduleFuelTank, return);
 	renderManager.DrawTextUI(ScreenPos(CRenderManager::Get().GetBaseScreenWidth() - 400.0f, 0.0f), "Fuel: " + std::to_string(int(moduleFuelTank->GetFuelPercentage() * 100)) + " %");
 

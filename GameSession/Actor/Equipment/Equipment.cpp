@@ -17,9 +17,9 @@ void CEquipment::InitAfterCreation()
 	// Fill with default data
 	for (auto moduleType = ModuleType(0); moduleType < ModuleType::Count; moduleType = ModuleType(int(moduleType) + 1))
 	{
-		ModulePtr module = CEquipmentFactory::GetMutable().CreateDefaultModule(moduleType, *this);
+		ModulePtr moduleInstance = CEquipmentFactory::GetMutable().CreateDefaultModule(moduleType, *this);
 
-		m_ModuleMap.emplace(moduleType, std::move(module));
+		m_ModuleMap.emplace(moduleType, std::move(moduleInstance));
 	}
 }
 
@@ -61,8 +61,8 @@ hvgs::CModuleBase* CEquipment::GetModule(hvgs::ModuleType moduleType) const
 
 void CEquipment::ReplaceModule(ModuleType moduleType, ModuleGUID moduleGUID)
 {
-	ModulePtr module = CEquipmentFactory::GetMutable().CreateModule(moduleType, moduleGUID, *this);
-	m_ModuleMap[moduleType] = std::move(module);
+	ModulePtr moduleInstance = CEquipmentFactory::GetMutable().CreateModule(moduleType, moduleGUID, *this);
+	m_ModuleMap[moduleType] = std::move(moduleInstance);
 }
 
 //////////////////////////////////////////////////////////////////////////

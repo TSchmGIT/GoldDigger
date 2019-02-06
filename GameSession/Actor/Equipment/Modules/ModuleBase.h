@@ -20,10 +20,9 @@ class CModuleBase
 public:
 	struct ModuleDeleter
 	{
-		void operator()(CModuleBase* module)
+		void operator()(CModuleBase* moduleInstance)
 		{
-			
-			delete module;
+			delete moduleInstance;
 		}
 	};
 

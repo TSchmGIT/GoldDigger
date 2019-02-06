@@ -4,7 +4,6 @@
     "texture": 26,
     "name": "Basic Tank",
     "fueltype": "Oil",
-    "consumption": 20,
     "capacity": 10000,
     "price": 0
   },
@@ -13,7 +12,6 @@
     "texture": 27,
     "name": "Advanced Tank",
     "fueltype": "Oil",
-    "consumption": 20,
     "capacity": 30000,
     "price": 500
   },
@@ -22,7 +20,6 @@
     "texture": 28,
     "name": "Pro Tank",
     "fueltype": "Oil",
-    "consumption": 20,
     "capacity": 100000,
     "price": 1500
   },
@@ -31,7 +28,6 @@
     "texture": 29,
     "name": "Gas Tank",
     "fueltype": "Gas",
-    "consumption": 30,
     "capacity": 15000,
     "price": 4000
   },
@@ -40,7 +36,6 @@
     "texture": 30,
     "name": "Advanced Gas Tank",
     "fueltype": "Gas",
-    "consumption": 30,
     "capacity": 75000,
     "price": 10000
   }

@@ -96,7 +96,7 @@ void CGameManager::Shutdown()
 
 void CGameManager::Run()
 {
-	while (CRenderManager::Get().GetWindow()->isOpen())
+	while (CRenderManager::Get().GetWindow().isOpen())
 	{
 		PrepareTick();
 
@@ -140,7 +140,7 @@ void CGameManager::PrepareTick()
 void CGameManager::PollEvents()
 {
 	sf::Event pollEvent;
-	while (CRenderManager::GetMutable().GetWindow()->pollEvent(pollEvent))
+	while (CRenderManager::GetMutable().PollEvent(pollEvent))
 	{
 		switch (pollEvent.type)
 		{
@@ -178,11 +178,11 @@ void CGameManager::PollEvents()
 		{
 			// update the view to the new size of the window
 			sf::FloatRect visibleArea(0.0f, 0.0f, float(pollEvent.size.width), float(pollEvent.size.height));
-			CRenderManager::GetMutable().GetWindow()->setView(sf::View(visibleArea));
+			CRenderManager::GetMutable().SetView(sf::View(visibleArea));
 			break;
 		}
 		case sf::Event::EventType::Closed:
-			CRenderManager::GetMutable().GetWindow()->close();
+			CRenderManager::GetMutable().CloseWindow();
 			break;
 		default:
 			break;

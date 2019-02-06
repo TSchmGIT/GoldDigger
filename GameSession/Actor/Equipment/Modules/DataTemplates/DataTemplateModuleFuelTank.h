@@ -22,12 +22,10 @@ public:
 
 public:
 	hvgs::FuelType GetFuelType() const;
-	hvgs::FuelConsumption GetConsumption() const;
 	hvgs::FuelAmount GetCapacity() const;
 	
 protected:
 	hvgs::FuelType m_FuelType = hvgs::FuelType::Invalid;
-	hvgs::FuelConsumption m_Consumption = hvgs::FuelConsumption(0);
 	hvgs::FuelAmount m_Capacity = hvgs::FuelAmount(0);
 };
 

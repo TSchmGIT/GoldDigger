@@ -8,15 +8,9 @@ namespace hvsdk
 
 //////////////////////////////////////////////////////////////////////////
 
-
-
-//////////////////////////////////////////////////////////////////////////
-
-void CAssertManager::CreateErrorAssert(const std::string&)
+void CAssertManager::CreateErrorAssert(const std::string& errorMessage)
 {
-	return;
-
-	/*int msgID = MessageBox(
+	int msgID = MessageBox(
 		nullptr,
 		std::wstring(errorMessage.begin(), errorMessage.end()).c_str(),
 		L"ASSERT",
@@ -32,7 +26,7 @@ void CAssertManager::CreateErrorAssert(const std::string&)
 		break;
 	default:
 		break;
-	}*/
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -14,8 +14,6 @@ namespace hvgs::ui
 CBuildingWorkshopSceneBase::CBuildingWorkshopSceneBase()
 {
 	m_ModuleList.SetMaximumElementsHorizontal(4);
-
-
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -33,7 +33,8 @@ public:
 	MoneyAmount GetPrice(TileType tileType) const;
 
 protected:
-	virtual ui::SceneID GetUISceneID() const override;
+	ui::SceneID GetUISceneID() const override;
+	TextureName GetBuildingTexture() const override;
 
 protected:
 	void FillPriceChart();

@@ -16,7 +16,7 @@ namespace hvgs
 void CBuildingBase::Draw() const
 {
 	ScreenPos renderSize = CCameraManager::Get().GetActive()->WorldToScreenDirection(m_Size);
-	CRenderManager::GetMutable().DrawSpriteWorld(m_Position, m_Texture, renderSize, Alignment::CenterBottom);
+	CRenderManager::GetMutable().DrawSpriteWorld(m_Position, GetBuildingTexture(), renderSize, Alignment::CenterBottom);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -38,20 +38,6 @@ const hvgs::WorldPos& CBuildingBase::GetPosition() const
 void CBuildingBase::SetPosition(const WorldPos& position)
 {
 	m_Position = position;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-hvgs::TextureName CBuildingBase::GetTexture() const
-{
-	return m_Texture;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CBuildingBase::SetTexture(TextureName value)
-{
-	m_Texture = value;
 }
 
 //////////////////////////////////////////////////////////////////////////

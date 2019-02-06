@@ -253,7 +253,8 @@ void CModuleDetailPanel::DrawDetailsFuelTank() const
 
 	//////////////////////////////////////////////////////////////////////////
 
-	FuelConsumption fuelConsumption = moduleTemplateFuelTank->GetConsumption();
+	//FuelConsumption fuelConsumption = moduleTemplateFuelTank->GetConsumption();
+	FuelConsumption fuelConsumption = FuelConsumption(20);
 
 	{
 		std::stringstream ss;

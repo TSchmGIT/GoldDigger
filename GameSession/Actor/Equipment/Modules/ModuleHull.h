@@ -13,7 +13,7 @@ class CModuleHull : public CModuleBase
 {
 
 public:
-	CModuleHull(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleHull& dataTemplate);
+	CModuleHull(ModuleID moduleID, CEquipment& equipment, const hvda::CDataTemplateModuleHull& dataTemplate, Optional<const CModuleHull&> inheritedHull);
 	virtual ~CModuleHull() = default;
 
 public:

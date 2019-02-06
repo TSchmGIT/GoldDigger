@@ -11,7 +11,7 @@ namespace hvda
 CDataTemplateModuleMotor::CDataTemplateModuleMotor(const JSON& json)
 	: CDataTemplateModuleBase(json)
 {
-
+	m_Consumption = hvgs::FuelConsumption(json["consumption"].get<hvgs::FuelConsumption::value_type>());
 }
 
 //////////////////////////////////////////////////////////////////////////

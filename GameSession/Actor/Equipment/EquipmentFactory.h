@@ -28,20 +28,20 @@ public:
 
 public:
 	ModulePtr CreateDefaultModule(ModuleType moduleType, CEquipment& parentEquipment);
-	ModulePtr CreateModule(ModuleType moduleType, ModuleGUID moduleGUID, CEquipment& parentEquipment);
+	ModulePtr CreateModule(ModuleType moduleType, ModuleGUID moduleGUID, CEquipment& parentEquipment, Optional<const CModuleBase&> inheritedModule);
 
 protected:
 	void DestroyModule(CModuleBase* moduleInstance);
 
 	template<class ModuleClass, class ModuleTemplate>
-	ModulePtr CreateModule(ModuleGUID guid, CEquipment& parentEquipment)
+	ModulePtr CreateModule(ModuleGUID guid, CEquipment& parentEquipment, Optional<const ModuleClass&> inheritedModule)
 	{
 		const auto*	moduleTemplate = hvda::CDataModuleManager::Get().GetModuleTemplate<ModuleTemplate>(guid);
 		ASSERT_OR_EXECUTE(moduleTemplate, return ModulePtr(nullptr, nullptr));
 
 		// Create new module of specific type
 		auto boundDeleter = [this](CModuleBase* moduleBase) { DestroyModule(moduleBase); };
-		ModulePtr moduleInstance(new ModuleClass(m_UniqueModuleID, parentEquipment, *moduleTemplate), boundDeleter);
+		ModulePtr moduleInstance(new ModuleClass(m_UniqueModuleID, parentEquipment, *moduleTemplate, inheritedModule), boundDeleter);
 
 		// Emplace it in the map
 		auto emplaceResult = m_ModuleInstanceMap.emplace(m_UniqueModuleID, moduleInstance.get());
@@ -50,7 +50,7 @@ protected:
 		// Increase unique ID
 		m_UniqueModuleID += ModuleID(1);
 
-		// Return weak ptr
+		// Return unique ptr
 		return std::move(moduleInstance);
 	}
 

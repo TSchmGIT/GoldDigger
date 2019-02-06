@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "MotorBase.h"
+#include "../Actor.h"
 
+#include "../Equipment/Equipment.h"
+#include "../Equipment/Modules/ModuleFuelTank.h"
 //////////////////////////////////////////////////////////////////////////
 
 namespace hvgs
@@ -11,7 +14,6 @@ namespace hvgs
 CMotorBase::CMotorBase(CActor& actor)
 	: m_Actor(actor)
 {
-
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -21,6 +21,27 @@ void CDataModuleManager::Init()
 
 //////////////////////////////////////////////////////////////////////////
 
+hvgs::ModuleType CDataModuleManager::GetModuleType(ModuleGUID moduleGUID) const
+{
+	for (int i = 0; i < int(hvgs::ModuleType::Count); ++i)
+	{
+		hvgs::ModuleType currentType = hvgs::ModuleType(i);
+		const auto& moduleMap = GetModuleMap(currentType);
+
+		auto itFind = moduleMap.find(moduleGUID);
+		if (itFind == moduleMap.end())
+		{
+			continue;
+		}
+
+		return currentType;
+	}
+
+	return hvgs::ModuleType::Invalid;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 const CDataTemplateModuleBase* CDataModuleManager::GetModuleTemplate(ModuleGUID moduleGUID, hvgs::ModuleType moduleType) const
 {
 	switch (moduleType)

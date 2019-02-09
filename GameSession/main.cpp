@@ -18,10 +18,6 @@ using namespace hvgs;
 
 int main()
 {
-	std::array<char, 256> buffer;
-	GetCurrentDirectoryA(buffer.size(), buffer.data());
-	LOG_INFO(buffer.data());
-
 	std::srand(unsigned int(std::time(nullptr)));
 
 	CGameManager::GetMutable().Construct();

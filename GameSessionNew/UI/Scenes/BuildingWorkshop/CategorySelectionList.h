@@ -1,0 +1,47 @@
+#pragma once
+#include "GameSessionNew/UI/Elements/UIButton.h"
+
+/////////////////////////////////////////////////////////////////////////////
+
+namespace hvgs::ui
+{
+
+//////////////////////////////////////////////////////////////////////////
+
+namespace BuildingWorkshop
+{
+
+//////////////////////////////////////////////////////////////////////////
+
+class CCategorySelectionList
+{
+public:
+	CCategorySelectionList(const CBaseScene& baseScene);
+	~CCategorySelectionList() = default;
+
+	void Draw() const;
+
+public:
+	Vector<CUIButton>& GetButtonList();
+
+	void PushElement();
+	void Resize(size_t newSize);
+
+private:
+	void UpdateButtonPositions();
+
+private:
+	const CBaseScene& m_BaseScene;
+
+	Vector<CUIButton> m_ButtonList;
+
+	Vector2 m_PivotPos = Vector2{ 0.0f, 0.0f };
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+} // hvgs::ui

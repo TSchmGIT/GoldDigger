@@ -1,0 +1,31 @@
+#pragma once
+
+/////////////////////////////////////////////////////////////////////////////
+
+namespace hvgs
+{
+
+/////////////////////////////////////////////////////////////////////////////
+
+class CActorHealth
+{
+
+public:
+	CActorHealth();
+	virtual ~CActorHealth();
+
+	hvuint GetHealth() const;
+	void SetHealth(hvuint health);
+
+	hvuint GetArmor() const;
+	void SetArmor(hvuint armor);
+
+protected:
+
+	hvuint		m_Health = 0U;
+	hvuint		m_Armor = 0U;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+
+} // hvgs

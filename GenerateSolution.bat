@@ -1,1 +1,1 @@
-{\rtf1}
+call External\PreMake\premake5.exe vs2017

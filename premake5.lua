@@ -1,5 +1,5 @@
-workspace "GoldDigger_new"
-    architecture "x86"
+workspace "GoldDigger"
+    architecture "x64"
 
     configurations
     {
@@ -14,107 +14,167 @@ outputdir = "/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 targetdirectory = outputroot .. "/bin/" .. outputdir
 objdirectory =  outputroot .. "/bin-int/" .. outputdir
 
-project "GameSessionNew"
-    location "GameSessionNew"
+project "GameSession"
+    location "src/GameSession"
     kind "ConsoleApp"
     language "C++"
 
     pchheader "stdafx.h"
-    pchsource "GameSessionNew/stdafx.cpp"
+    pchsource "src/GameSession/stdafx.cpp"
 
     targetdir (targetdirectory .. "/%{prj.name}")
     objdir (objdirectory .. "/%{prj.name}")
 
     files
     {
-        "%{prj.name}/**.h",
-        "%{prj.name}/**.cpp",
-        "%{prj.name}/**.inl" 
+        "src/%{prj.name}/**.h",
+        "src/%{prj.name}/**.cpp",
+        "src/%{prj.name}/**.inl" 
+    }
+
+    defines
+    {
+        "SFML_STATIC",
+        "STATIC_SFML",
+        "SFML_USE_STATIC_STD_LIBS"
     }
 
     includedirs
     {
-       "%{wks.location}",
-       "%{wks.location}/%{prj.name}" 
+        "External/SFML/include",
+        "External/boost",
+
+        "External/FastNoiseSIMD",
+
+        "%{wks.location}/src/",
+        "%{wks.location}/src/%{prj.name}"
     }
 
     libdirs
     {
-        outputroot .. "/hvsdk/" .. outputdir,
-        outputroot .. "/hvmath/" .. outputdir,
-        outputroot .. "/Octree/" .. outputdir,
-        outputroot .. "/FastNoiseSIMD/" .. outputdir,
-        -- $(SolutionDir)\ProjectOutput\hvmath\$(Configuration)
+        "External/SFML/lib",
+        "External/boost/libs",
+        targetdirectory .. "/FastNoiseSIMD"
     }
 
     links
     {
+        -- SFML DEFAULT LINKS
+        "opengl32",
+        "freetype",
+        "winmm",
+        "gdi32",
+        "flac",
+        "vorbisenc",
+        "vorbisfile",
+        "vorbis",
+        "ogg",
+        "ws2_32",
+        -- END SFML DEFAULT LINKS
+
         "hvsdk",
         "hvmath",
-        "Octree",
         "FastNoiseSIMD"
         -- Octree.lib;FastNoiseSIMD.lib;hvmath.lib;hvsdk.lib;
     }
 
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
+        -- staticruntime "On"
         systemversion "latest"
 
     filter "configurations:Debug"
         defines 
         {
+            "DEBUG",
             "HV_DEBUG",
-            "USE_ASSERTS",
-            "STATIC_SFML"
+            "USE_ASSERTS"
         }
+
+        links
+        {
+            "sfml-graphics-s-d",
+			"sfml-window-s-d",
+			"sfml-system-s-d",
+			"sfml-audio-s-d",
+			"sfml-network-s-d"
+        }
+
         symbols "On"
 
     filter "configurations:Release"
-        defines "HV_RELEASE"
+        defines
+        {
+            "RELEASE",
+            "NDEBUG",
+            "HV_RELEASE"
+        }
         optimize "On"
 
+        links
+		{	
+			"sfml-graphics-s",
+			"sfml-window-s",
+			"sfml-system-s",
+			"sfml-audio-s",
+			"sfml-network-s"
+		}
+
     filter "configurations:Retail"
-        defines "HV_RETAIL"
+        defines
+        {
+            "RELEASE",
+            "NDEBUG",
+            "HV_RETAIL"
+        }
         optimize "On"
+
+        links
+		{	
+			"sfml-graphics-s",
+			"sfml-window-s",
+			"sfml-system-s",
+			"sfml-audio-s",
+			"sfml-network-s"
+		}
 
 -- //////////////////////////////////////////////////////////////////////////////////////////
 
 project "hvsdk"
-    location "hvsdk"
+    location "src/hvsdk"
     kind "StaticLib"
     language "C++"
 
     pchheader "stdafx.h"
-    pchsource "hvsdk/stdafx.cpp"
+    pchsource "src/hvsdk/stdafx.cpp"
 
     targetdir (targetdirectory .. "/%{prj.name}")
     objdir (objdirectory .. "/%{prj.name}")
 
     files
     {
-        "%{prj.name}/**.h",
-        "%{prj.name}/**.cpp",
-        "%{prj.name}/**.inl" 
+        "src/%{prj.name}/**.h",
+        "src/%{prj.name}/**.cpp",
+        "src/%{prj.name}/**.inl" 
     }
 
     includedirs
     {
-       "%{wks.location}",
-       "%{wks.location}/%{prj.name}" 
+        "External/boost",
+        "%{wks.location}/src",
+        "%{wks.location}/src/%{prj.name}" 
     }
 
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
+        -- staticruntime "On"
         systemversion "latest"
 
     filter "configurations:Debug"
         defines 
         {
             "HV_DEBUG",
-            "USE_ASSERTS",
-            "STATIC_SFML"
+            "USE_ASSERTS"
         }
         symbols "On"
 
@@ -129,32 +189,45 @@ project "hvsdk"
 -- //////////////////////////////////////////////////////////////////////////////////////////
 
 project "hvmath"
-location "hvmath"
+location "src/hvmath"
 kind "StaticLib"
 language "C++"
 
 pchheader "stdafx.h"
-pchsource "hvmath/stdafx.cpp"
+pchsource "src/hvmath/stdafx.cpp"
 
 targetdir (targetdirectory .. "/%{prj.name}")
 objdir (objdirectory .. "/%{prj.name}")
 
 files
 {
-    "%{prj.name}/**.h",
-    "%{prj.name}/**.cpp",
-    "%{prj.name}/**.inl" 
+    "src/%{prj.name}/**.h",
+    "src/%{prj.name}/**.cpp",
+    "src/%{prj.name}/**.inl" 
+}
+
+libdirs
+{
+    "External/SFML/lib"
 }
 
 includedirs
 {
-   "%{wks.location}",
-   "%{wks.location}/%{prj.name}" 
+    "External/SFML/include",
+    "%{wks.location}/src",
+    "%{wks.location}/src/%{prj.name}" 
+}
+
+defines
+{
+    "SFML_STATIC",
+    "STATIC_SFML",
+    "SFML_USE_STATIC_STD_LIBS"
 }
 
 filter "system:windows"
     cppdialect "C++17"
-    staticruntime "On"
+    -- staticruntime "On"
     systemversion "latest"
 
 filter "configurations:Debug"
@@ -170,75 +243,43 @@ filter "configurations:Retail"
     optimize "On"
     
 -- //////////////////////////////////////////////////////////////////////////////////////////
-
-project "Octree"
-    location "Octree"
-    kind "StaticLib"
-    language "C++"
-
-    pchheader "stdafx.h"
-    pchsource "Octree/stdafx.cpp"
-
-    targetdir (targetdirectory .. "/%{prj.name}")
-    objdir (objdirectory .. "/%{prj.name}")
-
-    files
-    {
-        "%{prj.name}/**.h",
-        "%{prj.name}/**.cpp",
-        "%{prj.name}/**.inl" 
-    }
-
-    filter "system:windows"
-        cppdialect "C++17"
-        staticruntime "On"
-        systemversion "latest"
-
-    filter "configurations:Debug"
-        defines "DEBUG"
-        symbols "On"
-
-    filter "configurations:Release"
-        defines "RELEASE"
-        optimize "On"
-
-    filter "configurations:Retail"
-        defines "RELEASE"
-        optimize "On"
-
 -- //////////////////////////////////////////////////////////////////////////////////////////
 
-project "FastNoiseSIMD"
-location "FastNoiseSIMD"
-kind "StaticLib"
-language "C++"
+-- workspace "FastNoiseSIMD"
+--     location "External/FastNoiseSIMD"
+--     architecture "x64"
 
-pchheader "stdafx.h"
-pchsource "FastNoiseSIMD/stdafx.cpp"
+--     configurations
+--     {
+--         "Debug",
+--         "Release"
+--     }
 
-targetdir (targetdirectory .. "/%{prj.name}")
-objdir (objdirectory .. "/%{prj.name}")
+-- project "FastNoiseSIMD"
+--     location "External/FastNoiseSIMD"
+--     kind "StaticLib"
+--     language "C++"
 
-files
-{
-    "%{prj.name}/**.h",
-    "%{prj.name}/**.cpp",
-    "%{prj.name}/**.inl" 
-}
+-- targetdir (targetdirectory .. "/%{prj.name}")
+-- objdir (objdirectory .. "/%{prj.name}")
 
-filter "system:windows"
-    cppdialect "C++17"
-    staticruntime "On"
-    systemversion "latest"
+-- files
+-- {
+--     "%{prj.location}/**.h",
+--     "%{prj.location}/**.cpp",
+--     "%{prj.location}/**.inl",
+--     "%{prj.location}/**.c" 
+-- }
 
-filter "configurations:Debug"
-    defines "DEBUG"
-    symbols "On"
+-- filter "system:windows"
+--     cppdialect "C++17"
+--     -- staticruntime "On"
+--     systemversion "latest"
 
-filter "configurations:Release"
-    defines "RELEASE"
-    optimize "On"
+-- filter "configurations:Debug"
+--     defines "DEBUG"
+--     symbols "On"
 
-filter "configurations:Retail"
-    defines "RELEASE"
-    optimize "On"
+-- filter "configurations:Release"
+--     defines "RELEASE"
+--     optimize "On"

@@ -1,0 +1,6 @@
+[submodule "External/FastNoiseSIMD"]
+	path = External/FastNoiseSIMD
+	url = https://github.com/Auburns/FastNoiseSIMD
+[submodule "External/Octree"]
+	path = External/Octree
+	url = https://github.com/ox/ofxOctree

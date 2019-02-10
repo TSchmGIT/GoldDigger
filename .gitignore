@@ -3,6 +3,7 @@
 
 # Gold Digger files
 ProjectOutput/
+External/boost/
 
 # User-specific files
 *.suo

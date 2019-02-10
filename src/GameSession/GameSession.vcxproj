@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Retail|x64">
+      <Configuration>Retail</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A3BD3228-0F73-AB1D-9867-A5F4041CA221}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>GameSession</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Retail|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\ProjectOutput\bin\Debug-windows-x86_64\GameSession\</OutDir>
+    <IntDir>..\..\ProjectOutput\bin-int\Debug-windows-x86_64\GameSession\</IntDir>
+    <TargetName>GameSession</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\ProjectOutput\bin\Release-windows-x86_64\GameSession\</OutDir>
+    <IntDir>..\..\ProjectOutput\bin-int\Release-windows-x86_64\GameSession\</IntDir>
+    <TargetName>GameSession</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\ProjectOutput\bin\Retail-windows-x86_64\GameSession\</OutDir>
+    <IntDir>..\..\ProjectOutput\bin-int\Retail-windows-x86_64\GameSession\</IntDir>
+    <TargetName>GameSession</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>SFML_STATIC;STATIC_SFML;SFML_USE_STATIC_STD_LIBS;DEBUG;HV_DEBUG;USE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\External\SFML\include;..\..\External\boost;..\..\External\FastNoiseSIMD;..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;FastNoiseSIMD.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-audio-s-d.lib;sfml-network-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\External\SFML\lib;..\..\External\boost\libs;..\..\ProjectOutput\bin\Debug-windows-x86_64\FastNoiseSIMD;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>SFML_STATIC;STATIC_SFML;SFML_USE_STATIC_STD_LIBS;RELEASE;NDEBUG;HV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\External\SFML\include;..\..\External\boost;..\..\External\FastNoiseSIMD;..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;FastNoiseSIMD.lib;sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;sfml-audio-s.lib;sfml-network-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\External\SFML\lib;..\..\External\boost\libs;..\..\ProjectOutput\bin\Release-windows-x86_64\FastNoiseSIMD;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>SFML_STATIC;STATIC_SFML;SFML_USE_STATIC_STD_LIBS;RELEASE;NDEBUG;HV_RETAIL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\External\SFML\include;..\..\External\boost;..\..\External\FastNoiseSIMD;..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;FastNoiseSIMD.lib;sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;sfml-audio-s.lib;sfml-network-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\External\SFML\lib;..\..\External\boost\libs;..\..\ProjectOutput\bin\Retail-windows-x86_64\FastNoiseSIMD;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="Actor\Economy\ActorEconomy.h" />
+    <ClInclude Include="Actor\Economy\EconomyTypes.h" />
+    <ClInclude Include="Actor\Equipment\Equipment.h" />
+    <ClInclude Include="Actor\Equipment\EquipmentFactory.h" />
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleBase.h" />
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleCargo.h" />
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleDrill.h" />
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleFuelTank.h" />
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleHull.h" />
+    <ClInclude Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleMotor.h" />
+    <ClInclude Include="Actor\Equipment\Modules\DefinesModules.h" />
+    <ClInclude Include="Actor\Equipment\Modules\EnumsModules.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleBase.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleCargo.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleDrill.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleFuelTank.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleHelper.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleHull.h" />
+    <ClInclude Include="Actor\Equipment\Modules\ModuleMotor.h" />
+    <ClInclude Include="Actor\Health\ActorHealth.h" />
+    <ClInclude Include="Actor\Interaction\IInteractionObject.h" />
+    <ClInclude Include="Actor\Motor\MotorBase.h" />
+    <ClInclude Include="Actor\Motor\MotorDefault.h" />
+    <ClInclude Include="Actor\Motor\MotorDigging.h" />
+    <ClInclude Include="Buildings\BuildingBase.h" />
+    <ClInclude Include="Buildings\BuildingBroker.h" />
+    <ClInclude Include="Buildings\BuildingFuelStation.h" />
+    <ClInclude Include="Buildings\BuildingInteractiveBase.h" />
+    <ClInclude Include="Buildings\BuildingWorkshop.h" />
+    <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Config\config_default.h" />
+    <ClInclude Include="Data\DataDefines.h" />
+    <ClInclude Include="Data\DataModuleManager.h" />
+    <ClInclude Include="GameObjects\IGameObject.h" />
+    <ClInclude Include="Input\InputEnums.h" />
+    <ClInclude Include="Items\Inventory.h" />
+    <ClInclude Include="Items\ItemBase.h" />
+    <ClInclude Include="Items\ItemBlock.h" />
+    <ClInclude Include="Items\ItemStack.h" />
+    <ClInclude Include="Manager\CameraManager.h" />
+    <ClInclude Include="Manager\GameManager.h" />
+    <ClInclude Include="Manager\GameObjectManager.h" />
+    <ClInclude Include="Manager\InputManager.h" />
+    <ClInclude Include="Manager\InteractionManager.h" />
+    <ClInclude Include="Manager\PerformanceManager.h" />
+    <ClInclude Include="Manager\PhysicsManager.h" />
+    <ClInclude Include="Manager\RenderManager.h" />
+    <ClInclude Include="Manager\Rendering\FontManager.h" />
+    <ClInclude Include="Manager\Rendering\TextureManager.h" />
+    <ClInclude Include="Manager\SingletonBase.h" />
+    <ClInclude Include="Manager\TimeManager.h" />
+    <ClInclude Include="Manager\UIManager.h" />
+    <ClInclude Include="Meta\Defines.h" />
+    <ClInclude Include="Meta\Events.h" />
+    <ClInclude Include="Meta\TrackTime.h" />
+    <ClInclude Include="Physics\CollisionObject.h" />
+    <ClInclude Include="Physics\PhysicsEnums.h" />
+    <ClInclude Include="Rendering\DebugRender.h" />
+    <ClInclude Include="Rendering\Fonts\EnumsFont.h" />
+    <ClInclude Include="Rendering\IRenderElement.h" />
+    <ClInclude Include="Rendering\RenderDefines.h" />
+    <ClInclude Include="Rendering\RenderEnums.h" />
+    <ClInclude Include="Rendering\SpriteAnimation\SpriteAnimationData.h" />
+    <ClInclude Include="Rendering\Textures\EnumsTexture.h" />
+    <ClInclude Include="Rendering\UIScope.h" />
+    <ClInclude Include="Time\DefinesTime.h" />
+    <ClInclude Include="UI\Elements\UIButton.h" />
+    <ClInclude Include="UI\Elements\UISpriteWithText.h" />
+    <ClInclude Include="UI\Elements\UIWidget.h" />
+    <ClInclude Include="UI\Event.h" />
+    <ClInclude Include="UI\ISpriteHandler.h" />
+    <ClInclude Include="UI\IUIEventHandler.h" />
+    <ClInclude Include="UI\Scenes\BaseScene.h" />
+    <ClInclude Include="UI\Scenes\BuildingBrokerScene.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopScene.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneBase.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\CategorySelectionList.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleDetailPanel.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleElement.h" />
+    <ClInclude Include="UI\Scenes\BuildingWorkshop\ModuleList.h" />
+    <ClInclude Include="UI\Scenes\InventoryScene.h" />
+    <ClInclude Include="UI\Scenes\Meta\SceneEnum.h" />
+    <ClInclude Include="UI\Scenes\Meta\SceneManager.h" />
+    <ClInclude Include="UI\UIStructs.h" />
+    <ClInclude Include="World\Chunk.h" />
+    <ClInclude Include="World\ChunkSlice.h" />
+    <ClInclude Include="World\Tile.h" />
+    <ClInclude Include="World\World.h" />
+    <ClInclude Include="World\WorldEnums.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="Actor\Economy\ActorEconomy.cpp" />
+    <ClCompile Include="Actor\Equipment\Equipment.cpp" />
+    <ClCompile Include="Actor\Equipment\EquipmentFactory.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleBase.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleCargo.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleDrill.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleFuelTank.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleHull.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\DataTemplates\DataTemplateModuleMotor.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleBase.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleCargo.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleDrill.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleFuelTank.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleHelper.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleHull.cpp" />
+    <ClCompile Include="Actor\Equipment\Modules\ModuleMotor.cpp" />
+    <ClCompile Include="Actor\Health\ActorHealth.cpp" />
+    <ClCompile Include="Actor\Interaction\IInteractionObject.cpp" />
+    <ClCompile Include="Actor\Motor\MotorBase.cpp" />
+    <ClCompile Include="Actor\Motor\MotorDefault.cpp" />
+    <ClCompile Include="Actor\Motor\MotorDigging.cpp" />
+    <ClCompile Include="Buildings\BuildingBase.cpp" />
+    <ClCompile Include="Buildings\BuildingBroker.cpp" />
+    <ClCompile Include="Buildings\BuildingFuelStation.cpp" />
+    <ClCompile Include="Buildings\BuildingInteractiveBase.cpp" />
+    <ClCompile Include="Buildings\BuildingWorkshop.cpp" />
+    <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Data\DataModuleManager.cpp" />
+    <ClCompile Include="GameObjects\IGameObject.cpp" />
+    <ClCompile Include="Items\Inventory.cpp" />
+    <ClCompile Include="Items\ItemBase.cpp" />
+    <ClCompile Include="Items\ItemBlock.cpp" />
+    <ClCompile Include="Items\ItemStack.cpp" />
+    <ClCompile Include="Manager\CameraManager.cpp" />
+    <ClCompile Include="Manager\GameManager.cpp" />
+    <ClCompile Include="Manager\GameObjectManager.cpp" />
+    <ClCompile Include="Manager\InputManager.cpp" />
+    <ClCompile Include="Manager\InteractionManager.cpp" />
+    <ClCompile Include="Manager\PerformanceManager.cpp" />
+    <ClCompile Include="Manager\PhysicsManager.cpp" />
+    <ClCompile Include="Manager\RenderManager.cpp" />
+    <ClCompile Include="Manager\Rendering\FontManager.cpp" />
+    <ClCompile Include="Manager\Rendering\TextureManager.cpp" />
+    <ClCompile Include="Manager\TimeManager.cpp" />
+    <ClCompile Include="Manager\UIManager.cpp" />
+    <ClCompile Include="Physics\CollisionObject.cpp" />
+    <ClCompile Include="Rendering\DebugRender.cpp" />
+    <ClCompile Include="Rendering\IRenderElement.cpp" />
+    <ClCompile Include="Rendering\SpriteAnimation\SpriteAnimationData.cpp" />
+    <ClCompile Include="UI\Elements\UIButton.cpp" />
+    <ClCompile Include="UI\Elements\UISpriteWithText.cpp" />
+    <ClCompile Include="UI\Elements\UIWidget.cpp" />
+    <ClCompile Include="UI\Event.cpp" />
+    <ClCompile Include="UI\ISpriteHandler.cpp" />
+    <ClCompile Include="UI\IUIEventHandler.cpp" />
+    <ClCompile Include="UI\Scenes\BaseScene.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingBrokerScene.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopScene.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\BuildingWorkshopSceneBase.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\CategorySelectionList.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleDetailPanel.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleElement.cpp" />
+    <ClCompile Include="UI\Scenes\BuildingWorkshop\ModuleList.cpp" />
+    <ClCompile Include="UI\Scenes\InventoryScene.cpp" />
+    <ClCompile Include="UI\Scenes\Meta\SceneManager.cpp" />
+    <ClCompile Include="World\Chunk.cpp" />
+    <ClCompile Include="World\ChunkSlice.cpp" />
+    <ClCompile Include="World\Tile.cpp" />
+    <ClCompile Include="World\World.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hvsdk\hvsdk.vcxproj">
+      <Project>{C59F9B0F-31B4-C3C0-FA35-67206609C0F1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\hvmath\hvmath.vcxproj">
+      <Project>{ED420C03-D9E4-36D9-C29F-4A2DAEE0BD29}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
